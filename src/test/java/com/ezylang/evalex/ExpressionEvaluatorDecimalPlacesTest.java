@@ -15,15 +15,17 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
+import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 
@@ -34,9 +36,14 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testDefaultNoRoundingVariable() throws ParseException, EvaluationException {
-    Expression expression = new Expression("a").with("a", new BigDecimal("2.12345"));
+    Expression expression1 = new Expression("a");
+    new BigDecimal("2.12345");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("2.12345");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", new BigDecimal("2.12345"))
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("2.12345");
   }
 
   @Test
@@ -57,9 +64,13 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
   @Test
   void testDefaultNoRoundingArray() throws ParseException, EvaluationException {
     List<BigDecimal> array = List.of(new BigDecimal("1.12345"));
-    Expression expression = createExpression("a[0]").with("a", array);
+    Expression expression1 = createExpression("a[0]");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("1.12345");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", array)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("1.12345");
   }
 
   @Test
@@ -71,9 +82,13 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    Expression expression = createExpression("a.b").with("a", structure);
+    Expression expression1 = createExpression("a.b");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("1.12345");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("1.12345");
   }
 
   @Test
@@ -82,16 +97,21 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
         ExpressionConfiguration.builder().decimalPlacesRounding(2).build();
     Expression expression = new Expression("2.12345", config);
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("2.12");
+    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("2.12");
   }
 
   @Test
   void testCustomRoundingDecimalsVariable() throws ParseException, EvaluationException {
     ExpressionConfiguration config =
         ExpressionConfiguration.builder().decimalPlacesRounding(2).build();
-    Expression expression = new Expression("a", config).with("a", new BigDecimal("2.126"));
+    Expression expression1 = new Expression("a", config);
+    new BigDecimal("2.126");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("2.13");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", new BigDecimal("2.126"))
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("2.13");
   }
 
   @Test
@@ -101,7 +121,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     Expression expression = new Expression("2.12345+1.54321", config);
 
     // literals are rounded first, the added and rounded again.
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("3.666");
+    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("3.666");
   }
 
   @Test
@@ -110,7 +130,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
         ExpressionConfiguration.builder().decimalPlacesRounding(3).build();
     Expression expression = new Expression("-2.12345", config);
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("-2.123");
+    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("-2.123");
   }
 
   @Test
@@ -120,7 +140,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     Expression expression = new Expression("SUM(2.12345,1.54321)", config);
 
     // literals are rounded first, the added and rounded again.
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("3.666");
+    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("3.666");
   }
 
   @Test
@@ -128,9 +148,13 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     ExpressionConfiguration config =
         ExpressionConfiguration.builder().decimalPlacesRounding(3).build();
     List<BigDecimal> array = List.of(new BigDecimal("1.12345"));
-    Expression expression = new Expression("a[0]", config).with("a", array);
+    Expression expression1 = new Expression("a[0]", config);
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("1.123");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", array)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("1.123");
   }
 
   @Test
@@ -144,15 +168,19 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    Expression expression = new Expression("a.b", config).with("a", structure);
+    Expression expression1 = new Expression("a.b", config);
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("1.123");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("1.123");
   }
 
   @Test
   void testDefaultStripZeros() throws EvaluationException, ParseException {
     Expression expression = new Expression("9.000");
-    assertThat(expression.evaluate().getNumberValue()).isEqualTo("9");
+    assertThat(expression.evaluate(VariableResolver.empty()).getNumberValue()).isEqualTo("9");
   }
 
   @Test
@@ -161,6 +189,6 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
         ExpressionConfiguration.builder().stripTrailingZeros(false).build();
 
     Expression expression = new Expression("9.000", config);
-    assertThat(expression.evaluate().getNumberValue()).isEqualTo("9.000");
+    assertThat(expression.evaluate(VariableResolver.empty()).getNumberValue()).isEqualTo("9.000");
   }
 }

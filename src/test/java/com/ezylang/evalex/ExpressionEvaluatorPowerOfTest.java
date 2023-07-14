@@ -15,12 +15,13 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
@@ -38,6 +39,6 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
     Expression expression = new Expression("-2^2", config);
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("-4");
+    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("-4");
   }
 }

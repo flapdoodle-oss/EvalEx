@@ -15,11 +15,12 @@
 */
 package com.ezylang.evalex.parser;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.VariableResolverBuilder;
 import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TokenizerStringLiteralTest extends BaseParserTest {
 
@@ -67,7 +68,7 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 
   @Test
   void testUnknownEscapeCharacter() {
-    assertThatThrownBy(() -> new Expression("\" \\y \"").evaluate())
+    assertThatThrownBy(() -> new Expression("\" \\y \"").evaluate(VariableResolverBuilder.newInstance().build()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Unknown escape character");
   }

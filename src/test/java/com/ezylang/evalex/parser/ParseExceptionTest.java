@@ -15,9 +15,9 @@
 */
 package com.ezylang.evalex.parser;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ParseExceptionTest {
 

@@ -15,12 +15,13 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExpressionEvaluationExceptionsTest {
 
@@ -31,7 +32,7 @@ class ExpressionEvaluationExceptionsTest {
     assertThatThrownBy(
             () -> {
               ASTNode node = new ASTNode(new Token(1, "(", TokenType.BRACE_OPEN));
-              expression.evaluateSubtree(node);
+              expression.evaluateSubtree(VariableResolver.empty(), node);
             })
         .isInstanceOf(EvaluationException.class)
         .hasMessage(

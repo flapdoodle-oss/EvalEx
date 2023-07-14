@@ -15,8 +15,6 @@
 */
 package com.ezylang.evalex.operators.arithmetic;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_POWER;
-
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
@@ -24,9 +22,12 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_POWER;
 
 /**
  * Power of operator, calculates the power of right operand of left operand. The precedence is read

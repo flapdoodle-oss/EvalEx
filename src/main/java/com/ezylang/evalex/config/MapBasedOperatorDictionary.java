@@ -15,11 +15,12 @@
 */
 package com.ezylang.evalex.config;
 
-import static java.util.Arrays.stream;
-
 import com.ezylang.evalex.operators.OperatorIfc;
+
 import java.util.Map;
 import java.util.TreeMap;
+
+import static java.util.Arrays.stream;
 
 /**
  * A default case-insensitive implementation of the operator dictionary that uses a local <code>

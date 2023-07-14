@@ -15,15 +15,17 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class EvalEx2CompatibilityTest {
 
@@ -98,7 +100,7 @@ class EvalEx2CompatibilityTest {
     Expression expression =
         new Expression(
             "SQRT(2)", ExpressionConfiguration.builder().mathContext(new MathContext(128)).build());
-    assertThat(expression.evaluate().getNumberValue())
+    assertThat(expression.evaluate(VariableResolver.empty()).getNumberValue())
         .isEqualByComparingTo(
             "1.41421356237309504880168872420969807856967187537694807317667973799073247846210703885038753432764157273501384623091229702492483605");
 
@@ -232,23 +234,26 @@ class EvalEx2CompatibilityTest {
       })
   void testImplicitMultiplication(String expressionString, String expectedResult)
       throws EvaluationException, ParseException {
+    Expression expression1 = new Expression(
+            expressionString,
+            ExpressionConfiguration.builder().mathContext(MathContext.DECIMAL32).build());
     Expression expression =
-        new Expression(
-                expressionString,
-                ExpressionConfiguration.builder().mathContext(MathContext.DECIMAL32).build())
-            .with("a", 2)
-            .and("b", 3);
-    assertThat(expression.evaluate().getStringValue()).isEqualTo(expectedResult);
+      expression1;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", 2)
+      .and("b", 3)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo(expectedResult);
   }
 
   private BigDecimal evaluateToNumber(String expression)
       throws EvaluationException, ParseException {
 
     // Given an expression with EvalEx2 compatible math context
-    return new Expression(
+    Expression expression1 = new Expression(
             expression,
-            ExpressionConfiguration.builder().mathContext(MathContext.DECIMAL32).build())
-        .evaluate()
+            ExpressionConfiguration.builder().mathContext(MathContext.DECIMAL32).build());
+    return expression1.evaluate(VariableResolver.empty())
         .getNumberValue();
   }
 }

@@ -15,15 +15,16 @@
 */
 package com.ezylang.evalex.operators.arithmetic;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_ADDITIVE;
-
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
+
 import java.time.Duration;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_ADDITIVE;
 
 /** Subtraction of two numbers. */
 @InfixOperator(precedence = OPERATOR_PRECEDENCE_ADDITIVE)

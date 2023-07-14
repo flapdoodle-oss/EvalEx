@@ -18,6 +18,7 @@ package com.ezylang.evalex.functions;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.Token;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

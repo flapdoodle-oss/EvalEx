@@ -15,14 +15,15 @@
 */
 package com.ezylang.evalex.operators.arithmetic;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_ADDITIVE;
-
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
+
 import java.time.Duration;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_ADDITIVE;
 
 /**
  * Addition of numbers and strings. If one operand is a string, a string concatenation is performed.

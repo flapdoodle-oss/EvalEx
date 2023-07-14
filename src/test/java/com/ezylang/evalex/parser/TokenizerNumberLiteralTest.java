@@ -15,12 +15,12 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.parser.Token.TokenType.NUMBER_LITERAL;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static com.ezylang.evalex.parser.Token.TokenType.NUMBER_LITERAL;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TokenizerNumberLiteralTest extends BaseParserTest {
 

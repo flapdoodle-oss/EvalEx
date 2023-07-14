@@ -15,18 +15,20 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.parser.Token.TokenType.*;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.operators.arithmetic.InfixMultiplicationOperator;
 import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
-import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static com.ezylang.evalex.parser.Token.TokenType.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShuntingYardExceptionsTest extends BaseParserTest {
 
@@ -61,7 +63,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testEmptyExpression() {
     Expression expression = new Expression("");
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -70,7 +72,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testEmptyExpressionBraces() {
     Expression expression = new Expression("()");
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -79,7 +81,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testComma() {
     Expression expression = new Expression(",");
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -118,7 +120,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testFunctionNotEnoughParameters() {
     Expression expression = new Expression("ROUND(2)");
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Not enough parameters for function");
   }
@@ -127,7 +129,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testFunctionNotEnoughParametersForVarArgs() {
     Expression expression = new Expression("MIN()");
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Not enough parameters for function");
   }
@@ -136,7 +138,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testFunctionTooManyParameters() {
     Expression expression = new Expression("ROUND(1,2,3)");
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many parameters for function");
   }
@@ -158,7 +160,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testTooManyOperands(String expressionString) {
     Expression expression = new Expression(expressionString);
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many operands");
   }
@@ -170,7 +172,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
     Expression expression = new Expression(expressionString);
 
-    assertThatThrownBy(expression::evaluate)
+    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Unexpected token after infix operator")
         .extracting("startPosition")

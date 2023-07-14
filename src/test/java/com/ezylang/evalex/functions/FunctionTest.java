@@ -15,13 +15,14 @@
 */
 package com.ezylang.evalex.functions;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FunctionTest {
 
@@ -66,7 +67,7 @@ class FunctionTest {
   private static class CorrectFunctionDefinitionFunction extends AbstractFunction {
     @Override
     public EvaluationValue evaluate(
-        Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
       return new EvaluationValue("OK");
     }
   }
@@ -77,7 +78,7 @@ class FunctionTest {
   private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
     @Override
     public EvaluationValue evaluate(
-        Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
       return new EvaluationValue("OK");
     }
   }

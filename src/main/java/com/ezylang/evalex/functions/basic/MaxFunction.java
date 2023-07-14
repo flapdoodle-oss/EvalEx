@@ -17,9 +17,11 @@ package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
+
 import java.math.BigDecimal;
 
 /** Returns the maximum value of all parameters. */
@@ -27,7 +29,7 @@ import java.math.BigDecimal;
 public class MaxFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     BigDecimal max = null;
     for (EvaluationValue parameter : parameterValues) {
       if (max == null || parameter.getNumberValue().compareTo(max) > 0) {

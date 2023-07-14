@@ -15,20 +15,21 @@
 */
 package com.ezylang.evalex.data;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
+import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.*;
 import java.util.*;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class EvaluationValueTest {
 
@@ -498,9 +499,10 @@ class EvaluationValueTest {
 
       EvaluationValue structureMap = new EvaluationValue(structure);
 
-      Expression exp = new Expression("value.a == \"Hello\"").with("value", structureMap);
+			Expression expression = new Expression("value.a == \"Hello\"");
+			Expression exp = expression;
 
-      EvaluationValue result = exp.evaluate();
+      EvaluationValue result = exp.evaluate(VariableResolver.empty());
       assertThat(result.getBooleanValue()).isTrue();
     } catch (EvaluationException | ParseException e) {
       e.printStackTrace();

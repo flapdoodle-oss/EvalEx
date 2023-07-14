@@ -15,15 +15,15 @@
 */
 package com.ezylang.evalex.operators;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_UNARY;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_UNARY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OperatorTest {
 

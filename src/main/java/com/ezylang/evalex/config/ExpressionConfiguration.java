@@ -15,9 +15,7 @@
 */
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.data.DataAccessorIfc;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.MapBasedDataAccessor;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.functions.basic.*;
 import com.ezylang.evalex.functions.datetime.*;
@@ -28,6 +26,9 @@ import com.ezylang.evalex.functions.trigonometric.*;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.arithmetic.*;
 import com.ezylang.evalex.operators.booleans.*;
+import lombok.Builder;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -36,9 +37,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Supplier;
-import lombok.Builder;
-import lombok.Getter;
 
 /**
  * The expression configuration can be used to configure various aspects of expression parsing and
@@ -176,15 +174,6 @@ public class ExpressionConfiguration {
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
-
-  /**
-   * The data accessor is responsible for accessing variable and constant values in an expression.
-   * The supplier will be called once for each new expression, the default is to create a new {@link
-   * MapBasedDataAccessor} instance for each expression, providing a new storage for each
-   * expression.
-   */
-  @Builder.Default @Getter
-  private final Supplier<DataAccessorIfc> dataAccessorSupplier = MapBasedDataAccessor::new;
 
   /**
    * Default constants will be added automatically to each expression and can be used in expression

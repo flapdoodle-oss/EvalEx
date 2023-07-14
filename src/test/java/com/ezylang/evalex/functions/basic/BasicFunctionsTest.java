@@ -15,23 +15,25 @@
 */
 package com.ezylang.evalex.functions.basic;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
+
+import java.math.MathContext;
+import java.math.RoundingMode;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BasicFunctionsTest extends BaseEvaluationTest {
 
@@ -161,7 +163,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testSqrtNegative() {
-    assertThatThrownBy(() -> new Expression("SQRT(-1)").evaluate())
+    assertThatThrownBy(() -> new Expression("SQRT(-1)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
@@ -189,22 +191,26 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     Expression expressionMock = Mockito.mock(Expression.class);
     Token token = new Token(1, "NOT", TokenType.FUNCTION, notFunction);
 
+    VariableResolver variableResolver = VariableResolver.empty();
+    
     assertThat(
             notFunction
-                .evaluate(expressionMock, token, new EvaluationValue(true))
+                .evaluate(variableResolver, expressionMock, token, new EvaluationValue(true))
                 .getBooleanValue())
         .isFalse();
     assertThat(
             notFunction
-                .evaluate(expressionMock, token, new EvaluationValue(false))
+                .evaluate(variableResolver, expressionMock, token, new EvaluationValue(false))
                 .getBooleanValue())
         .isTrue();
   }
 
   @Test
   void testRandom() throws EvaluationException, ParseException {
-    EvaluationValue r1 = new Expression("RANDOM()").evaluate();
-    EvaluationValue r2 = new Expression("RANDOM()").evaluate();
+    Expression expression1 = new Expression("RANDOM()");
+    EvaluationValue r1 = expression1.evaluate(VariableResolver.empty());
+    Expression expression = new Expression("RANDOM()");
+    EvaluationValue r2 = expression.evaluate(VariableResolver.empty());
 
     assertThat(r1).isNotEqualByComparingTo(r2);
   }
@@ -278,14 +284,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testLogNegative() {
-    assertThatThrownBy(() -> new Expression("LOG(-1)").evaluate())
+    assertThatThrownBy(() -> new Expression("LOG(-1)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
 
   @Test
   void testLogZero() {
-    assertThatThrownBy(() -> new Expression("LOG(0)").evaluate())
+    assertThatThrownBy(() -> new Expression("LOG(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -306,14 +312,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testLog10Negative() {
-    assertThatThrownBy(() -> new Expression("LOG10(-1)").evaluate())
+    assertThatThrownBy(() -> new Expression("LOG10(-1)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
 
   @Test
   void testLog10Zero() {
-    assertThatThrownBy(() -> new Expression("LOG10(0)").evaluate())
+    assertThatThrownBy(() -> new Expression("LOG10(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }

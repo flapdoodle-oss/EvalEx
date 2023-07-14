@@ -15,20 +15,17 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.parser.Token.TokenType.ARRAY_INDEX;
-import static com.ezylang.evalex.parser.Token.TokenType.ARRAY_OPEN;
-import static com.ezylang.evalex.parser.Token.TokenType.BRACE_OPEN;
-import static com.ezylang.evalex.parser.Token.TokenType.FUNCTION;
-import static com.ezylang.evalex.parser.Token.TokenType.STRUCTURE_SEPARATOR;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.parser.Token.TokenType;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+
+import static com.ezylang.evalex.parser.Token.TokenType.*;
 
 /**
  * The shunting yard algorithm can be used to convert a mathematical expression from an infix

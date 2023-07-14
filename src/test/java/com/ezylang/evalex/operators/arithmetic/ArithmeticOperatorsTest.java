@@ -15,17 +15,18 @@
 */
 package com.ezylang.evalex.operators.arithmetic;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
-import java.time.ZoneId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.time.ZoneId;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ArithmeticOperatorsTest extends BaseEvaluationTest {
 

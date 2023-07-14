@@ -15,11 +15,12 @@
 */
 package com.ezylang.evalex.config;
 
-import static java.util.Arrays.stream;
-
 import com.ezylang.evalex.functions.FunctionIfc;
+
 import java.util.Map;
 import java.util.TreeMap;
+
+import static java.util.Arrays.stream;
 
 /**
  * A default case-insensitive implementation of the function dictionary that uses a local <code>

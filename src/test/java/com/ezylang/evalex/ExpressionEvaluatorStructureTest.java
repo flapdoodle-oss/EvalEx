@@ -15,16 +15,18 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
+import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
@@ -36,9 +38,13 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
             put("environment_id", new BigDecimal(12345));
           }
         };
-    Expression expression = new Expression("order.environment_id").with("order", structure);
+    Expression expression1 = new Expression("order.environment_id");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("12345");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("order", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("12345");
   }
 
   @Test
@@ -52,9 +58,13 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     structure2.put("var_x", structure3);
     structure1.put("e_id_e", structure2);
 
-    Expression expression = new Expression("order.e_id_e.var_x.e").with("order", structure1);
+    Expression expression1 = new Expression("order.e_id_e.var_x.e");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("765");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("order", structure1)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("765");
   }
 
   @Test
@@ -66,9 +76,13 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    Expression expression = createExpression("a.b").with("a", structure);
+    Expression expression1 = createExpression("a.b");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("99");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("99");
   }
 
   @Test
@@ -84,14 +98,22 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
     structure.put("b", subStructure);
 
-    Expression expression = createExpression("a.b.c").with("a", structure);
+    Expression expression1 = createExpression("a.b.c");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("95");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("95");
   }
 
   @Test
   void testThrowsUnsupportedDataTypeForStructure() {
-    assertThatThrownBy(() -> createExpression("a.b").with("a", "aString").evaluate())
+    assertThatThrownBy(() -> {
+      VariableResolver variableResolver = VariableResolver.builder().with("a", "aString").build();
+      Expression expression = createExpression("a.b");
+      expression.evaluate(variableResolver);
+    })
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");
   }
@@ -102,7 +124,13 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     testStructure.put("field1", new BigDecimal(3));
 
     assertThatThrownBy(
-            () -> createExpression("a.field1 + a.field2").with("a", testStructure).evaluate())
+            () -> {
+              VariableResolver variableResolver = VariableResolver.builder()
+                .with("a", testStructure)
+                .build();
+              Expression expression = createExpression("a.field1 + a.field2");
+              expression.evaluate(variableResolver);
+            })
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Field 'field2' not found in structure")
         .extracting("startPosition")
@@ -114,9 +142,13 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     Map<String, BigDecimal> testStructure = new HashMap<>();
     testStructure.put("field 1", new BigDecimal(88));
 
-    Expression expression = createExpression("a.\"field 1\"").with("a", testStructure);
+    Expression expression1 = createExpression("a.\"field 1\"");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("88");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", testStructure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("88");
   }
 
   @Test
@@ -126,9 +158,13 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     subStructure.put("prop c", 99);
     structure.put("prop b", List.of(subStructure));
 
-    Expression expression = createExpression("a.\"prop b\"[0].\"prop c\"").with("a", structure);
+    Expression expression1 = createExpression("a.\"prop b\"[0].\"prop c\"");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("99");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("99");
   }
 
   @Test
@@ -140,8 +176,12 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    Expression expression = createExpression("a.\"b prop\"[1]").with("a", structure);
+    Expression expression1 = createExpression("a.\"b prop\"[1]");
+    Expression expression = expression1;
 
-    assertThat(expression.evaluate().getStringValue()).isEqualTo("2");
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", structure)
+      .build();
+    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("2");
   }
 }

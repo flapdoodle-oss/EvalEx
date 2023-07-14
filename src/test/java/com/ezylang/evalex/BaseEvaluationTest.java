@@ -15,13 +15,14 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public abstract class BaseEvaluationTest {
 
@@ -51,6 +52,6 @@ public abstract class BaseEvaluationTest {
       throws EvaluationException, ParseException {
     Expression expression = new Expression(expressionString, configuration);
 
-    return expression.evaluate();
+    return expression.evaluate(VariableResolver.empty());
   }
 }

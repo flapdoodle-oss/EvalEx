@@ -15,14 +15,15 @@
 */
 package com.ezylang.evalex.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.config.TestConfigurationProvider.PostfixQuestionOperator;
 import com.ezylang.evalex.config.TestConfigurationProvider.PrefixPlusPlusOperator;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.arithmetic.InfixModuloOperator;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MapBasedOperatorDictionaryTest {
 

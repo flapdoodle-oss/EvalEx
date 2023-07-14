@@ -16,13 +16,14 @@
 package com.ezylang.evalex.data;
 
 import com.ezylang.evalex.parser.ASTNode;
+import lombok.Value;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.time.*;
 import java.util.*;
 import java.util.Map.Entry;
-import lombok.Value;
 
 /**
  * The representation of the final or intermediate evaluation result value. The representation

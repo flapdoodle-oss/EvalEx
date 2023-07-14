@@ -17,12 +17,14 @@ package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.PostfixOperator;
 import com.ezylang.evalex.operators.PrefixOperator;
 import com.ezylang.evalex.parser.Token;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -40,7 +42,7 @@ public class TestConfigurationProvider {
   public static class DummyFunction extends AbstractFunction {
     @Override
     public EvaluationValue evaluate(
-        Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
       // dummy implementation
       return new EvaluationValue("OK");
     }

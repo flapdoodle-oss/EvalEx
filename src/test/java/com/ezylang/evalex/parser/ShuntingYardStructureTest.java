@@ -15,10 +15,10 @@
 */
 package com.ezylang.evalex.parser;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.Expression;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShuntingYardStructureTest extends BaseParserTest {
 

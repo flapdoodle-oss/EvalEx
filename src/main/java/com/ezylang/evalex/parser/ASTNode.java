@@ -15,10 +15,11 @@
 */
 package com.ezylang.evalex.parser;
 
+import lombok.Value;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.Value;
 
 /**
  * Expressions are parsed into an abstract syntax tree (AST). The tree has one root node and each

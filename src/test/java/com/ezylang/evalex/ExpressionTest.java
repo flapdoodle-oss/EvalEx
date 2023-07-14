@@ -15,18 +15,20 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
+import org.junit.jupiter.api.Test;
+
 import java.math.MathContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExpressionTest {
 
@@ -63,7 +65,11 @@ class ExpressionTest {
     Expression expression = new Expression("a*b");
     ASTNode subExpression = expression.createExpressionNode("4+3");
 
-    EvaluationValue result = expression.with("a", 2).and("b", subExpression).evaluate();
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("a", 2).and("b", subExpression)
+      .build();
+    EvaluationValue result = expression1.evaluate(variableResolver);
 
     assertThat(result.getStringValue()).isEqualTo("14");
   }
@@ -76,7 +82,11 @@ class ExpressionTest {
     values.put("a", 3.5);
     values.put("b", 2.5);
 
-    EvaluationValue result = expression.withValues(values).evaluate();
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .withValues(values)
+      .build();
+    EvaluationValue result = expression1.evaluate(variableResolver);
 
     assertThat(result.getStringValue()).isEqualTo("6");
   }
@@ -89,7 +99,11 @@ class ExpressionTest {
     values.put("a", 3.9);
     values.put("b", 3.1);
 
-    EvaluationValue result = expression.withValues(values).evaluate();
+		Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .withValues(values)
+      .build();
+    EvaluationValue result = expression1.evaluate(variableResolver);
 
     assertThat(result.getStringValue()).isEqualTo("7");
   }
@@ -103,7 +117,11 @@ class ExpressionTest {
     values.put("b", " ");
     values.put("c", "world");
 
-    EvaluationValue result = expression.withValues(values).evaluate();
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .withValues(values)
+      .build();
+    EvaluationValue result = expression1.evaluate(variableResolver);
 
     assertThat(result.getStringValue()).isEqualTo("Hello world");
   }
@@ -117,7 +135,11 @@ class ExpressionTest {
     values.put("b", " ");
     values.put("c", 24.7);
 
-    EvaluationValue result = expression.withValues(values).evaluate();
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .withValues(values)
+      .build();
+		EvaluationValue result = expression1.evaluate(variableResolver);
 
     assertThat(result.getStringValue()).isEqualTo("true 24.7");
   }
@@ -127,7 +149,6 @@ class ExpressionTest {
     Expression expression1 = new Expression("1+1");
     Expression expression2 = new Expression("1+1");
 
-    assertThat(expression1.getDataAccessor()).isNotSameAs(expression2.getDataAccessor());
     assertThat(expression1.getConfiguration().getOperatorDictionary())
         .isNotSameAs(expression2.getConfiguration().getOperatorDictionary());
     assertThat(expression1.getConfiguration().getFunctionDictionary())
@@ -189,7 +210,11 @@ class ExpressionTest {
 
   @Test
   void testGetUndefinedVariables() throws ParseException {
-    Expression expression = new Expression("a+A+b+B+c+C+E+e+PI+x").with("x", 1);
-    assertThat(expression.getUndefinedVariables()).containsExactlyInAnyOrder("a", "b", "c");
+    Expression expression1 = new Expression("a+A+b+B+c+C+E+e+PI+x");
+    Expression expression = expression1;
+    VariableResolver variableResolver = VariableResolver.builder()
+      .with("x", 1)
+      .build();
+    assertThat(expression.getUndefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");
   }
 }

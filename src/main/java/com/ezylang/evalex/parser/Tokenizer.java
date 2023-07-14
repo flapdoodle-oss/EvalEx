@@ -15,16 +15,17 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.parser.Token.TokenType.*;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.FunctionDictionaryIfc;
 import com.ezylang.evalex.config.OperatorDictionaryIfc;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.parser.Token.TokenType;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ezylang.evalex.parser.Token.TokenType.*;
 
 /**
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens

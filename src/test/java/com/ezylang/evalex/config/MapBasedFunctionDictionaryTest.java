@@ -15,13 +15,14 @@
 */
 package com.ezylang.evalex.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.functions.basic.MaxFunction;
 import com.ezylang.evalex.functions.basic.MinFunction;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MapBasedFunctionDictionaryTest {
 

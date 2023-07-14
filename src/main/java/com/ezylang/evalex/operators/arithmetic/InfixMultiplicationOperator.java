@@ -15,14 +15,14 @@
 */
 package com.ezylang.evalex.operators.arithmetic;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
-
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
 
 /** Multiplication of two numbers. */
 @InfixOperator(precedence = OPERATOR_PRECEDENCE_MULTIPLICATIVE)

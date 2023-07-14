@@ -15,19 +15,18 @@
 */
 package com.ezylang.evalex.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.config.TestConfigurationProvider.DummyFunction;
-import com.ezylang.evalex.data.DataAccessorIfc;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.MapBasedDataAccessor;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import java.math.MathContext;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ExpressionConfigurationTest {
 
@@ -41,8 +40,6 @@ class ExpressionConfigurationTest {
         .isInstanceOf(MapBasedOperatorDictionary.class);
     assertThat(configuration.getFunctionDictionary())
         .isInstanceOf(MapBasedFunctionDictionary.class);
-    assertThat(configuration.getDataAccessorSupplier().get())
-        .isInstanceOf(MapBasedDataAccessor.class);
     assertThat(configuration.isArraysAllowed()).isTrue();
     assertThat(configuration.isStructuresAllowed()).isTrue();
     assertThat(configuration.isImplicitMultiplicationAllowed()).isTrue();
@@ -105,26 +102,6 @@ class ExpressionConfigurationTest {
         ExpressionConfiguration.builder().functionDictionary(mockedFunctionDictionary).build();
 
     assertThat(configuration.getFunctionDictionary()).isEqualTo(mockedFunctionDictionary);
-  }
-
-  @Test
-  void testCustomDataAccessorSupplier() {
-    DataAccessorIfc mockedDataAccessor = Mockito.mock(DataAccessorIfc.class);
-
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().dataAccessorSupplier(() -> mockedDataAccessor).build();
-
-    assertThat(configuration.getDataAccessorSupplier().get()).isEqualTo(mockedDataAccessor);
-  }
-
-  @Test
-  void testDataAccessorSupplierReturnsNewInstance() {
-    ExpressionConfiguration configuration = ExpressionConfiguration.defaultConfiguration();
-
-    DataAccessorIfc accessor1 = configuration.getDataAccessorSupplier().get();
-    DataAccessorIfc accessor2 = configuration.getDataAccessorSupplier().get();
-
-    assertThat(accessor1).isNotEqualTo(accessor2);
   }
 
   @Test

@@ -15,11 +15,12 @@
 */
 package com.ezylang.evalex.parser;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
+
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /** */
 public abstract class BaseParserTest {

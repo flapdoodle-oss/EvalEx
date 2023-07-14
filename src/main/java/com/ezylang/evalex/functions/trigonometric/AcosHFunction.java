@@ -18,6 +18,7 @@ package com.ezylang.evalex.functions.trigonometric;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
@@ -27,7 +28,7 @@ import com.ezylang.evalex.parser.Token;
 public class AcosHFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
 
     /* Formula: acosh(x) = ln(x + sqrt(x^2 - 1)) */

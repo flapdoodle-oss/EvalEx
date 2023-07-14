@@ -18,7 +18,9 @@ package com.ezylang.evalex.functions;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
+
 import java.util.List;
 
 /**
@@ -37,15 +39,16 @@ public interface FunctionIfc {
   /**
    * Performs the function logic and returns an evaluation result.
    *
-   * @param expression The expression, where this function is executed. Can be used to access the
-   *     expression configuration.
-   * @param functionToken The function token from the parsed expression.
-   * @param parameterValues The parameter values.
+   * @param variableResolver
+   * @param expression       The expression, where this function is executed. Can be used to access the
+   *                         expression configuration.
+   * @param functionToken    The function token from the parsed expression.
+   * @param parameterValues  The parameter values.
    * @return The evaluation result in form of a {@link EvaluationValue}.
    * @throws EvaluationException In case there were problems during evaluation.
    */
   EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+    VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException;
 
   /**

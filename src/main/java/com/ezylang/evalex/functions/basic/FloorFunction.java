@@ -17,9 +17,11 @@ package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
+
 import java.math.RoundingMode;
 
 /** Rounds the given value an integer using the rounding mode {@link RoundingMode#FLOOR} */
@@ -27,7 +29,7 @@ import java.math.RoundingMode;
 public class FloorFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
     EvaluationValue value = parameterValues[0];
 

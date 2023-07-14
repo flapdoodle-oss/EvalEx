@@ -17,6 +17,7 @@ package com.ezylang.evalex.functions.string;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
@@ -27,7 +28,7 @@ import com.ezylang.evalex.parser.Token;
 public class StringContains extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String string = parameterValues[0].getStringValue();
     String substring = parameterValues[1].getStringValue();
     return new EvaluationValue(string.toUpperCase().contains(substring.toUpperCase()));

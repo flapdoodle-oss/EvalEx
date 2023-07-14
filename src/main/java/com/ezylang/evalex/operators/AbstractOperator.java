@@ -15,10 +15,10 @@
 */
 package com.ezylang.evalex.operators;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OperatorType.PREFIX_OPERATOR;
-
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import lombok.Getter;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OperatorType.PREFIX_OPERATOR;
 
 /**
  * Abstract implementation of the {@link OperatorIfc}, used as base class for operator

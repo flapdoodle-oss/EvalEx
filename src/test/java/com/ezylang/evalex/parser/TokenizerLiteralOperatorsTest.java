@@ -15,9 +15,6 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_AND;
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_OR;
-
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
@@ -25,9 +22,13 @@ import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.operators.PostfixOperator;
 import com.ezylang.evalex.operators.PrefixOperator;
 import com.ezylang.evalex.parser.Token.TokenType;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_AND;
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_OR;
 
 class TokenizerLiteralOperatorsTest extends BaseParserTest {
 

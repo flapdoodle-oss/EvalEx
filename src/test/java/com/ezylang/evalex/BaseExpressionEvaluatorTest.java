@@ -17,6 +17,7 @@ package com.ezylang.evalex;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
 
 public abstract class BaseExpressionEvaluatorTest {
@@ -26,7 +27,7 @@ public abstract class BaseExpressionEvaluatorTest {
 
   String evaluate(String expressionString) throws ParseException, EvaluationException {
     Expression expression = createExpression(expressionString);
-    return expression.evaluate().getStringValue();
+    return expression.evaluate(VariableResolver.empty()).getStringValue();
   }
 
   Expression createExpression(String expressionString) {
