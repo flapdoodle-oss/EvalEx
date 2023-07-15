@@ -20,7 +20,7 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 /**
@@ -29,10 +29,16 @@ import com.ezylang.evalex.parser.Token;
  * resultIfTrue</code> and <code>resultIfFalse</code> are only evaluated (lazily evaluated),
  * <b>after</b> the condition was evaluated.
  */
-@FunctionParameter(name = "condition")
-@FunctionParameter(name = "resultIfTrue", isLazy = true)
-@FunctionParameter(name = "resultIfFalse", isLazy = true)
 public class IfFunction extends AbstractFunction {
+
+  public  IfFunction() {
+    super(
+      FunctionParameterDefinition.of("condition"),
+      FunctionParameterDefinition.lazyWith("resultIfTrue"),
+      FunctionParameterDefinition.lazyWith("resultIfFalse")
+    );
+  }
+
   @Override
   public EvaluationValue evaluate(
     VariableResolver variableResolver,

@@ -30,28 +30,28 @@ class FunctionTest {
   void testParameterDefinition() {
     FunctionIfc function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.getFunctionParameterDefinitions().get(0).getName()).isEqualTo("default");
-    assertThat(function.getFunctionParameterDefinitions().get(0).isLazy()).isFalse();
-    assertThat(function.getFunctionParameterDefinitions().get(0).isVarArg()).isFalse();
+    assertThat(function.parameterDefinitions().get(0).getName()).isEqualTo("default");
+    assertThat(function.parameterDefinitions().get(0).isLazy()).isFalse();
+    assertThat(function.parameterDefinitions().get(0).isVarArg()).isFalse();
 
-    assertThat(function.getFunctionParameterDefinitions().get(1).getName()).isEqualTo("lazy");
-    assertThat(function.getFunctionParameterDefinitions().get(1).isLazy()).isTrue();
-    assertThat(function.getFunctionParameterDefinitions().get(1).isVarArg()).isFalse();
+    assertThat(function.parameterDefinitions().get(1).getName()).isEqualTo("lazy");
+    assertThat(function.parameterDefinitions().get(1).isLazy()).isTrue();
+    assertThat(function.parameterDefinitions().get(1).isVarArg()).isFalse();
 
-    assertThat(function.getFunctionParameterDefinitions().get(2).getName()).isEqualTo("vararg");
-    assertThat(function.getFunctionParameterDefinitions().get(2).isLazy()).isFalse();
-    assertThat(function.getFunctionParameterDefinitions().get(2).isVarArg()).isTrue();
+    assertThat(function.parameterDefinitions().get(2).getName()).isEqualTo("vararg");
+    assertThat(function.parameterDefinitions().get(2).isLazy()).isFalse();
+    assertThat(function.parameterDefinitions().get(2).isVarArg()).isTrue();
   }
 
   @Test
   void testParameterIsLazy() {
     FunctionIfc function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.isParameterLazy(0)).isFalse();
-    assertThat(function.isParameterLazy(1)).isTrue();
-    assertThat(function.isParameterLazy(2)).isFalse();
-    assertThat(function.isParameterLazy(3)).isFalse();
-    assertThat(function.isParameterLazy(4)).isFalse();
+    assertThat(function.parameterIsLazy(0)).isFalse();
+    assertThat(function.parameterIsLazy(1)).isTrue();
+    assertThat(function.parameterIsLazy(2)).isFalse();
+    assertThat(function.parameterIsLazy(3)).isFalse();
+    assertThat(function.parameterIsLazy(4)).isFalse();
   }
 
   @Test
@@ -61,10 +61,15 @@ class FunctionTest {
         .hasMessage("Only last parameter may be defined as variable argument");
   }
 
-  @FunctionParameter(name = "default")
-  @FunctionParameter(name = "lazy", isLazy = true)
-  @FunctionParameter(name = "vararg", isVarArg = true)
   private static class CorrectFunctionDefinitionFunction extends AbstractFunction {
+
+    protected CorrectFunctionDefinitionFunction() {
+      super(
+        FunctionParameterDefinition.of("default"),
+        FunctionParameterDefinition.lazyWith("lazy"),
+        FunctionParameterDefinition.varArgWith("vararg")
+      );
+    }
     @Override
     public EvaluationValue evaluate(
 			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
@@ -72,10 +77,14 @@ class FunctionTest {
     }
   }
 
-  @FunctionParameter(name = "default")
-  @FunctionParameter(name = "vararg", isVarArg = true)
-  @FunctionParameter(name = "another")
   private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
+    public WrongVarargFunctionDefinitionFunction() {
+      super(
+        FunctionParameterDefinition.of("default"),
+        FunctionParameterDefinition.varArgWith("vararg"),
+        FunctionParameterDefinition.of("another")
+      );
+    }
     @Override
     public EvaluationValue evaluate(
 			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

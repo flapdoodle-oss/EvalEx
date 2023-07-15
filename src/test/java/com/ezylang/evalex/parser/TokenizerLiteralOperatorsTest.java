@@ -17,18 +17,11 @@ package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
-import com.ezylang.evalex.operators.PostfixOperator;
-import com.ezylang.evalex.operators.PrefixOperator;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.operators.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
-
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_AND;
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_OR;
 
 class TokenizerLiteralOperatorsTest extends BaseParserTest {
 
@@ -46,20 +39,23 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
   void testAndOrNot() throws ParseException {
     assertAllTokensParsedCorrectly(
         "NOT a AND b DENIED OR NOT(c)",
-        new Token(1, "NOT", TokenType.PREFIX_OPERATOR),
-        new Token(5, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(7, "AND", TokenType.INFIX_OPERATOR),
-        new Token(11, "b", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(13, "DENIED", TokenType.POSTFIX_OPERATOR),
-        new Token(20, "OR", TokenType.INFIX_OPERATOR),
-        new Token(23, "NOT", TokenType.PREFIX_OPERATOR),
-        new Token(26, "(", TokenType.BRACE_OPEN),
-        new Token(27, "c", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(28, ")", TokenType.BRACE_CLOSE));
+      Token.of(1, "NOT", TokenType.PREFIX_OPERATOR),
+      Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(7, "AND", TokenType.INFIX_OPERATOR),
+      Token.of(11, "b", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(13, "DENIED", TokenType.POSTFIX_OPERATOR),
+      Token.of(20, "OR", TokenType.INFIX_OPERATOR),
+      Token.of(23, "NOT", TokenType.PREFIX_OPERATOR),
+      Token.of(26, "(", TokenType.BRACE_OPEN),
+      Token.of(27, "c", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(28, ")", TokenType.BRACE_CLOSE));
   }
 
-  @InfixOperator(precedence = OPERATOR_PRECEDENCE_AND)
-  static class AndOperator extends AbstractOperator {
+  static class AndOperator extends AbstractInfixOperator {
+    protected AndOperator() {
+      super(Precedence.OPERATOR_PRECEDENCE_AND);
+    }
+
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
@@ -67,8 +63,11 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     }
   }
 
-  @InfixOperator(precedence = OPERATOR_PRECEDENCE_OR)
-  static class OrOperator extends AbstractOperator {
+  static class OrOperator extends AbstractInfixOperator {
+    protected OrOperator() {
+      super(Precedence.OPERATOR_PRECEDENCE_OR);
+    }
+    
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
@@ -76,8 +75,11 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     }
   }
 
-  @PrefixOperator(leftAssociative = false)
-  static class NotOperator extends AbstractOperator {
+  static class NotOperator extends AbstractPrefixOperator {
+    protected NotOperator() {
+      super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+    }
+
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
@@ -85,9 +87,12 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     }
   }
 
-  @PostfixOperator()
-  static class DeniedOperator extends AbstractOperator {
-    @Override
+  static class DeniedOperator extends AbstractPostfixOperator {
+    protected DeniedOperator() {
+        super(Precedence.OPERATOR_PRECEDENCE_UNARY);
+      }
+
+      @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       return new EvaluationValue(!operands[0].getBooleanValue());

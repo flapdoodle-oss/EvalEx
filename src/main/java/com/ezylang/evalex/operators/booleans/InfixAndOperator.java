@@ -17,16 +17,17 @@ package com.ezylang.evalex.operators.booleans;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_AND;
-
 /** Boolean AND of two values. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_AND)
-public class InfixAndOperator extends AbstractOperator {
+public class InfixAndOperator extends AbstractInfixOperator {
 
+  public InfixAndOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_AND);
+  }
+  
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {

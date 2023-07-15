@@ -18,13 +18,18 @@ package com.ezylang.evalex.functions.datetime;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.Instant;
 import java.time.ZoneId;
 
-public abstract class AbstractDateTimeParseFunction extends AbstractFunction {
+public abstract class AbstractDateTimeParseFunction extends SingleArgumentFunction {
+  protected AbstractDateTimeParseFunction() {
+    super(FunctionParameterDefinition.varArgWith("value"));
+  }
+  
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

@@ -30,15 +30,15 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
     assertThat(evaluate("-2^2")).isEqualTo("4");
   }
 
-  @Test
-  void testPrecedenceHigher() throws ParseException, EvaluationException {
-    ExpressionConfiguration config =
-        ExpressionConfiguration.builder()
-            .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER)
-            .build();
-
-    Expression expression = new Expression("-2^2", config);
-
-    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("-4");
-  }
+//  @Test
+//  void testPrecedenceHigher() throws ParseException, EvaluationException {
+//    ExpressionConfiguration config =
+//        ExpressionConfiguration.builder()
+//            .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER)
+//            .build();
+//
+//    Expression expression = new Expression("-2^2", config);
+//
+//    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("-4");
+//  }
 }

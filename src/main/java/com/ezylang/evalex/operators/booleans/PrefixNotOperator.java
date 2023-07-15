@@ -17,14 +17,17 @@ package com.ezylang.evalex.operators.booleans;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.PrefixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 /** Boolean negation of value. */
-@PrefixOperator
-public class PrefixNotOperator extends AbstractOperator {
+public class PrefixNotOperator extends AbstractPrefixOperator {
 
+  public PrefixNotOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_UNARY);
+  }
+  
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {

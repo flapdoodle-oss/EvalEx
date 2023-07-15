@@ -18,13 +18,16 @@ package com.ezylang.evalex.operators.arithmetic;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.PrefixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 /** Unary prefix minus. */
-@PrefixOperator(leftAssociative = false)
-public class PrefixMinusOperator extends AbstractOperator {
+public class PrefixMinusOperator extends AbstractPrefixOperator {
+
+  public PrefixMinusOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+  }
 
   @Override
   public EvaluationValue evaluate(

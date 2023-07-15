@@ -17,10 +17,7 @@ package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
+import org.immutables.value.Value;
 
 /**
  * A token represents a singe part of an expression, like an operator, number literal, or a brace.
@@ -29,48 +26,35 @@ import lombok.Value;
  *
  * <p>For operators and functions, the operator and function definition is also set during parsing.
  */
-@Value
-@AllArgsConstructor
-@EqualsAndHashCode(doNotUseGetters = true)
-public class Token {
+@Value.Immutable
+public interface Token {
 
-  public enum TokenType {
-    BRACE_OPEN,
-    BRACE_CLOSE,
-    COMMA,
-    STRING_LITERAL,
-    NUMBER_LITERAL,
-    VARIABLE_OR_CONSTANT,
-    INFIX_OPERATOR,
-    PREFIX_OPERATOR,
-    POSTFIX_OPERATOR,
-    FUNCTION,
-    FUNCTION_PARAM_START,
-    ARRAY_OPEN,
-    ARRAY_CLOSE,
-    ARRAY_INDEX,
-    STRUCTURE_SEPARATOR
+  @Value.Parameter
+  int getStartPosition();
+
+  @Value.Parameter
+  String getValue();
+
+  @Value.Parameter
+  TokenType getType();
+
+  @Nullable
+  @Value.Auxiliary
+  FunctionIfc getFunctionDefinition();
+
+  @Nullable
+  @Value.Auxiliary
+  OperatorIfc getOperatorDefinition();
+
+  static Token of(int startPosition, String value, TokenType type) {
+    return ImmutableToken.of(startPosition, value, type);
   }
 
-  int startPosition;
-
-  String value;
-
-  TokenType type;
-
-  @EqualsAndHashCode.Exclude @ToString.Exclude FunctionIfc functionDefinition;
-
-  @EqualsAndHashCode.Exclude @ToString.Exclude OperatorIfc operatorDefinition;
-
-  public Token(int startPosition, String value, TokenType type) {
-    this(startPosition, value, type, null, null);
+  static Token of(int startPosition, String value, TokenType type, FunctionIfc functionDefinition) {
+    return ImmutableToken.of(startPosition, value, type).withFunctionDefinition(functionDefinition);
   }
 
-  public Token(int startPosition, String value, TokenType type, FunctionIfc functionDefinition) {
-    this(startPosition, value, type, functionDefinition, null);
-  }
-
-  public Token(int startPosition, String value, TokenType type, OperatorIfc operatorDefinition) {
-    this(startPosition, value, type, null, operatorDefinition);
+  static Token of(int startPosition, String value, TokenType type, OperatorIfc operatorDefinition) {
+    return ImmutableToken.of(startPosition, value, type).withOperatorDefinition(operatorDefinition);
   }
 }

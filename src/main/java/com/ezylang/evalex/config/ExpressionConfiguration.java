@@ -17,15 +17,10 @@ package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.functions.basic.*;
-import com.ezylang.evalex.functions.datetime.*;
-import com.ezylang.evalex.functions.string.StringContains;
-import com.ezylang.evalex.functions.string.StringLowerFunction;
-import com.ezylang.evalex.functions.string.StringUpperFunction;
-import com.ezylang.evalex.functions.trigonometric.*;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.AbstractPostfixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
 import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.operators.arithmetic.*;
-import com.ezylang.evalex.operators.booleans.*;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -77,100 +72,17 @@ public class ExpressionConfiguration {
   @Builder.Default
   @Getter
   @SuppressWarnings("unchecked")
-  private final OperatorDictionaryIfc operatorDictionary =
-      MapBasedOperatorDictionary.ofOperators(
-          // arithmetic
-          Map.entry("+", new PrefixPlusOperator()),
-          Map.entry("-", new PrefixMinusOperator()),
-          Map.entry("+", new InfixPlusOperator()),
-          Map.entry("-", new InfixMinusOperator()),
-          Map.entry("*", new InfixMultiplicationOperator()),
-          Map.entry("/", new InfixDivisionOperator()),
-          Map.entry("^", new InfixPowerOfOperator()),
-          Map.entry("%", new InfixModuloOperator()),
-          // booleans
-          Map.entry("=", new InfixEqualsOperator()),
-          Map.entry("==", new InfixEqualsOperator()),
-          Map.entry("!=", new InfixNotEqualsOperator()),
-          Map.entry("<>", new InfixNotEqualsOperator()),
-          Map.entry(">", new InfixGreaterOperator()),
-          Map.entry(">=", new InfixGreaterEqualsOperator()),
-          Map.entry("<", new InfixLessOperator()),
-          Map.entry("<=", new InfixLessEqualsOperator()),
-          Map.entry("&&", new InfixAndOperator()),
-          Map.entry("||", new InfixOrOperator()),
-          Map.entry("!", new PrefixNotOperator()));
+  private OperatorResolver operatorResolver = OperatorResolver.defaults();
 
+  // basic functions
+  // trigonometric
+  // string functions
+  // date time functions
   /** The function dictionary holds all functions that will be allowed in an expression. */
   @Builder.Default
   @Getter
   @SuppressWarnings("unchecked")
-  private final FunctionDictionaryIfc functionDictionary =
-      MapBasedFunctionDictionary.ofFunctions(
-          // basic functions
-          Map.entry("ABS", new AbsFunction()),
-          Map.entry("CEILING", new CeilingFunction()),
-          Map.entry("FACT", new FactFunction()),
-          Map.entry("FLOOR", new FloorFunction()),
-          Map.entry("IF", new IfFunction()),
-          Map.entry("LOG", new LogFunction()),
-          Map.entry("LOG10", new Log10Function()),
-          Map.entry("MAX", new MaxFunction()),
-          Map.entry("MIN", new MinFunction()),
-          Map.entry("NOT", new NotFunction()),
-          Map.entry("RANDOM", new RandomFunction()),
-          Map.entry("ROUND", new RoundFunction()),
-          Map.entry("SUM", new SumFunction()),
-          Map.entry("SQRT", new SqrtFunction()),
-          // trigonometric
-          Map.entry("ACOS", new AcosFunction()),
-          Map.entry("ACOSH", new AcosHFunction()),
-          Map.entry("ACOSR", new AcosRFunction()),
-          Map.entry("ACOT", new AcotFunction()),
-          Map.entry("ACOTH", new AcotHFunction()),
-          Map.entry("ACOTR", new AcotRFunction()),
-          Map.entry("ASIN", new AsinFunction()),
-          Map.entry("ASINH", new AsinHFunction()),
-          Map.entry("ASINR", new AsinRFunction()),
-          Map.entry("ATAN", new AtanFunction()),
-          Map.entry("ATAN2", new Atan2Function()),
-          Map.entry("ATAN2R", new Atan2RFunction()),
-          Map.entry("ATANH", new AtanHFunction()),
-          Map.entry("ATANR", new AtanRFunction()),
-          Map.entry("COS", new CosFunction()),
-          Map.entry("COSH", new CosHFunction()),
-          Map.entry("COSR", new CosRFunction()),
-          Map.entry("COT", new CotFunction()),
-          Map.entry("COTH", new CotHFunction()),
-          Map.entry("COTR", new CotRFunction()),
-          Map.entry("CSC", new CscFunction()),
-          Map.entry("CSCH", new CscHFunction()),
-          Map.entry("CSCR", new CscRFunction()),
-          Map.entry("DEG", new DegFunction()),
-          Map.entry("RAD", new RadFunction()),
-          Map.entry("SIN", new SinFunction()),
-          Map.entry("SINH", new SinHFunction()),
-          Map.entry("SINR", new SinRFunction()),
-          Map.entry("SEC", new SecFunction()),
-          Map.entry("SECH", new SecHFunction()),
-          Map.entry("SECR", new SecRFunction()),
-          Map.entry("TAN", new TanFunction()),
-          Map.entry("TANH", new TanHFunction()),
-          Map.entry("TANR", new TanRFunction()),
-          // string functions
-          Map.entry("STR_CONTAINS", new StringContains()),
-          Map.entry("STR_LOWER", new StringLowerFunction()),
-          Map.entry("STR_UPPER", new StringUpperFunction()),
-          // date time functions
-          Map.entry("DT_DATE_TIME", new DateTimeFunction()),
-          Map.entry("DT_PARSE", new DateTimeParseFunction()),
-          Map.entry("DT_ZONED_PARSE", new ZonedDateTimeParseFunction()),
-          Map.entry("DT_FORMAT", new DateTimeFormatFunction()),
-          Map.entry("DT_EPOCH", new DateTimeToEpochFunction()),
-          Map.entry("DT_DATE_TIME_EPOCH", new DateTimeFromEpochFunction()),
-          Map.entry("DT_DURATION_MILLIS", new DurationFromMillisFunction()),
-          Map.entry("DT_DURATION_DAYS", new DurationFromDaysFunction()),
-          Map.entry("DT_DURATION_PARSE", new DurationParseFunction()));
+  private FunctionResolver functionResolver = FunctionResolver.defaults();
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
@@ -190,13 +102,6 @@ public class ExpressionConfiguration {
 
   /** Support for implicit multiplication, like in (a+b)(b+c) are allowed or not. */
   @Builder.Default @Getter private final boolean implicitMultiplicationAllowed = true;
-
-  /**
-   * The power of operator precedence, can be set higher {@link
-   * OperatorIfc#OPERATOR_PRECEDENCE_POWER_HIGHER} or to a custom value.
-   */
-  @Builder.Default @Getter
-  private final int powerOfPrecedence = OperatorIfc.OPERATOR_PRECEDENCE_POWER;
 
   /**
    * If specified, all results from operations and functions will be rounded to the specified number
@@ -243,10 +148,27 @@ public class ExpressionConfiguration {
    * @return The modified configuration, to allow chaining of methods.
    */
   @SafeVarargs
+  @Deprecated
   public final ExpressionConfiguration withAdditionalOperators(
       Map.Entry<String, OperatorIfc>... operators) {
+    ImmutableMapBasedOperatorResolver.Builder builder = MapBasedOperatorResolver.builder();
     Arrays.stream(operators)
-        .forEach(entry -> operatorDictionary.addOperator(entry.getKey(), entry.getValue()));
+        .forEach(entry -> {
+          OperatorIfc operator = entry.getValue();
+          switch (operator.type()) {
+            case INFIX_OPERATOR:
+              builder.putInfixOperators(entry.getKey(), (AbstractInfixOperator) operator);
+              break;
+            case PREFIX_OPERATOR:
+              builder.putPrefixOperators(entry.getKey(), (AbstractPrefixOperator) operator);
+              break;
+            case POSTFIX_OPERATOR:
+              builder.putPostfixOperators(entry.getKey(), (AbstractPostfixOperator) operator);
+              break;
+          }
+        });
+    ImmutableMapBasedOperatorResolver override = builder.build();
+    this.operatorResolver = override.andThen(operatorResolver);
     return this;
   }
 
@@ -266,11 +188,23 @@ public class ExpressionConfiguration {
    * @return The modified configuration, to allow chaining of methods.
    */
   @SafeVarargs
+  @Deprecated
   public final ExpressionConfiguration withAdditionalFunctions(
       Map.Entry<String, FunctionIfc>... functions) {
+    ImmutableMapBasedFunctionResolver.Builder builder = MapBasedFunctionResolver.builder();
+
     Arrays.stream(functions)
-        .forEach(entry -> functionDictionary.addFunction(entry.getKey(), entry.getValue()));
+        .forEach(entry -> builder.putFunctions(entry.getKey(), entry.getValue()));
+
+    ImmutableMapBasedFunctionResolver override = builder.build();
+    this.functionResolver = override.andThen(this.functionResolver);
+    
     return this;
+  }
+
+  @Deprecated
+  public final ExpressionConfiguration withAdditionalFunction(String name, FunctionIfc function) {
+    return withAdditionalFunctions(Map.entry(name, function));
   }
 
   private static Map<String, EvaluationValue> getStandardConstants() {

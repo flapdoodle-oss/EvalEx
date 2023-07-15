@@ -15,23 +15,27 @@
 */
 package com.ezylang.evalex.functions;
 
-import lombok.Builder;
-import lombok.Value;
+import com.ezylang.evalex.functions.validations.ParameterValidator;
+import org.immutables.value.Value;
+
+import java.util.List;
 
 /** Definition of a function parameter. */
-@Value
-@Builder
-public class FunctionParameterDefinition {
+@Value.Immutable
+public interface FunctionParameterDefinition {
 
   /** Name of the parameter, useful for error messages etc. */
-  String name;
+  String getName();
 
   /**
    * Whether this parameter is a variable argument parameter (can be repeated).
    *
    * @see com.ezylang.evalex.functions.basic.MinFunction for an example.
    */
-  boolean isVarArg;
+  @Value.Default
+  default boolean isVarArg() {
+    return false;
+  }
 
   /**
    * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
@@ -39,11 +43,26 @@ public class FunctionParameterDefinition {
    *
    * @see com.ezylang.evalex.functions.basic.IfFunction for an example.
    */
-  boolean isLazy;
+  @Value.Default
+  default boolean isLazy() {
+    return false;
+  }
 
-  /** If the parameter does not allow zero values. */
-  boolean nonZero;
+  List<ParameterValidator> validators();
 
-  /** If the parameter does not allow negative values. */
-  boolean nonNegative;
+  static ImmutableFunctionParameterDefinition.Builder builder() {
+    return ImmutableFunctionParameterDefinition.builder();
+  }
+
+  static ImmutableFunctionParameterDefinition of(String name) {
+    return builder().name(name).build();
+  }
+
+  static ImmutableFunctionParameterDefinition varArgWith(String name) {
+    return builder().name(name).isVarArg(true).build();
+  }
+
+  static ImmutableFunctionParameterDefinition lazyWith(String name) {
+    return builder().name(name).isLazy(true).build();
+  }
 }

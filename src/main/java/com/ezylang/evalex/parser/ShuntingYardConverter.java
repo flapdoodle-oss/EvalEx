@@ -18,14 +18,13 @@ package com.ezylang.evalex.parser;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.parser.Token.TokenType;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import static com.ezylang.evalex.parser.Token.TokenType.*;
+import static com.ezylang.evalex.parser.TokenType.*;
 
 /**
  * The shunting yard algorithm can be used to convert a mathematical expression from an infix
@@ -130,10 +129,10 @@ public class ShuntingYardConverter {
     if (previousToken != null && previousToken.getType() == FUNCTION) {
       // start of parameter list, marker for variable number of arguments
       Token paramStart =
-          new Token(
-              currentToken.getStartPosition(),
-              currentToken.getValue(),
-              TokenType.FUNCTION_PARAM_START);
+        Token.of(
+            currentToken.getStartPosition(),
+            currentToken.getValue(),
+            TokenType.FUNCTION_PARAM_START);
       operandStack.push(new ASTNode(paramStart));
     }
     operatorStack.push(currentToken);
@@ -161,11 +160,11 @@ public class ShuntingYardConverter {
   private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
       throws ParseException {
     FunctionIfc function = functionToken.getFunctionDefinition();
-    if (parameters.size() < function.getFunctionParameterDefinitions().size()) {
+    if (parameters.size() < function.parameterDefinitions().size()) {
       throw new ParseException(functionToken, "Not enough parameters for function");
     }
     if (!function.hasVarArgs()
-        && parameters.size() > function.getFunctionParameterDefinitions().size()) {
+        && parameters.size() > function.parameterDefinitions().size()) {
       throw new ParseException(functionToken, "Too many parameters for function");
     }
   }
@@ -185,7 +184,7 @@ public class ShuntingYardConverter {
     }
     // create ARRAY_INDEX operator (just like a function name) and push it to the operator stack
     Token arrayIndex =
-        new Token(currentToken.getStartPosition(), currentToken.getValue(), ARRAY_INDEX);
+      Token.of(currentToken.getStartPosition(), currentToken.getValue(), ARRAY_INDEX);
     operatorStack.push(arrayIndex);
 
     // push the ARRAY_OPEN to the operators, too (to later match the ARRAY_CLOSE)
@@ -262,11 +261,11 @@ public class ShuntingYardConverter {
     }
 
     if (currentOperator.isLeftAssociative()) {
-      return currentOperator.getPrecedence(configuration)
-          <= nextOperator.getPrecedence(configuration);
+      return currentOperator.getPrecedence()
+          <= nextOperator.getPrecedence();
     } else {
-      return currentOperator.getPrecedence(configuration)
-          < nextOperator.getPrecedence(configuration);
+      return currentOperator.getPrecedence()
+          < nextOperator.getPrecedence();
     }
   }
 

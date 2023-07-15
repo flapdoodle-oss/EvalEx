@@ -18,7 +18,7 @@ package com.ezylang.evalex;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.Token;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.parser.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,11 +31,11 @@ class ExpressionEvaluationExceptionsTest {
 
     assertThatThrownBy(
             () -> {
-              ASTNode node = new ASTNode(new Token(1, "(", TokenType.BRACE_OPEN));
+              ASTNode node = new ASTNode(Token.of(1, "(", TokenType.BRACE_OPEN));
               expression.evaluateSubtree(VariableResolver.empty(), node);
             })
         .isInstanceOf(EvaluationException.class)
         .hasMessage(
-            "Unexpected evaluation token: Token(startPosition=1, value=(, type=BRACE_OPEN)");
+            "Unexpected evaluation token: Token{startPosition=1, value=(, type=BRACE_OPEN}");
   }
 }

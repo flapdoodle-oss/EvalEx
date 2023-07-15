@@ -17,19 +17,20 @@ package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.Duration;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_ADDITIVE;
-
 /**
  * Addition of numbers and strings. If one operand is a string, a string concatenation is performed.
  */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_ADDITIVE)
-public class InfixPlusOperator extends AbstractOperator {
+public class InfixPlusOperator extends AbstractInfixOperator {
+
+  public InfixPlusOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_ADDITIVE);
+  }
 
   @Override
   public EvaluationValue evaluate(

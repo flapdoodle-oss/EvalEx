@@ -15,7 +15,6 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,11 +25,11 @@ class TokenizerBracesTest extends BaseParserTest {
   void testBracesSimple() throws ParseException {
     assertAllTokensParsedCorrectly(
         "(a + b)",
-        new Token(1, "(", TokenType.BRACE_OPEN),
-        new Token(2, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(4, "+", TokenType.INFIX_OPERATOR),
-        new Token(6, "b", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(7, ")", TokenType.BRACE_CLOSE));
+      Token.of(1, "(", TokenType.BRACE_OPEN),
+      Token.of(2, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(4, "+", TokenType.INFIX_OPERATOR),
+      Token.of(6, "b", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(7, ")", TokenType.BRACE_CLOSE));
   }
 
   @Test
@@ -38,15 +37,15 @@ class TokenizerBracesTest extends BaseParserTest {
 
     assertAllTokensParsedCorrectly(
         "(a+(b+c))",
-        new Token(1, "(", TokenType.BRACE_OPEN),
-        new Token(2, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(3, "+", TokenType.INFIX_OPERATOR),
-        new Token(4, "(", TokenType.BRACE_OPEN),
-        new Token(5, "b", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(6, "+", TokenType.INFIX_OPERATOR),
-        new Token(7, "c", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(8, ")", TokenType.BRACE_CLOSE),
-        new Token(9, ")", TokenType.BRACE_CLOSE));
+      Token.of(1, "(", TokenType.BRACE_OPEN),
+      Token.of(2, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(3, "+", TokenType.INFIX_OPERATOR),
+      Token.of(4, "(", TokenType.BRACE_OPEN),
+      Token.of(5, "b", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(6, "+", TokenType.INFIX_OPERATOR),
+      Token.of(7, "c", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(8, ")", TokenType.BRACE_CLOSE),
+      Token.of(9, ")", TokenType.BRACE_CLOSE));
   }
 
   @Test

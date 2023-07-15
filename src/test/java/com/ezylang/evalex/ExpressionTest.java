@@ -18,6 +18,7 @@ package com.ezylang.evalex;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
@@ -39,12 +40,12 @@ class ExpressionTest {
     assertThat(expression.getExpressionString()).isEqualTo("a+b");
     assertThat(expression.getConfiguration().getMathContext())
         .isEqualTo(ExpressionConfiguration.DEFAULT_MATH_CONTEXT);
-    assertThat(expression.getConfiguration().getFunctionDictionary().hasFunction("SUM")).isTrue();
-    assertThat(expression.getConfiguration().getOperatorDictionary().hasInfixOperator("+"))
+    assertThat(expression.getConfiguration().getFunctionResolver().hasFunction("SUM")).isTrue();
+    assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(OperatorType.INFIX_OPERATOR, "+"))
         .isTrue();
-    assertThat(expression.getConfiguration().getOperatorDictionary().hasPrefixOperator("+"))
+		assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(OperatorType.PREFIX_OPERATOR, "+"))
         .isTrue();
-    assertThat(expression.getConfiguration().getOperatorDictionary().hasPostfixOperator("+"))
+    assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(OperatorType.POSTFIX_OPERATOR, "+"))
         .isFalse();
   }
 
@@ -149,10 +150,10 @@ class ExpressionTest {
     Expression expression1 = new Expression("1+1");
     Expression expression2 = new Expression("1+1");
 
-    assertThat(expression1.getConfiguration().getOperatorDictionary())
-        .isNotSameAs(expression2.getConfiguration().getOperatorDictionary());
-    assertThat(expression1.getConfiguration().getFunctionDictionary())
-        .isNotSameAs(expression2.getConfiguration().getFunctionDictionary());
+    assertThat(expression1.getConfiguration().getOperatorResolver())
+        .isNotSameAs(expression2.getConfiguration().getOperatorResolver());
+    assertThat(expression1.getConfiguration().getFunctionResolver())
+        .isNotSameAs(expression2.getConfiguration().getFunctionResolver());
     assertThat(expression1.getConfiguration().getDefaultConstants())
         .isNotSameAs(expression2.getConfiguration().getDefaultConstants());
   }

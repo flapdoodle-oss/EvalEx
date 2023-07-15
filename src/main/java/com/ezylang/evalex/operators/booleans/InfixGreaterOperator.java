@@ -17,15 +17,16 @@ package com.ezylang.evalex.operators.booleans;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_COMPARISON;
-
 /** Greater of two values. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
-public class InfixGreaterOperator extends AbstractOperator {
+public class InfixGreaterOperator extends AbstractInfixOperator {
+
+  public InfixGreaterOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_COMPARISON);
+  }
 
   @Override
   public EvaluationValue evaluate(

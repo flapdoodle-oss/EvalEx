@@ -17,26 +17,24 @@ package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_POWER;
-
 /**
  * Power of operator, calculates the power of right operand of left operand. The precedence is read
  * from the configuration during parsing.
- *
- * @see #getPrecedence(ExpressionConfiguration)
  */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_POWER, leftAssociative = false)
-public class InfixPowerOfOperator extends AbstractOperator {
+public class InfixPowerOfOperator extends AbstractInfixOperator {
+
+  public InfixPowerOfOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_POWER, false);
+  }
 
   @Override
   public EvaluationValue evaluate(
@@ -71,10 +69,5 @@ public class InfixPowerOfOperator extends AbstractOperator {
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
     }
-  }
-
-  @Override
-  public int getPrecedence(ExpressionConfiguration configuration) {
-    return configuration.getPowerOfPrecedence();
   }
 }

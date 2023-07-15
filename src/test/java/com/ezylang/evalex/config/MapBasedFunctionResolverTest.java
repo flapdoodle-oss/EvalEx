@@ -24,7 +24,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MapBasedFunctionDictionaryTest {
+class MapBasedFunctionResolverTest {
 
   @Test
   void testCreationOfFunctions() {
@@ -32,8 +32,8 @@ class MapBasedFunctionDictionaryTest {
     FunctionIfc max = new MaxFunction();
 
     @SuppressWarnings({"unchecked", "varargs"})
-    FunctionDictionaryIfc dictionary =
-        MapBasedFunctionDictionary.ofFunctions(Map.entry("min", min), Map.entry("max", max));
+    FunctionResolver dictionary =
+        MapBasedFunctionResolver.builder().putFunctions("min", min).putFunctions("max", max).build();
 
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("max")).isTrue();
@@ -50,8 +50,8 @@ class MapBasedFunctionDictionaryTest {
     FunctionIfc max = new MaxFunction();
 
     @SuppressWarnings({"unchecked", "varargs"})
-    FunctionDictionaryIfc dictionary =
-        MapBasedFunctionDictionary.ofFunctions(Map.entry("Min", min), Map.entry("MAX", max));
+    FunctionResolver dictionary =
+      MapBasedFunctionResolver.builder().putFunctions("Min", min).putFunctions("MAX", max).build();
 
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("MIN")).isTrue();

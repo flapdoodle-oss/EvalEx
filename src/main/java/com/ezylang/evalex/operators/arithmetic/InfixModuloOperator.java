@@ -18,17 +18,18 @@ package com.ezylang.evalex.operators.arithmetic;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
-
 /** Remainder (modulo) of two numbers. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_MULTIPLICATIVE)
-public class InfixModuloOperator extends AbstractOperator {
+public class InfixModuloOperator extends AbstractInfixOperator {
+
+  public InfixModuloOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE);
+  }
 
   @Override
   public EvaluationValue evaluate(

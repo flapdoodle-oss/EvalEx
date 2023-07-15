@@ -18,15 +18,13 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 /** Absolute (non-negative) value. */
-@FunctionParameter(name = "value")
-public class AbsFunction extends AbstractFunction {
+public class AbsFunction extends SingleArgumentFunction {
 
-  @Override
+	@Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 

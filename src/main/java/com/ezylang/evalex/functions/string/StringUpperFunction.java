@@ -18,13 +18,11 @@ package com.ezylang.evalex.functions.string;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 /** Converts the given value to upper case. */
-@FunctionParameter(name = "value")
-public class StringUpperFunction extends AbstractFunction {
+public class StringUpperFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

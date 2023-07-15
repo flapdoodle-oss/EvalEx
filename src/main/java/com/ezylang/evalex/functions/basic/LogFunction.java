@@ -18,13 +18,20 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
+import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
+import com.ezylang.evalex.functions.validations.NonZeroNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
 /** The natural logarithm (base e) of a value */
-@FunctionParameter(name = "value", nonZero = true, nonNegative = true)
-public class LogFunction extends AbstractFunction {
+public class LogFunction extends SingleArgumentFunction {
+
+  public LogFunction() {
+    super(FunctionParameterDefinition.of("value")
+      .withValidators(new NonNegativeNumberValidator(), new NonZeroNumberValidator()));
+  }
+
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

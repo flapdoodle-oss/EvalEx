@@ -15,14 +15,11 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
-import com.ezylang.evalex.functions.FunctionParameter;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
-@FunctionParameter(name = "value", isVarArg = true)
 public class DateTimeParseFunction extends AbstractDateTimeParseFunction {
 
   protected Instant parse(String value, String format, ZoneId zoneId) {

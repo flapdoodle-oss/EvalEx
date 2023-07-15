@@ -19,8 +19,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
@@ -29,8 +28,7 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
 
 /** Returns the arc-sine (in radians). */
-@FunctionParameter(name = "value")
-public class AsinRFunction extends AbstractFunction {
+public class AsinRFunction extends SingleArgumentFunction {
 
   private static final BigDecimal MINUS_ONE = valueOf(-1);
 

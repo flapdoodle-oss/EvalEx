@@ -18,8 +18,9 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
+import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
@@ -27,8 +28,12 @@ import java.math.BigInteger;
 import java.math.MathContext;
 
 /** Square root function, uses the standard {@link BigDecimal#sqrt(MathContext)} implementation. */
-@FunctionParameter(name = "value", nonNegative = true)
-public class SqrtFunction extends AbstractFunction {
+public class SqrtFunction extends SingleArgumentFunction {
+
+  public SqrtFunction() {
+    super(FunctionParameterDefinition.of("value")
+      .withValidators(new NonNegativeNumberValidator()));
+  }
 
   @Override
   public EvaluationValue evaluate(

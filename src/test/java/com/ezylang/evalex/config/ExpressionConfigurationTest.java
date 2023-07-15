@@ -17,7 +17,7 @@ package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.config.TestConfigurationProvider.DummyFunction;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.OperatorIfc;
+import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,15 +36,13 @@ class ExpressionConfigurationTest {
 
     assertThat(configuration.getMathContext())
         .isEqualTo(ExpressionConfiguration.DEFAULT_MATH_CONTEXT);
-    assertThat(configuration.getOperatorDictionary())
-        .isInstanceOf(MapBasedOperatorDictionary.class);
-    assertThat(configuration.getFunctionDictionary())
-        .isInstanceOf(MapBasedFunctionDictionary.class);
+    assertThat(configuration.getOperatorResolver())
+        .isInstanceOf(OperatorResolver.class);
+    assertThat(configuration.getFunctionResolver())
+        .isInstanceOf(FunctionResolver.class);
     assertThat(configuration.isArraysAllowed()).isTrue();
     assertThat(configuration.isStructuresAllowed()).isTrue();
     assertThat(configuration.isImplicitMultiplicationAllowed()).isTrue();
-    assertThat(configuration.getPowerOfPrecedence())
-        .isEqualTo(OperatorIfc.OPERATOR_PRECEDENCE_POWER);
     assertThat(configuration.getDefaultConstants())
         .containsAllEntriesOf(ExpressionConfiguration.StandardConstants);
     assertThat(configuration.getDecimalPlacesRounding())
@@ -61,8 +59,8 @@ class ExpressionConfigurationTest {
                 Map.entry("ADDED1", new InfixPlusOperator()),
                 Map.entry("ADDED2", new InfixPlusOperator()));
 
-    assertThat(configuration.getOperatorDictionary().hasInfixOperator("ADDED1")).isTrue();
-    assertThat(configuration.getOperatorDictionary().hasInfixOperator("ADDED2")).isTrue();
+    assertThat(configuration.getOperatorResolver().hasOperator(OperatorType.INFIX_OPERATOR, "ADDED1")).isTrue();
+    assertThat(configuration.getOperatorResolver().hasOperator(OperatorType.INFIX_OPERATOR, "ADDED2")).isTrue();
   }
 
   @Test
@@ -72,8 +70,8 @@ class ExpressionConfigurationTest {
             .withAdditionalFunctions(
                 Map.entry("ADDED1", new DummyFunction()), Map.entry("ADDED2", new DummyFunction()));
 
-    assertThat(configuration.getFunctionDictionary().hasFunction("ADDED1")).isTrue();
-    assertThat(configuration.getFunctionDictionary().hasFunction("ADDED2")).isTrue();
+    assertThat(configuration.getFunctionResolver().hasFunction("ADDED1")).isTrue();
+    assertThat(configuration.getFunctionResolver().hasFunction("ADDED2")).isTrue();
   }
 
   @Test
@@ -86,22 +84,22 @@ class ExpressionConfigurationTest {
 
   @Test
   void testCustomOperatorDictionary() {
-    OperatorDictionaryIfc mockedOperatorDictionary = Mockito.mock(OperatorDictionaryIfc.class);
+    OperatorResolver mockedOperatorDictionary = Mockito.mock(OperatorResolver.class);
 
     ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().operatorDictionary(mockedOperatorDictionary).build();
+        ExpressionConfiguration.builder().operatorResolver(mockedOperatorDictionary).build();
 
-    assertThat(configuration.getOperatorDictionary()).isEqualTo(mockedOperatorDictionary);
+    assertThat(configuration.getOperatorResolver()).isEqualTo(mockedOperatorDictionary);
   }
 
   @Test
   void testCustomFunctionDictionary() {
-    FunctionDictionaryIfc mockedFunctionDictionary = Mockito.mock(FunctionDictionaryIfc.class);
+    FunctionResolver mockedFunctionDictionary = Mockito.mock(FunctionResolver.class);
 
     ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().functionDictionary(mockedFunctionDictionary).build();
+        ExpressionConfiguration.builder().functionResolver(mockedFunctionDictionary).build();
 
-    assertThat(configuration.getFunctionDictionary()).isEqualTo(mockedFunctionDictionary);
+    assertThat(configuration.getFunctionResolver()).isEqualTo(mockedFunctionDictionary);
   }
 
   @Test
@@ -141,16 +139,5 @@ class ExpressionConfigurationTest {
         ExpressionConfiguration.builder().implicitMultiplicationAllowed(false).build();
 
     assertThat(configuration.isImplicitMultiplicationAllowed()).isFalse();
-  }
-
-  @Test
-  void testPowerOfPrecedence() {
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder()
-            .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER)
-            .build();
-
-    assertThat(configuration.getPowerOfPrecedence())
-        .isEqualTo(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER);
   }
 }

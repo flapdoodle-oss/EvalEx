@@ -18,13 +18,11 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 /** Boolean negation function. */
-@FunctionParameter(name = "value")
-public class NotFunction extends AbstractFunction {
+public class NotFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(

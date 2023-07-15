@@ -18,13 +18,12 @@ package com.ezylang.evalex.parser;
 import com.ezylang.evalex.functions.basic.MinFunction;
 import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
-import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ASTNodeTest {
-  final Token variable = new Token(1, "variable", TokenType.VARIABLE_OR_CONSTANT);
+  final Token variable = Token.of(1, "variable", TokenType.VARIABLE_OR_CONSTANT);
 
   @Test
   void testJSONSingle() {
@@ -36,7 +35,7 @@ class ASTNodeTest {
 
   @Test
   void testJSONPrefix() {
-    Token token = new Token(1, "-", TokenType.PREFIX_OPERATOR, new PrefixMinusOperator());
+    Token token = Token.of(1, "-", TokenType.PREFIX_OPERATOR, new PrefixMinusOperator());
     ASTNode node = new ASTNode(token, new ASTNode(variable));
 
     assertThat(node.toJSON())
@@ -46,7 +45,7 @@ class ASTNodeTest {
 
   @Test
   void testJSONInfix() {
-    Token token = new Token(1, "+", TokenType.INFIX_OPERATOR, new InfixPlusOperator());
+    Token token = Token.of(1, "+", TokenType.INFIX_OPERATOR, new InfixPlusOperator());
     ASTNode node = new ASTNode(token, new ASTNode(variable), new ASTNode(variable));
 
     assertThat(node.toJSON())
@@ -56,7 +55,7 @@ class ASTNodeTest {
 
   @Test
   void testJSONFunction() {
-    Token token = new Token(1, "+", TokenType.FUNCTION, new MinFunction());
+    Token token = Token.of(1, "+", TokenType.FUNCTION, new MinFunction());
     ASTNode node =
         new ASTNode(token, new ASTNode(variable), new ASTNode(variable), new ASTNode(variable));
 

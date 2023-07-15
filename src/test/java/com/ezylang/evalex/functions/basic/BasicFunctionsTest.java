@@ -23,7 +23,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.parser.TokenType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -189,7 +189,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     // somehow, code coverage for the NotFunction traditional tests does not work on Google build
     NotFunction notFunction = new NotFunction();
     Expression expressionMock = Mockito.mock(Expression.class);
-    Token token = new Token(1, "NOT", TokenType.FUNCTION, notFunction);
+    Token token = Token.of(1, "NOT", TokenType.FUNCTION, notFunction);
 
     VariableResolver variableResolver = VariableResolver.empty();
     

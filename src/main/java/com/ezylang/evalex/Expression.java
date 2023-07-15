@@ -16,6 +16,7 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.DataType;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.FunctionIfc;
@@ -146,7 +147,7 @@ public class Expression {
       throws EvaluationException {
     List<EvaluationValue> parameterResults = new ArrayList<>();
     for (int i = 0; i < startNode.getParameters().size(); i++) {
-      if (token.getFunctionDefinition().isParameterLazy(i)) {
+      if (token.getFunctionDefinition().parameterIsLazy(i)) {
         parameterResults.add(new EvaluationValue(startNode.getParameters().get(i)));
       } else {
         parameterResults.add(evaluateSubtree(variableResolver, startNode.getParameters().get(i)));
@@ -276,7 +277,7 @@ public class Expression {
    * java.math.MathContext}.
    *
    * @param value The double value to covert.
-   * @return An {@link EvaluationValue} of type {@link EvaluationValue.DataType#NUMBER}.
+   * @return An {@link EvaluationValue} of type {@link DataType#NUMBER}.
    */
   public EvaluationValue convertDoubleValue(double value) {
     return new EvaluationValue(value, configuration.getMathContext());
@@ -312,7 +313,7 @@ public class Expression {
     Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
     for (ASTNode node : getAllASTNodes()) {
-      if (node.getToken().getType() == Token.TokenType.VARIABLE_OR_CONSTANT
+      if (node.getToken().getType() == TokenType.VARIABLE_OR_CONSTANT
           && !constants.containsKey(node.getToken().getValue())) {
         variables.add(node.getToken().getValue());
       }

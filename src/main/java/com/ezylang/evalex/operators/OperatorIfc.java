@@ -17,7 +17,6 @@ package com.ezylang.evalex.operators;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.Token;
 
@@ -29,47 +28,6 @@ import com.ezylang.evalex.parser.Token;
  * parentheses.
  */
 public interface OperatorIfc {
-
-  /** The operator type. */
-  enum OperatorType {
-    /** Unary prefix operator, like -x */
-    PREFIX_OPERATOR,
-    /** Unary postfix operator,like x! */
-    POSTFIX_OPERATOR,
-    /** Binary infix operator, like x+y */
-    INFIX_OPERATOR
-  }
-
-  /** Or operator precedence: || */
-  int OPERATOR_PRECEDENCE_OR = 2;
-
-  /** And operator precedence: && */
-  int OPERATOR_PRECEDENCE_AND = 4;
-
-  /** Equality operators precedence: =, ==, !=, <> */
-  int OPERATOR_PRECEDENCE_EQUALITY = 7;
-
-  /** Comparative operators precedence: <, >, <=, >= */
-  int OPERATOR_PRECEDENCE_COMPARISON = 10;
-
-  /** Additive operators precedence: + and - */
-  int OPERATOR_PRECEDENCE_ADDITIVE = 20;
-
-  /** Multiplicative operators precedence: *, /, % */
-  int OPERATOR_PRECEDENCE_MULTIPLICATIVE = 30;
-
-  /** Power operator precedence: ^ */
-  int OPERATOR_PRECEDENCE_POWER = 40;
-
-  /** Unary operators precedence: + and - as prefix */
-  int OPERATOR_PRECEDENCE_UNARY = 60;
-
-  /**
-   * An optional higher power operator precedence, higher than the unary prefix, e.g. -2^2 equals to
-   * 4 or -4, depending on precedence configuration.
-   */
-  int OPERATOR_PRECEDENCE_POWER_HIGHER = 80;
-
   /**
    * @return The operator's precedence.
    */
@@ -82,34 +40,7 @@ public interface OperatorIfc {
    */
   boolean isLeftAssociative();
 
-  /**
-   * If it is a prefix operator.
-   *
-   * @return <code>true</code> if it is a prefix operator.
-   */
-  boolean isPrefix();
-
-  /**
-   * If it is a postfix operator.
-   *
-   * @return <code>true</code> if it is a postfix operator.
-   */
-  boolean isPostfix();
-
-  /**
-   * If it is an infix operator.
-   *
-   * @return <code>true</code> if it is an infix operator.
-   */
-  boolean isInfix();
-
-  /**
-   * Called during parsing, can be implemented to return a customized precedence.
-   *
-   * @param configuration The expression configuration.
-   * @return The default precedence from the operator annotation, or a customized value.
-   */
-  int getPrecedence(ExpressionConfiguration configuration);
+  OperatorType type();
 
   /**
    * Performs the operator logic and returns an evaluation result.

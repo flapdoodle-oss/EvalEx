@@ -18,11 +18,9 @@ package com.ezylang.evalex.config;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.PostfixOperator;
-import com.ezylang.evalex.operators.PrefixOperator;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
+import com.ezylang.evalex.operators.*;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
@@ -38,8 +36,11 @@ public class TestConfigurationProvider {
               Map.entry("?", new PostfixQuestionOperator()))
           .withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
 
-  @FunctionParameter(name = "input", isVarArg = true)
-  public static class DummyFunction extends AbstractFunction {
+  public static class DummyFunction extends SingleArgumentFunction {
+    public DummyFunction() {
+      super(FunctionParameterDefinition.varArgWith("input"));
+    }
+    
     @Override
     public EvaluationValue evaluate(
 			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
@@ -48,8 +49,12 @@ public class TestConfigurationProvider {
     }
   }
 
-  @PrefixOperator(leftAssociative = false)
-  public static class PrefixPlusPlusOperator extends AbstractOperator {
+  public static class PrefixPlusPlusOperator extends AbstractPrefixOperator {
+
+    public PrefixPlusPlusOperator() {
+      super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+    }
+    
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
@@ -59,8 +64,8 @@ public class TestConfigurationProvider {
     }
   }
 
-  @PostfixOperator()
-  public static class PostfixPlusPlusOperator extends AbstractOperator {
+  public static class PostfixPlusPlusOperator extends AbstractPostfixOperator {
+
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
@@ -70,8 +75,12 @@ public class TestConfigurationProvider {
     }
   }
 
-  @PostfixOperator(leftAssociative = false)
-  public static class PostfixQuestionOperator extends AbstractOperator {
+  public static class PostfixQuestionOperator  extends AbstractPostfixOperator {
+
+    public PostfixQuestionOperator() {
+      super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+    }
+
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {

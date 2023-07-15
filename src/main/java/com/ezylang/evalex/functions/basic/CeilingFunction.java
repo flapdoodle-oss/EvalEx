@@ -18,15 +18,14 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.RoundingMode;
 
 /** Rounds the given value an integer using the rounding mode {@link RoundingMode#CEILING} */
-@FunctionParameter(name = "value")
-public class CeilingFunction extends AbstractFunction {
+public class CeilingFunction extends SingleArgumentFunction {
+  
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

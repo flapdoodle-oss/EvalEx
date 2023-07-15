@@ -18,13 +18,11 @@ package com.ezylang.evalex.functions.trigonometric;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the trigonometric sine of an angle (in degrees). */
-@FunctionParameter(name = "value")
-public class SinFunction extends AbstractFunction {
+public class SinFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

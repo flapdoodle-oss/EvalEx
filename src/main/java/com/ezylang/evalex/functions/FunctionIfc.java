@@ -19,6 +19,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.functions.validations.ParameterValidator;
 import com.ezylang.evalex.parser.Token;
 
 import java.util.List;
@@ -28,13 +29,13 @@ import java.util.List;
  * expressions.
  */
 public interface FunctionIfc {
-
+  
   /**
    * Returns the list of parameter definitions. Is never empty or <code>null</code>.
    *
    * @return The parameter definition list.
    */
-  List<FunctionParameterDefinition> getFunctionParameterDefinitions();
+  List<FunctionParameterDefinition> parameterDefinitions();
 
   /**
    * Performs the function logic and returns an evaluation result.
@@ -58,15 +59,24 @@ public interface FunctionIfc {
    * @param parameterValues The parameter values
    * @throws EvaluationException in case of any validation error
    */
-  void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
-      throws EvaluationException;
+  default void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
+    throws EvaluationException {
 
+    for (int i = 0; i < parameterValues.length; i++) {
+      FunctionParameterDefinition definition = parameterDefinition(i);
+      for (ParameterValidator validator : definition.validators()) {
+        validator.validate(token, parameterValues[i]);
+      }
+    }
+  }
   /**
    * Checks whether the function has a variable number of arguments parameter.
    *
    * @return <code>true</code> or <code>false</code>:
    */
-  boolean hasVarArgs();
+  default boolean hasVarArgs() {
+    return !parameterDefinitions().isEmpty() && parameterDefinitions().get(parameterDefinitions().size()-1).isVarArg();
+  }
 
   /**
    * Checks if the parameter is a lazy parameter.
@@ -76,10 +86,15 @@ public interface FunctionIfc {
    *     checked.
    * @return <code>true</code> if the specified parameter is defined as lazy.
    */
-  default boolean isParameterLazy(int parameterIndex) {
-    if (parameterIndex >= getFunctionParameterDefinitions().size()) {
-      parameterIndex = getFunctionParameterDefinitions().size() - 1;
-    }
-    return getFunctionParameterDefinitions().get(parameterIndex).isLazy();
+  default boolean parameterIsLazy(int parameterIndex) {
+    return parameterDefinition(parameterIndex).isLazy();
   }
+
+  default FunctionParameterDefinition parameterDefinition(int index) {
+    if (hasVarArgs() && index >= parameterDefinitions().size()) {
+      index = parameterDefinitions().size() - 1;
+    }
+    return parameterDefinitions().get(index);
+  }
+
 }

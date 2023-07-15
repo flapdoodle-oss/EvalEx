@@ -20,10 +20,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_UNARY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OperatorTest {
 
@@ -31,12 +28,10 @@ class OperatorTest {
   void testPrefixOperator() {
     OperatorIfc operator = new CorrectPrefixOperator();
 
-    assertThat(operator.getPrecedence()).isEqualTo(OPERATOR_PRECEDENCE_UNARY);
+    assertThat(operator.getPrecedence()).isEqualTo(Precedence.OPERATOR_PRECEDENCE_UNARY.value());
     assertThat(operator.isLeftAssociative()).isFalse();
 
-    assertThat(operator.isPrefix()).isTrue();
-    assertThat(operator.isPostfix()).isFalse();
-    assertThat(operator.isInfix()).isFalse();
+    assertThat(operator.type()).isEqualTo(OperatorType.PREFIX_OPERATOR);
   }
 
   @Test
@@ -46,44 +41,47 @@ class OperatorTest {
     assertThat(operator.getPrecedence()).isEqualTo(88);
     assertThat(operator.isLeftAssociative()).isTrue();
 
-    assertThat(operator.isPrefix()).isFalse();
-    assertThat(operator.isPostfix()).isTrue();
-    assertThat(operator.isInfix()).isFalse();
+    assertThat(operator.type()).isEqualTo(OperatorType.POSTFIX_OPERATOR);
   }
 
   @Test
   void testInfixOperator() {
     OperatorIfc operator = new CorrectInfixOperator();
 
-    assertThat(operator.getPrecedence()).isEqualTo(OPERATOR_PRECEDENCE_MULTIPLICATIVE);
+    assertThat(operator.getPrecedence()).isEqualTo(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE.value());
     assertThat(operator.isLeftAssociative()).isTrue();
 
-    assertThat(operator.isPrefix()).isFalse();
-    assertThat(operator.isPostfix()).isFalse();
-    assertThat(operator.isInfix()).isTrue();
+    assertThat(operator.type()).isEqualTo(OperatorType.INFIX_OPERATOR);
   }
 
-  @Test
-  void testThrowsFunctionParameterAnnotationNotFoundException() {
-
-    assertThatThrownBy(DummyAnnotationOperator::new)
-        .isInstanceOf(OperatorAnnotationNotFoundException.class)
-        .hasMessage(
-            "Operator annotation for"
-                + " 'com.ezylang.evalex.operators.OperatorTest$DummyAnnotationOperator' not"
-                + " found");
+  private static class CorrectPrefixOperator extends DummyAnnotationOperator {
+    protected CorrectPrefixOperator() {
+      super(OperatorType.PREFIX_OPERATOR, Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+    }
   }
 
-  @PrefixOperator(leftAssociative = false)
-  private static class CorrectPrefixOperator extends DummyAnnotationOperator {}
+  private static class CorrectPostfixOperator extends DummyAnnotationOperator {
+    protected CorrectPostfixOperator() {
+      super(OperatorType.POSTFIX_OPERATOR, 88, true);
+    }
+  }
 
-  @PostfixOperator(precedence = 88)
-  private static class CorrectPostfixOperator extends DummyAnnotationOperator {}
+  private static class CorrectInfixOperator extends DummyAnnotationOperator {
 
-  @InfixOperator(precedence = OPERATOR_PRECEDENCE_MULTIPLICATIVE)
-  private static class CorrectInfixOperator extends DummyAnnotationOperator {}
+    protected CorrectInfixOperator() {
+      super(OperatorType.INFIX_OPERATOR, Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE, true);
+    }
+  }
 
-  private static class DummyAnnotationOperator extends AbstractOperator {
+  private static class DummyAnnotationOperator extends AbstractBaseOperator {
+    protected DummyAnnotationOperator(OperatorType type, int precedence, boolean leftAssociative) {
+      super(type, precedence, leftAssociative);
+    }
+
+    protected DummyAnnotationOperator(OperatorType type, Precedence precedence, boolean leftAssociative) {
+      super(type, precedence, leftAssociative);
+    }
+
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {

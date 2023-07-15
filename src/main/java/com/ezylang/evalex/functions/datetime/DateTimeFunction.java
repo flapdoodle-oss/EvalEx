@@ -18,15 +18,20 @@ package com.ezylang.evalex.functions.datetime;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
+import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@FunctionParameter(name = "values", isVarArg = true, nonNegative = true)
-public class DateTimeFunction extends AbstractFunction {
+public class DateTimeFunction extends SingleArgumentFunction {
+  public DateTimeFunction() {
+    super(FunctionParameterDefinition.varArgWith("values")
+      .withValidators(new NonNegativeNumberValidator()));
+  }
+  
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

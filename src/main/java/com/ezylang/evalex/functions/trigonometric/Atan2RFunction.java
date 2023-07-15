@@ -19,14 +19,16 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the angle of atan2 (in radians). */
-@FunctionParameter(name = "y")
-@FunctionParameter(name = "x")
 public class Atan2RFunction extends AbstractFunction {
-  @Override
+	public Atan2RFunction() {
+		super(FunctionParameterDefinition.of("y"), FunctionParameterDefinition.of("x"));
+	}
+	
+	@Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 

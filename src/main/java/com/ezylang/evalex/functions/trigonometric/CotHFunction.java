@@ -18,13 +18,11 @@ package com.ezylang.evalex.functions.trigonometric;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the hyperbolic co-tangent of a value. */
-@FunctionParameter(name = "value", nonZero = true)
-public class CotHFunction extends AbstractFunction {
+public class CotHFunction extends NonZeroFunction {
+
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

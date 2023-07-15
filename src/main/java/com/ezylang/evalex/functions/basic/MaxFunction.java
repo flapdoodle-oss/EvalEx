@@ -18,15 +18,19 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 
 /** Returns the maximum value of all parameters. */
-@FunctionParameter(name = "value", isVarArg = true)
-public class MaxFunction extends AbstractFunction {
+public class MaxFunction extends SingleArgumentFunction {
+
+  public MaxFunction() {
+    super(FunctionParameterDefinition.varArgWith("value"));
+  }
+  
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

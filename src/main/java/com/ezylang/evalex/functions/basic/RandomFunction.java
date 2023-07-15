@@ -18,13 +18,21 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
+import com.ezylang.evalex.functions.FunctionIfc;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.List;
 
 /** Random function produces a random value between 0 and 1. */
-public class RandomFunction extends AbstractFunction {
+public class RandomFunction implements FunctionIfc {
+
+  @Override
+  public List<FunctionParameterDefinition> parameterDefinitions() {
+    return Collections.emptyList();
+  }
 
   @Override
   public EvaluationValue evaluate(

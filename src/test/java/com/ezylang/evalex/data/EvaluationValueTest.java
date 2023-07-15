@@ -20,7 +20,7 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.parser.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -413,7 +413,7 @@ class EvaluationValueTest {
 
   @Test
   void testExpressionNode() {
-    ASTNode node = new ASTNode(new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT));
+    ASTNode node = new ASTNode(Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT));
     EvaluationValue value = new EvaluationValue(node);
 
     assertThat(value.isExpressionNode()).isTrue();
@@ -426,7 +426,7 @@ class EvaluationValueTest {
 
     assertDataIsCorrect(
         value,
-        "ASTNode(parameters=[], token=Token(startPosition=1, value=a, type=VARIABLE_OR_CONSTANT))",
+        "ASTNode(parameters=[], token=Token{startPosition=1, value=a, type=VARIABLE_OR_CONSTANT})",
         BigDecimal.ZERO,
         false,
         Instant.EPOCH,

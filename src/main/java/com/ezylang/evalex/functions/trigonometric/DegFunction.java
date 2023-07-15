@@ -18,15 +18,17 @@ package com.ezylang.evalex.functions.trigonometric;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 /**
  * Converts an angle measured in radians to an approximately equivalent angle measured in degrees.
  */
-@FunctionParameter(name = "radians")
-public class DegFunction extends AbstractFunction {
+public class DegFunction extends SingleArgumentFunction {
+  public DegFunction() {
+    super("radians");
+  }
+  
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {

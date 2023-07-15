@@ -16,7 +16,6 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,28 +26,28 @@ class TokenizerArrayTest extends BaseParserTest {
   void testArraySimple() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a[1]",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, "[", TokenType.ARRAY_OPEN),
-        new Token(3, "1", TokenType.NUMBER_LITERAL),
-        new Token(4, "]", TokenType.ARRAY_CLOSE));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, "[", TokenType.ARRAY_OPEN),
+      Token.of(3, "1", TokenType.NUMBER_LITERAL),
+      Token.of(4, "]", TokenType.ARRAY_CLOSE));
   }
 
   @Test
   void testArrayNested() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a[b[2] + c[3]]",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, "[", TokenType.ARRAY_OPEN),
-        new Token(3, "b", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(4, "[", TokenType.ARRAY_OPEN),
-        new Token(5, "2", TokenType.NUMBER_LITERAL),
-        new Token(6, "]", TokenType.ARRAY_CLOSE),
-        new Token(8, "+", TokenType.INFIX_OPERATOR),
-        new Token(10, "c", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(11, "[", TokenType.ARRAY_OPEN),
-        new Token(12, "3", TokenType.NUMBER_LITERAL),
-        new Token(13, "]", TokenType.ARRAY_CLOSE),
-        new Token(14, "]", TokenType.ARRAY_CLOSE));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, "[", TokenType.ARRAY_OPEN),
+      Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(4, "[", TokenType.ARRAY_OPEN),
+      Token.of(5, "2", TokenType.NUMBER_LITERAL),
+      Token.of(6, "]", TokenType.ARRAY_CLOSE),
+      Token.of(8, "+", TokenType.INFIX_OPERATOR),
+      Token.of(10, "c", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(11, "[", TokenType.ARRAY_OPEN),
+      Token.of(12, "3", TokenType.NUMBER_LITERAL),
+      Token.of(13, "]", TokenType.ARRAY_CLOSE),
+      Token.of(14, "]", TokenType.ARRAY_CLOSE));
   }
 
   @Test

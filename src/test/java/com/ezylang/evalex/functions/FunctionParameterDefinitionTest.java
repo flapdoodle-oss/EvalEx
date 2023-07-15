@@ -28,19 +28,15 @@ class FunctionParameterDefinitionTest {
             .name("name")
             .isVarArg(true)
             .isLazy(true)
-            .nonZero(true)
-            .nonNegative(true)
             .build();
 
     assertThat(definition.getName()).isEqualTo("name");
     assertThat(definition.isVarArg()).isTrue();
     assertThat(definition.isLazy()).isTrue();
-    assertThat(definition.isNonZero()).isTrue();
-    assertThat(definition.isNonNegative()).isTrue();
 
     assertThat(definition)
         .hasToString(
-            "FunctionParameterDefinition(name=name, isVarArg=true, isLazy=true, nonZero=true,"
-                + " nonNegative=true)");
+            "FunctionParameterDefinition{name=name, isVarArg=true, isLazy=true,"
+                + " validators=[]}");
   }
 }

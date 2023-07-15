@@ -19,13 +19,17 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns true, if the string contains the substring (case-insensitive). */
-@FunctionParameter(name = "string")
-@FunctionParameter(name = "substring")
 public class StringContains extends AbstractFunction {
+  public StringContains() {
+    super(
+      FunctionParameterDefinition.of("string"),
+      FunctionParameterDefinition.of("substring")
+    );
+  }
   @Override
   public EvaluationValue evaluate(
 		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
