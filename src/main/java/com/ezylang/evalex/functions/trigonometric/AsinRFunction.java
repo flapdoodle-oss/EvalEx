@@ -23,6 +23,7 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
@@ -34,10 +35,10 @@ public class AsinRFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
       throws EvaluationException {
 
-    BigDecimal parameterValue = parameterValues[0].getNumberValue();
+    BigDecimal parameterValue = parameterValues.get(0).getNumberValue();
 
     if (parameterValue.compareTo(ONE) > 0) {
       throw new EvaluationException(
@@ -48,6 +49,6 @@ public class AsinRFunction extends SingleArgumentFunction {
           functionToken, "Illegal asinr(x) for x < -1: x = " + parameterValue);
     }
     return expression.convertDoubleValue(
-        Math.asin(parameterValues[0].getNumberValue().doubleValue()));
+        Math.asin(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

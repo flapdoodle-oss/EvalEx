@@ -21,6 +21,8 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -72,8 +74,8 @@ class FunctionTest {
     }
     @Override
     public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      return new EvaluationValue("OK");
+			VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+      return EvaluationValue.of("OK");
     }
   }
 
@@ -87,8 +89,8 @@ class FunctionTest {
     }
     @Override
     public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      return new EvaluationValue("OK");
+			VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+      return EvaluationValue.of("OK");
     }
   }
 }

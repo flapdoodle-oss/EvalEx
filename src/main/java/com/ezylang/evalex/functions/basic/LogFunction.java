@@ -24,6 +24,8 @@ import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
 import com.ezylang.evalex.functions.validations.NonZeroNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** The natural logarithm (base e) of a value */
 public class LogFunction extends SingleArgumentFunction {
 
@@ -34,9 +36,9 @@ public class LogFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
-    double d = parameterValues[0].getNumberValue().doubleValue();
+    double d = parameterValues.get(0).getNumberValue().doubleValue();
 
     return expression.convertDoubleValue(Math.log(d));
   }

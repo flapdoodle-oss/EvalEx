@@ -21,16 +21,18 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Boolean negation function. */
 public class NotFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
     VariableResolver variableResolver,
-    Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+    Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
-    boolean result = parameterValues[0].getBooleanValue();
+    boolean result = parameterValues.get(0).getBooleanValue();
 
-    return new EvaluationValue(!result);
+    return EvaluationValue.of(!result);
   }
 }

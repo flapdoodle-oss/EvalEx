@@ -20,14 +20,16 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the co-secant (in radians). */
 public class CscRFunction extends NonZeroFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: csc(x) = 1 / sin(x) */
     return expression.convertDoubleValue(
-        1 / Math.sin(parameterValues[0].getNumberValue().doubleValue()));
+        1 / Math.sin(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

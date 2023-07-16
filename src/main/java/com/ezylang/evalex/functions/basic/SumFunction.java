@@ -23,6 +23,7 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /** Returns the sum value of all parameters. */
 public class SumFunction extends SingleArgumentFunction {
@@ -33,11 +34,11 @@ public class SumFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
     BigDecimal sum = BigDecimal.ZERO;
     for (EvaluationValue parameter : parameterValues) {
       sum = sum.add(parameter.getNumberValue(), expression.getConfiguration().getMathContext());
     }
-    return new EvaluationValue(sum);
+    return EvaluationValue.of(sum);
   }
 }

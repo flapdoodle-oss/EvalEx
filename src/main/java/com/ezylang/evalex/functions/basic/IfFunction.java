@@ -23,6 +23,8 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /**
  * Conditional evaluation function. If parameter <code>condition</code> is <code>true</code>, the
  * <code>resultIfTrue</code> value is returned, else the <code>resultIfFalse</code> value. <code>
@@ -42,12 +44,12 @@ public class IfFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
     VariableResolver variableResolver,
-    Expression expression, Token functionToken, EvaluationValue... parameterValues)
+    Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
       throws EvaluationException {
-    if (Boolean.TRUE.equals(parameterValues[0].getBooleanValue())) {
-      return expression.evaluateSubtree(variableResolver, parameterValues[1].getExpressionNode());
+    if (Boolean.TRUE.equals(parameterValues.get(0).getBooleanValue())) {
+      return expression.evaluateSubtree(variableResolver, parameterValues.get(1).getExpressionNode());
     } else {
-      return expression.evaluateSubtree(variableResolver, parameterValues[2].getExpressionNode());
+      return expression.evaluateSubtree(variableResolver, parameterValues.get(2).getExpressionNode());
     }
   }
 }

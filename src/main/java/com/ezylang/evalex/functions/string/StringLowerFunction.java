@@ -21,11 +21,13 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Converts the given value to lower case. */
 public class StringLowerFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return new EvaluationValue(parameterValues[0].getStringValue().toLowerCase());
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    return EvaluationValue.of(parameterValues.get(0).getStringValue().toLowerCase());
   }
 }

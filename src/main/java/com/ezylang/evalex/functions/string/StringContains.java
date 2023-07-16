@@ -22,6 +22,8 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns true, if the string contains the substring (case-insensitive). */
 public class StringContains extends AbstractFunction {
   public StringContains() {
@@ -32,9 +34,9 @@ public class StringContains extends AbstractFunction {
   }
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String string = parameterValues[0].getStringValue();
-    String substring = parameterValues[1].getStringValue();
-    return new EvaluationValue(string.toUpperCase().contains(substring.toUpperCase()));
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    String string = parameterValues.get(0).getStringValue();
+    String substring = parameterValues.get(1).getStringValue();
+    return EvaluationValue.of(string.toUpperCase().contains(substring.toUpperCase()));
   }
 }

@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Value.Immutable
-public abstract class MapBasedFunctionResolver implements FunctionResolver {
+public abstract class MapBasedFunctionIfcResolver implements FunctionIfcResolver {
 	protected abstract Map<String, FunctionIfc> functions();
 
 	@Value.Lazy
@@ -22,7 +22,7 @@ public abstract class MapBasedFunctionResolver implements FunctionResolver {
 		return functions().get(lowerCaseToKey().get(functionName.toLowerCase()));
 	}
 
-	public static ImmutableMapBasedFunctionResolver.Builder builder() {
-		return ImmutableMapBasedFunctionResolver.builder();
+	public static ImmutableMapBasedFunctionIfcResolver.Builder builder() {
+		return ImmutableMapBasedFunctionIfcResolver.builder();
 	}
 }

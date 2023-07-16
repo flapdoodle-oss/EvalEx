@@ -22,12 +22,13 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.Duration;
+import java.util.List;
 
 public class DurationParseFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String text = parameterValues[0].getStringValue();
-    return new EvaluationValue(Duration.parse(text));
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    String text = parameterValues.get(0).getStringValue();
+    return EvaluationValue.of(Duration.parse(text));
   }
 }

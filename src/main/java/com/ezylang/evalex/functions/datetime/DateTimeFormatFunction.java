@@ -24,6 +24,7 @@ import com.ezylang.evalex.parser.Token;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class DateTimeFormatFunction extends SingleArgumentFunction {
 
@@ -33,17 +34,17 @@ public class DateTimeFormatFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
     String formatted;
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
-    if (parameterValues.length < 2) {
-      formatted = parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().toString();
+    if (parameterValues.size() < 2) {
+      formatted = parameterValues.get(0).getDateTimeValue().atZone(zoneId).toLocalDateTime().toString();
     } else {
       DateTimeFormatter formatter =
-          DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
+          DateTimeFormatter.ofPattern(parameterValues.get(1).getStringValue());
       formatted =
-          parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().format(formatter);
+          parameterValues.get(0).getDateTimeValue().atZone(zoneId).toLocalDateTime().format(formatter);
     }
-    return new EvaluationValue(formatted);
+    return EvaluationValue.of(formatted);
   }
 }

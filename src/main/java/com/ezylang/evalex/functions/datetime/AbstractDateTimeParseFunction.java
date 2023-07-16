@@ -24,6 +24,7 @@ import com.ezylang.evalex.parser.Token;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.List;
 
 public abstract class AbstractDateTimeParseFunction extends SingleArgumentFunction {
   protected AbstractDateTimeParseFunction() {
@@ -32,17 +33,17 @@ public abstract class AbstractDateTimeParseFunction extends SingleArgumentFuncti
   
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
     Instant instant;
 
-    if (parameterValues.length < 2) {
-      instant = parse(parameterValues[0].getStringValue(), null, zoneId);
+    if (parameterValues.size() < 2) {
+      instant = parse(parameterValues.get(0).getStringValue(), null, zoneId);
     } else {
       instant =
-          parse(parameterValues[0].getStringValue(), parameterValues[1].getStringValue(), zoneId);
+          parse(parameterValues.get(0).getStringValue(), parameterValues.get(1).getStringValue(), zoneId);
     }
-    return new EvaluationValue(instant);
+    return EvaluationValue.of(instant);
   }
 
   protected abstract Instant parse(String value, String format, ZoneId zoneId);

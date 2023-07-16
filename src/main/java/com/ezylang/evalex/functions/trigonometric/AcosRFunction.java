@@ -21,6 +21,8 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the arc-cosine (in radians). */
 public class AcosRFunction extends SingleArgumentFunction {
 	public AcosRFunction() {
@@ -29,9 +31,9 @@ public class AcosRFunction extends SingleArgumentFunction {
 
 	@Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.acos(parameterValues[0].getNumberValue().doubleValue()));
+        Math.acos(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

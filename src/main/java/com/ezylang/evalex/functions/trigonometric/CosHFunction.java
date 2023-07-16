@@ -21,13 +21,15 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the hyperbolic cosine of a value. */
 public class CosHFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.cosh(parameterValues[0].getNumberValue().doubleValue()));
+        Math.cosh(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

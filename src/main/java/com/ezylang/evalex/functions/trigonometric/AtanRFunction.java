@@ -21,13 +21,15 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the arc-tangent (in radians). */
 public class AtanRFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.atan(parameterValues[0].getNumberValue().doubleValue()));
+        Math.atan(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

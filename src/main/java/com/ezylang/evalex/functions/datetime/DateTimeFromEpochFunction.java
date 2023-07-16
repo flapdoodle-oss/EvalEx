@@ -23,12 +23,13 @@ import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 public class DateTimeFromEpochFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    BigDecimal millis = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Instant.ofEpochMilli(millis.longValue()));
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    BigDecimal millis = parameterValues.get(0).getNumberValue();
+    return EvaluationValue.of(Instant.ofEpochMilli(millis.longValue()));
   }
 }

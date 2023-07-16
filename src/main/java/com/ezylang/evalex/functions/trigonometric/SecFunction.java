@@ -20,14 +20,16 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the secant (in degrees). */
 public class SecFunction extends NonZeroFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: sec(x) = 1 / cos(x) */
     return expression.convertDoubleValue(
-        1 / Math.cos(Math.toRadians(parameterValues[0].getNumberValue().doubleValue())));
+        1 / Math.cos(Math.toRadians(parameterValues.get(0).getNumberValue().doubleValue())));
   }
 }

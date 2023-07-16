@@ -90,7 +90,7 @@ public class Expression {
         result = EvaluationValue.numberOfString(token.getValue(), configuration.getMathContext());
         break;
       case STRING_LITERAL:
-        result = new EvaluationValue(token.getValue());
+        result = EvaluationValue.of(token.getValue());
         break;
       case VARIABLE_OR_CONSTANT:
         result = getVariableOrConstant(variableResolver, token);
@@ -148,19 +148,17 @@ public class Expression {
     List<EvaluationValue> parameterResults = new ArrayList<>();
     for (int i = 0; i < startNode.getParameters().size(); i++) {
       if (token.getFunctionDefinition().parameterIsLazy(i)) {
-        parameterResults.add(new EvaluationValue(startNode.getParameters().get(i)));
+        parameterResults.add(EvaluationValue.of(startNode.getParameters().get(i)));
       } else {
         parameterResults.add(evaluateSubtree(variableResolver, startNode.getParameters().get(i)));
       }
     }
 
-    EvaluationValue[] parameters = parameterResults.toArray(new EvaluationValue[0]);
-
     FunctionIfc function = token.getFunctionDefinition();
 
-    function.validatePreEvaluation(token, parameters);
+//    function.validatePreEvaluation(token, parameterResults);
 
-    return function.evaluate(variableResolver,this, token, parameters);
+    return function.evaluateUnvalidated(variableResolver,this, token, parameterResults);
   }
 
   private EvaluationValue evaluateArrayIndex(VariableResolver variableResolver, ASTNode startNode) throws EvaluationException {
@@ -209,7 +207,7 @@ public class Expression {
     if (configuration.isStripTrailingZeros()) {
       bigDecimal = bigDecimal.stripTrailingZeros();
     }
-    return new EvaluationValue(bigDecimal);
+    return EvaluationValue.of(bigDecimal);
   }
 
   /**
@@ -241,7 +239,7 @@ public class Expression {
   public Expression withConstant(String variable, Object value) {
     if (constants.containsKey(variable)) {
       if (configuration.isAllowOverwriteConstants()) {
-        constants.put(variable, new EvaluationValue(value));
+        constants.put(variable, EvaluationValue.of(value));
       } else {
         throw new UnsupportedOperationException(
           String.format("Can't set value for constant '%s'", variable));
@@ -280,7 +278,7 @@ public class Expression {
    * @return An {@link EvaluationValue} of type {@link DataType#NUMBER}.
    */
   public EvaluationValue convertDoubleValue(double value) {
-    return new EvaluationValue(value, configuration.getMathContext());
+    return EvaluationValue.of(value, configuration.getMathContext());
   }
 
   /**

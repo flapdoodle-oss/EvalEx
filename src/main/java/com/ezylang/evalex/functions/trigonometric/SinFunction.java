@@ -21,13 +21,15 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the trigonometric sine of an angle (in degrees). */
 public class SinFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.sin(Math.toRadians(parameterValues[0].getNumberValue().doubleValue())));
+        Math.sin(Math.toRadians(parameterValues.get(0).getNumberValue().doubleValue())));
   }
 }

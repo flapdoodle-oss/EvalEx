@@ -21,14 +21,16 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the hyperbolic arc-sine. */
 public class AsinHFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: asinh(x) = ln(x + sqrt(x^2 + 1)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = parameterValues.get(0).getNumberValue().doubleValue();
     return expression.convertDoubleValue(Math.log(value + (Math.sqrt(Math.pow(value, 2) + 1))));
   }
 }

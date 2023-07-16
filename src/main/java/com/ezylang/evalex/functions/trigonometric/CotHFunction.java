@@ -20,15 +20,17 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the hyperbolic co-tangent of a value. */
 public class CotHFunction extends NonZeroFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: coth(x) = 1 / tanh(x) */
     return expression.convertDoubleValue(
-        1 / Math.tanh(parameterValues[0].getNumberValue().doubleValue()));
+        1 / Math.tanh(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

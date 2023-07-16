@@ -22,6 +22,8 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /**
  * Rounds the given value to the specified scale, using the {@link java.math.MathContext} of the
  * expression configuration.
@@ -35,12 +37,12 @@ public class RoundFunction extends AbstractFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
-    EvaluationValue value = parameterValues[0];
-    EvaluationValue precision = parameterValues[1];
+    EvaluationValue value = parameterValues.get(0);
+    EvaluationValue precision = parameterValues.get(1);
 
-    return new EvaluationValue(
+    return EvaluationValue.of(
         value
             .getNumberValue()
             .setScale(

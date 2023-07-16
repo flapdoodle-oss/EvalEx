@@ -21,6 +21,8 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /**
  * Converts an angle measured in radians to an approximately equivalent angle measured in degrees.
  */
@@ -31,9 +33,9 @@ public class DegFunction extends SingleArgumentFunction {
   
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
-    double rad = Math.toDegrees(parameterValues[0].getNumberValue().doubleValue());
+    double rad = Math.toDegrees(parameterValues.get(0).getNumberValue().doubleValue());
 
     return expression.convertDoubleValue(rad);
   }

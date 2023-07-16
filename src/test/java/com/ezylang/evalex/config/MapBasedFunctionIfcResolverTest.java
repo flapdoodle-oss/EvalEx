@@ -20,11 +20,9 @@ import com.ezylang.evalex.functions.basic.MaxFunction;
 import com.ezylang.evalex.functions.basic.MinFunction;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MapBasedFunctionResolverTest {
+class MapBasedFunctionIfcResolverTest {
 
   @Test
   void testCreationOfFunctions() {
@@ -32,8 +30,8 @@ class MapBasedFunctionResolverTest {
     FunctionIfc max = new MaxFunction();
 
     @SuppressWarnings({"unchecked", "varargs"})
-    FunctionResolver dictionary =
-        MapBasedFunctionResolver.builder().putFunctions("min", min).putFunctions("max", max).build();
+		FunctionIfcResolver dictionary =
+        MapBasedFunctionIfcResolver.builder().putFunctions("min", min).putFunctions("max", max).build();
 
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("max")).isTrue();
@@ -50,8 +48,8 @@ class MapBasedFunctionResolverTest {
     FunctionIfc max = new MaxFunction();
 
     @SuppressWarnings({"unchecked", "varargs"})
-    FunctionResolver dictionary =
-      MapBasedFunctionResolver.builder().putFunctions("Min", min).putFunctions("MAX", max).build();
+		FunctionIfcResolver dictionary =
+      MapBasedFunctionIfcResolver.builder().putFunctions("Min", min).putFunctions("MAX", max).build();
 
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("MIN")).isTrue();

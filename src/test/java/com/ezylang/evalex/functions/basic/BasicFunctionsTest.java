@@ -31,6 +31,7 @@ import org.mockito.Mockito;
 
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -195,12 +196,12 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     
     assertThat(
             notFunction
-                .evaluate(variableResolver, expressionMock, token, new EvaluationValue(true))
+                .evaluate(variableResolver, expressionMock, token, Arrays.asList(EvaluationValue.of(true)))
                 .getBooleanValue())
         .isFalse();
     assertThat(
             notFunction
-                .evaluate(variableResolver, expressionMock, token, new EvaluationValue(false))
+                .evaluate(variableResolver, expressionMock, token, Arrays.asList(EvaluationValue.of(false)))
                 .getBooleanValue())
         .isTrue();
   }

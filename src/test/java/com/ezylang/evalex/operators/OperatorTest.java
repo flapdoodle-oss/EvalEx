@@ -85,7 +85,7 @@ class OperatorTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return new EvaluationValue("OK");
+      return EvaluationValue.of("OK");
     }
   }
 }

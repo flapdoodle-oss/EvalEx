@@ -23,12 +23,13 @@ import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
 
 public class DurationFromDaysFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    BigDecimal days = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Duration.ofDays(days.longValue()));
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    BigDecimal days = parameterValues.get(0).getNumberValue();
+    return EvaluationValue.of(Duration.ofDays(days.longValue()));
   }
 }

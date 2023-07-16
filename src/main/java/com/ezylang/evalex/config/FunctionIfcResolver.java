@@ -8,7 +8,7 @@ import com.ezylang.evalex.functions.string.StringLowerFunction;
 import com.ezylang.evalex.functions.string.StringUpperFunction;
 import com.ezylang.evalex.functions.trigonometric.*;
 
-public interface FunctionResolver {
+public interface FunctionIfcResolver {
 	/**
 	 * Check if the dictionary has a function with that name.
 	 *
@@ -19,8 +19,8 @@ public interface FunctionResolver {
 		return getFunction(functionName) != null;
 	}
 
-	default FunctionResolver andThen(FunctionResolver fallback) {
-		FunctionResolver that=this;
+	default FunctionIfcResolver andThen(FunctionIfcResolver fallback) {
+		FunctionIfcResolver that=this;
 
 		return functionName -> {
 			FunctionIfc function = that.getFunction(functionName);
@@ -38,8 +38,8 @@ public interface FunctionResolver {
 	 */
 	FunctionIfc getFunction(String functionName);
 
-	static FunctionResolver defaults() {
-		return MapBasedFunctionResolver.builder()
+	static FunctionIfcResolver defaults() {
+		return MapBasedFunctionIfcResolver.builder()
 			.putFunctions("ABS", new AbsFunction())
 			.putFunctions("CEILING", new CeilingFunction())
 			.putFunctions("FACT", new FactFunction())

@@ -16,8 +16,8 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.config.FunctionResolver;
-import com.ezylang.evalex.config.OperatorResolver;
+import com.ezylang.evalex.config.FunctionIfcResolver;
+import com.ezylang.evalex.config.OperatorIfcResolver;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.OperatorType;
@@ -35,9 +35,9 @@ public class Tokenizer {
 
   private final String expressionString;
 
-  private final OperatorResolver operatorDictionary;
+  private final OperatorIfcResolver operatorDictionary;
 
-  private final FunctionResolver functionDictionary;
+  private final FunctionIfcResolver functionDictionary;
 
   private final ExpressionConfiguration configuration;
 
@@ -54,8 +54,8 @@ public class Tokenizer {
   public Tokenizer(String expressionString, ExpressionConfiguration configuration) {
     this.expressionString = expressionString;
     this.configuration = configuration;
-    this.operatorDictionary = configuration.getOperatorResolver();
-    this.functionDictionary = configuration.getFunctionResolver();
+    this.operatorDictionary = configuration.getOperatorIfcResolver();
+    this.functionDictionary = configuration.getFunctionIfcResolver();
   }
 
   /**

@@ -21,13 +21,15 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the arc-cosine (in degrees). */
 public class AcosFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.toDegrees(Math.acos(parameterValues[0].getNumberValue().doubleValue())));
+        Math.toDegrees(Math.acos(parameterValues.get(0).getNumberValue().doubleValue())));
   }
 }

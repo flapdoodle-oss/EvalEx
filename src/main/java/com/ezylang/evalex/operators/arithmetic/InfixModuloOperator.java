@@ -44,7 +44,7 @@ public class InfixModuloOperator extends AbstractInfixOperator {
         throw new EvaluationException(operatorToken, "Division by zero");
       }
 
-      return new EvaluationValue(
+      return EvaluationValue.of(
           leftOperand
               .getNumberValue()
               .remainder(

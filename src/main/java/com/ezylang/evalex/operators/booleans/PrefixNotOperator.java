@@ -31,6 +31,6 @@ public class PrefixNotOperator extends AbstractPrefixOperator {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(!operands[0].getBooleanValue());
+    return EvaluationValue.of(!operands[0].getBooleanValue());
   }
 }

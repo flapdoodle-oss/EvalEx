@@ -25,6 +25,7 @@ import com.ezylang.evalex.parser.Token;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 public class DateTimeFunction extends SingleArgumentFunction {
   public DateTimeFunction() {
@@ -34,17 +35,17 @@ public class DateTimeFunction extends SingleArgumentFunction {
   
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    int year = parameterValues[0].getNumberValue().intValue();
-    int month = parameterValues[1].getNumberValue().intValue();
-    int day = parameterValues[2].getNumberValue().intValue();
-    int hour = parameterValues.length >= 4 ? parameterValues[3].getNumberValue().intValue() : 0;
-    int minute = parameterValues.length >= 5 ? parameterValues[4].getNumberValue().intValue() : 0;
-    int second = parameterValues.length >= 6 ? parameterValues[5].getNumberValue().intValue() : 0;
-    int nanoOfs = parameterValues.length >= 7 ? parameterValues[6].getNumberValue().intValue() : 0;
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    int year = parameterValues.get(0).getNumberValue().intValue();
+    int month = parameterValues.get(1).getNumberValue().intValue();
+    int day = parameterValues.get(2).getNumberValue().intValue();
+    int hour = parameterValues.size() >= 4 ? parameterValues.get(3).getNumberValue().intValue() : 0;
+    int minute = parameterValues.size() >= 5 ? parameterValues.get(4).getNumberValue().intValue() : 0;
+    int second = parameterValues.size() >= 6 ? parameterValues.get(5).getNumberValue().intValue() : 0;
+    int nanoOfs = parameterValues.size() >= 7 ? parameterValues.get(6).getNumberValue().intValue() : 0;
 
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
-    return new EvaluationValue(
+    return EvaluationValue.of(
         LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)
             .atZone(zoneId)
             .toInstant());

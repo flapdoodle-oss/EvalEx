@@ -79,7 +79,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * @param value One of the supported data types.
    * @throws IllegalArgumentException if the data type can't be mapped.
    */
-  public EvaluationValue(Object value) {
+  private EvaluationValue(Object value) {
     BigDecimal number = convertToBigDecimal(value);
     if (number != null) {
       this.dataType = DataType.NUMBER;
@@ -129,14 +129,26 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     }
   }
 
-  public EvaluationValue(double value, MathContext mathContext) {
+  private EvaluationValue(double value, MathContext mathContext) {
     this.dataType = DataType.NUMBER;
     this.value = new BigDecimal(Double.toString(value), mathContext);
   }
 
-  public EvaluationValue(LocalDateTime value, ZoneId zoneId) {
+  private EvaluationValue(LocalDateTime value, ZoneId zoneId) {
     this.dataType = DataType.DATE_TIME;
     this.value = value.atZone(zoneId).toInstant();
+  }
+
+  public static EvaluationValue of(Object value) {
+    return new EvaluationValue(value);
+  }
+
+  public static EvaluationValue of(LocalDateTime value, ZoneId zoneId) {
+    return new EvaluationValue(value, zoneId);
+  }
+  
+  public static EvaluationValue of(double value, MathContext mathContext) {
+    return new EvaluationValue(value, mathContext);
   }
 
   /**
@@ -148,7 +160,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     Map<String, EvaluationValue> structure = new HashMap<>();
     for (Entry<?, ?> entry : value.entrySet()) {
       String name = entry.getKey().toString();
-      structure.put(name, new EvaluationValue(entry.getValue()));
+      structure.put(name, of(entry.getValue()));
     }
     return structure;
   }
@@ -160,7 +172,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    */
   private List<EvaluationValue> convertToList(List<?> value) {
     List<EvaluationValue> array = new ArrayList<>();
-    value.forEach(element -> array.add(new EvaluationValue(element)));
+    value.forEach(element -> array.add(of(element)));
     return array;
   }
 
@@ -274,9 +286,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public static EvaluationValue numberOfString(String value, MathContext mathContext) {
     if (value.startsWith("0x") || value.startsWith("0X")) {
       BigInteger hexToInteger = new BigInteger(value.substring(2), 16);
-      return new EvaluationValue(new BigDecimal(hexToInteger, mathContext));
+      return of(new BigDecimal(hexToInteger, mathContext));
     } else {
-      return new EvaluationValue(new BigDecimal(value, mathContext));
+      return of(new BigDecimal(value, mathContext));
     }
   }
 

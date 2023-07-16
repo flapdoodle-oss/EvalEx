@@ -53,8 +53,8 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
     Map<String, EvaluationValue> constants =
         new HashMap<>() {
           {
-            put("A", new EvaluationValue(new BigDecimal("2.5")));
-            put("B", new EvaluationValue(new BigDecimal("3.9")));
+            put("A", EvaluationValue.of(new BigDecimal("2.5")));
+            put("B", EvaluationValue.of(new BigDecimal("3.9")));
           }
         };
 

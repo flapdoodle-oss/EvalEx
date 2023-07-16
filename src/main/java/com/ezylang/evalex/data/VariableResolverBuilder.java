@@ -16,7 +16,7 @@ public class VariableResolverBuilder {
 	}
 
 	public VariableResolverBuilder with(String variable, Object value) {
-		variables.put(variable, new EvaluationValue(value));
+		variables.put(variable, EvaluationValue.of(value));
 		return this;
 	}
 	

@@ -50,7 +50,7 @@ class TokenTest {
           3,
           "MAX",
           TokenType.FUNCTION,
-          expressionConfiguration.getFunctionResolver().getFunction("MAX"));
+          expressionConfiguration.getFunctionIfcResolver().getFunction("MAX"));
 
     assertThat(token.getStartPosition()).isEqualTo(3);
     assertThat(token.getValue()).isEqualTo("MAX");
@@ -66,7 +66,7 @@ class TokenTest {
           1,
           "+",
           TokenType.INFIX_OPERATOR,
-				expressionConfiguration.getOperatorResolver().getOperator(OperatorType.INFIX_OPERATOR, "+"));
+				expressionConfiguration.getOperatorIfcResolver().getOperator(OperatorType.INFIX_OPERATOR, "+"));
 
     assertThat(token.getStartPosition()).isEqualTo(1);
     assertThat(token.getValue()).isEqualTo("+");

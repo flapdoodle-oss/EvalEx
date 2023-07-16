@@ -1,26 +1,28 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.operators.OperatorType;
-import com.ezylang.evalex.operators.arithmetic.*;
-import com.ezylang.evalex.operators.booleans.*;
+import com.ezylang.evalex.operatorsx.Operator;
+import com.ezylang.evalex.operatorsx.arithmetic.*;
+import com.ezylang.evalex.operatorsx.booleans.*;
 
 public interface OperatorResolver {
-	default boolean hasOperator(OperatorType type, String operatorString) {
+	default <T extends Operator> boolean hasOperator(Class<T> type, String operatorString) {
 		return getOperator(type, operatorString) != null;
 	}
 
-	OperatorIfc getOperator(OperatorType type, String operatorString);
+	<T extends Operator> T getOperator(Class<T> type, String operatorString);
 
 	default OperatorResolver andThen(OperatorResolver fallback) {
 		OperatorResolver that = this;
 
-		return (type, operatorString) -> {
-			OperatorIfc operator = that.getOperator(type, operatorString);
-			if (operator==null) {
-				return fallback.getOperator(type, operatorString);
+		return new OperatorResolver() {
+			@Override
+			public <T extends Operator> T getOperator(Class<T> type, String operatorString) {
+				T operator = that.getOperator(type, operatorString);
+				if (operator==null) {
+					return fallback.getOperator(type, operatorString);
+				}
+				return operator;
 			}
-			return operator;
 		};
 	}
 

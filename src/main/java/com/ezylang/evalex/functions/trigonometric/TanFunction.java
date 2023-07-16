@@ -21,13 +21,15 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the trigonometric tangent of an angle (in degrees). */
 public class TanFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.tan(Math.toRadians(parameterValues[0].getNumberValue().doubleValue())));
+        Math.tan(Math.toRadians(parameterValues.get(0).getNumberValue().doubleValue())));
   }
 }

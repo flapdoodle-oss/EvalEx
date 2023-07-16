@@ -20,14 +20,16 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the hyperbolic secant. */
 public class SecHFunction extends NonZeroFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: sech(x) = 1 / cosh(x) */
     return expression.convertDoubleValue(
-        1 / Math.cosh(parameterValues[0].getNumberValue().doubleValue()));
+        1 / Math.cosh(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

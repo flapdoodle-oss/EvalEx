@@ -22,15 +22,16 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.RoundingMode;
+import java.util.List;
 
 /** Rounds the given value an integer using the rounding mode {@link RoundingMode#FLOOR} */
 public class FloorFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
-    EvaluationValue value = parameterValues[0];
+    EvaluationValue value = parameterValues.get(0);
 
-    return new EvaluationValue(value.getNumberValue().setScale(0, RoundingMode.FLOOR));
+    return EvaluationValue.of(value.getNumberValue().setScale(0, RoundingMode.FLOOR));
   }
 }

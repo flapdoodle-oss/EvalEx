@@ -24,6 +24,7 @@ import com.ezylang.evalex.operators.*;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public class TestConfigurationProvider {
@@ -34,7 +35,7 @@ public class TestConfigurationProvider {
               Map.entry("++", new PrefixPlusPlusOperator()),
               Map.entry("++", new PostfixPlusPlusOperator()),
               Map.entry("?", new PostfixQuestionOperator()))
-          .withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
+          .withAdditionalFunctionsIfc(Map.entry("TEST", new DummyFunction()));
 
   public static class DummyFunction extends SingleArgumentFunction {
     public DummyFunction() {
@@ -43,9 +44,9 @@ public class TestConfigurationProvider {
     
     @Override
     public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+			VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
       // dummy implementation
-      return new EvaluationValue("OK");
+      return EvaluationValue.of("OK");
     }
   }
 
@@ -60,7 +61,7 @@ public class TestConfigurationProvider {
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       // dummy implementation
       EvaluationValue operand = operands[0];
-      return new EvaluationValue(operand.getNumberValue().add(BigDecimal.ONE));
+      return EvaluationValue.of(operand.getNumberValue().add(BigDecimal.ONE));
     }
   }
 
@@ -71,7 +72,7 @@ public class TestConfigurationProvider {
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       // dummy implementation
       EvaluationValue operand = operands[0];
-      return new EvaluationValue(operand.getNumberValue().add(BigDecimal.ONE));
+      return EvaluationValue.of(operand.getNumberValue().add(BigDecimal.ONE));
     }
   }
 
@@ -85,7 +86,7 @@ public class TestConfigurationProvider {
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       // dummy implementation
-      return new EvaluationValue("?");
+      return EvaluationValue.of("?");
     }
   }
 }

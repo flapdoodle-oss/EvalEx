@@ -40,12 +40,12 @@ class ExpressionTest {
     assertThat(expression.getExpressionString()).isEqualTo("a+b");
     assertThat(expression.getConfiguration().getMathContext())
         .isEqualTo(ExpressionConfiguration.DEFAULT_MATH_CONTEXT);
-    assertThat(expression.getConfiguration().getFunctionResolver().hasFunction("SUM")).isTrue();
-    assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(OperatorType.INFIX_OPERATOR, "+"))
+    assertThat(expression.getConfiguration().getFunctionIfcResolver().hasFunction("SUM")).isTrue();
+    assertThat(expression.getConfiguration().getOperatorIfcResolver().hasOperator(OperatorType.INFIX_OPERATOR, "+"))
         .isTrue();
-		assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(OperatorType.PREFIX_OPERATOR, "+"))
+		assertThat(expression.getConfiguration().getOperatorIfcResolver().hasOperator(OperatorType.PREFIX_OPERATOR, "+"))
         .isTrue();
-    assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(OperatorType.POSTFIX_OPERATOR, "+"))
+    assertThat(expression.getConfiguration().getOperatorIfcResolver().hasOperator(OperatorType.POSTFIX_OPERATOR, "+"))
         .isFalse();
   }
 
@@ -150,10 +150,10 @@ class ExpressionTest {
     Expression expression1 = new Expression("1+1");
     Expression expression2 = new Expression("1+1");
 
-    assertThat(expression1.getConfiguration().getOperatorResolver())
-        .isNotSameAs(expression2.getConfiguration().getOperatorResolver());
-    assertThat(expression1.getConfiguration().getFunctionResolver())
-        .isNotSameAs(expression2.getConfiguration().getFunctionResolver());
+    assertThat(expression1.getConfiguration().getOperatorIfcResolver())
+        .isNotSameAs(expression2.getConfiguration().getOperatorIfcResolver());
+    assertThat(expression1.getConfiguration().getFunctionIfcResolver())
+        .isNotSameAs(expression2.getConfiguration().getFunctionIfcResolver());
     assertThat(expression1.getConfiguration().getDefaultConstants())
         .isNotSameAs(expression2.getConfiguration().getDefaultConstants());
   }

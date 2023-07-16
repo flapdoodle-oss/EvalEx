@@ -22,6 +22,7 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /** Factorial function, calculates the factorial of a base value. */
 public class FactFunction extends SingleArgumentFunction {
@@ -32,8 +33,8 @@ public class FactFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    int number = parameterValues[0].getNumberValue().intValue();
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    int number = parameterValues.get(0).getNumberValue().intValue();
     BigDecimal factorial = BigDecimal.ONE;
     for (int i = 1; i <= number; i++) {
       factorial =
@@ -41,6 +42,6 @@ public class FactFunction extends SingleArgumentFunction {
               new BigDecimal(i, expression.getConfiguration().getMathContext()),
               expression.getConfiguration().getMathContext());
     }
-    return new EvaluationValue(factorial);
+    return EvaluationValue.of(factorial);
   }
 }

@@ -31,6 +31,6 @@ public class InfixOrOperator extends AbstractInfixOperator {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(operands[0].getBooleanValue() || operands[1].getBooleanValue());
+    return EvaluationValue.of(operands[0].getBooleanValue() || operands[1].getBooleanValue());
   }
 }

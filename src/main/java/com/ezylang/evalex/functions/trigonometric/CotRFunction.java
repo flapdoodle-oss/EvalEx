@@ -20,15 +20,17 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the trigonometric co-tangent of an angle (in radians). */
 public class CotRFunction extends NonZeroFunction {
 	
 	@Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
     return expression.convertDoubleValue(
-        1 / Math.tan(parameterValues[0].getNumberValue().doubleValue()));
+        1 / Math.tan(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }

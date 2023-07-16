@@ -23,13 +23,14 @@ import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
 
 public class DurationFromMillisFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
     VariableResolver variableResolver,
-    Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    BigDecimal millis = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Duration.ofMillis(millis.longValue()));
+    Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+    BigDecimal millis = parameterValues.get(0).getNumberValue();
+    return EvaluationValue.of(Duration.ofMillis(millis.longValue()));
   }
 }

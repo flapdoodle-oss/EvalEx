@@ -31,6 +31,6 @@ public class InfixGreaterEqualsOperator extends AbstractInfixOperator {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(operands[0].compareTo(operands[1]) >= 0);
+    return EvaluationValue.of(operands[0].compareTo(operands[1]) >= 0);
   }
 }

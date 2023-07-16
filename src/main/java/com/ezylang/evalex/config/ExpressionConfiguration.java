@@ -72,6 +72,11 @@ public class ExpressionConfiguration {
   @Builder.Default
   @Getter
   @SuppressWarnings("unchecked")
+  private OperatorIfcResolver operatorIfcResolver = OperatorIfcResolver.defaults();
+
+  @Builder.Default
+  @Getter
+  @SuppressWarnings("unchecked")
   private OperatorResolver operatorResolver = OperatorResolver.defaults();
 
   // basic functions
@@ -82,7 +87,7 @@ public class ExpressionConfiguration {
   @Builder.Default
   @Getter
   @SuppressWarnings("unchecked")
-  private FunctionResolver functionResolver = FunctionResolver.defaults();
+  private FunctionIfcResolver functionIfcResolver = FunctionIfcResolver.defaults();
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
@@ -151,7 +156,7 @@ public class ExpressionConfiguration {
   @Deprecated
   public final ExpressionConfiguration withAdditionalOperators(
       Map.Entry<String, OperatorIfc>... operators) {
-    ImmutableMapBasedOperatorResolver.Builder builder = MapBasedOperatorResolver.builder();
+    ImmutableMapBasedOperatorIfcResolver.Builder builder = MapBasedOperatorIfcResolver.builder();
     Arrays.stream(operators)
         .forEach(entry -> {
           OperatorIfc operator = entry.getValue();
@@ -167,8 +172,8 @@ public class ExpressionConfiguration {
               break;
           }
         });
-    ImmutableMapBasedOperatorResolver override = builder.build();
-    this.operatorResolver = override.andThen(operatorResolver);
+    ImmutableMapBasedOperatorIfcResolver override = builder.build();
+    this.operatorIfcResolver = override.andThen(operatorIfcResolver);
     return this;
   }
 
@@ -189,41 +194,41 @@ public class ExpressionConfiguration {
    */
   @SafeVarargs
   @Deprecated
-  public final ExpressionConfiguration withAdditionalFunctions(
+  public final ExpressionConfiguration withAdditionalFunctionsIfc(
       Map.Entry<String, FunctionIfc>... functions) {
-    ImmutableMapBasedFunctionResolver.Builder builder = MapBasedFunctionResolver.builder();
+    ImmutableMapBasedFunctionIfcResolver.Builder builder = MapBasedFunctionIfcResolver.builder();
 
     Arrays.stream(functions)
         .forEach(entry -> builder.putFunctions(entry.getKey(), entry.getValue()));
 
-    ImmutableMapBasedFunctionResolver override = builder.build();
-    this.functionResolver = override.andThen(this.functionResolver);
+    ImmutableMapBasedFunctionIfcResolver override = builder.build();
+    this.functionIfcResolver = override.andThen(this.functionIfcResolver);
     
     return this;
   }
 
   @Deprecated
-  public final ExpressionConfiguration withAdditionalFunction(String name, FunctionIfc function) {
-    return withAdditionalFunctions(Map.entry(name, function));
+  public final ExpressionConfiguration withAdditionalFunctionIfc(String name, FunctionIfc function) {
+    return withAdditionalFunctionsIfc(Map.entry(name, function));
   }
 
   private static Map<String, EvaluationValue> getStandardConstants() {
 
     Map<String, EvaluationValue> constants = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    constants.put("TRUE", new EvaluationValue(true));
-    constants.put("FALSE", new EvaluationValue(false));
+    constants.put("TRUE", EvaluationValue.of(true));
+    constants.put("FALSE", EvaluationValue.of(false));
     constants.put(
         "PI",
-        new EvaluationValue(
-            new BigDecimal(
-                "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679")));
+      EvaluationValue.of(
+          new BigDecimal(
+              "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679")));
     constants.put(
         "E",
-        new EvaluationValue(
-            new BigDecimal(
-                "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-    constants.put("NULL", new EvaluationValue(null));
+      EvaluationValue.of(
+          new BigDecimal(
+              "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
+    constants.put("NULL", EvaluationValue.of(null));
 
     return constants;
   }

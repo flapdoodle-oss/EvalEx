@@ -22,15 +22,17 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the hyperbolic arc-cosine. */
 public class AcosHFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
       throws EvaluationException {
 
     /* Formula: acosh(x) = ln(x + sqrt(x^2 - 1)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = parameterValues.get(0).getNumberValue().doubleValue();
     if (Double.compare(value, 1) < 0) {
       throw new EvaluationException(functionToken, "Value must be greater or equal to one");
     }

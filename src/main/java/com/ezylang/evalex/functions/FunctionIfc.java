@@ -49,9 +49,15 @@ public interface FunctionIfc {
    * @throws EvaluationException In case there were problems during evaluation.
    */
   EvaluationValue evaluate(
-    VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
+    VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
       throws EvaluationException;
 
+  default EvaluationValue evaluateUnvalidated(
+    VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
+    throws EvaluationException {
+    validatePreEvaluation(functionToken, parameterValues);
+    return evaluate(variableResolver, expression, functionToken, parameterValues);
+  }
   /**
    * Validates the evaluation parameters, called before the actual evaluation.
    *
@@ -59,13 +65,13 @@ public interface FunctionIfc {
    * @param parameterValues The parameter values
    * @throws EvaluationException in case of any validation error
    */
-  default void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
+  default void validatePreEvaluation(Token token, List<EvaluationValue> parameterValues)
     throws EvaluationException {
 
-    for (int i = 0; i < parameterValues.length; i++) {
+    for (int i = 0; i < parameterValues.size(); i++) {
       FunctionParameterDefinition definition = parameterDefinition(i);
       for (ParameterValidator validator : definition.validators()) {
-        validator.validate(token, parameterValues[i]);
+        validator.validate(token, parameterValues.get(i));
       }
     }
   }

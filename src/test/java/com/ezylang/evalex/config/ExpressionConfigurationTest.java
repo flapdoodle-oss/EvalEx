@@ -36,10 +36,10 @@ class ExpressionConfigurationTest {
 
     assertThat(configuration.getMathContext())
         .isEqualTo(ExpressionConfiguration.DEFAULT_MATH_CONTEXT);
-    assertThat(configuration.getOperatorResolver())
-        .isInstanceOf(OperatorResolver.class);
-    assertThat(configuration.getFunctionResolver())
-        .isInstanceOf(FunctionResolver.class);
+    assertThat(configuration.getOperatorIfcResolver())
+        .isInstanceOf(OperatorIfcResolver.class);
+    assertThat(configuration.getFunctionIfcResolver())
+        .isInstanceOf(FunctionIfcResolver.class);
     assertThat(configuration.isArraysAllowed()).isTrue();
     assertThat(configuration.isStructuresAllowed()).isTrue();
     assertThat(configuration.isImplicitMultiplicationAllowed()).isTrue();
@@ -59,19 +59,19 @@ class ExpressionConfigurationTest {
                 Map.entry("ADDED1", new InfixPlusOperator()),
                 Map.entry("ADDED2", new InfixPlusOperator()));
 
-    assertThat(configuration.getOperatorResolver().hasOperator(OperatorType.INFIX_OPERATOR, "ADDED1")).isTrue();
-    assertThat(configuration.getOperatorResolver().hasOperator(OperatorType.INFIX_OPERATOR, "ADDED2")).isTrue();
+    assertThat(configuration.getOperatorIfcResolver().hasOperator(OperatorType.INFIX_OPERATOR, "ADDED1")).isTrue();
+    assertThat(configuration.getOperatorIfcResolver().hasOperator(OperatorType.INFIX_OPERATOR, "ADDED2")).isTrue();
   }
 
   @Test
   void testWithAdditionalFunctions() {
     ExpressionConfiguration configuration =
         ExpressionConfiguration.defaultConfiguration()
-            .withAdditionalFunctions(
+            .withAdditionalFunctionsIfc(
                 Map.entry("ADDED1", new DummyFunction()), Map.entry("ADDED2", new DummyFunction()));
 
-    assertThat(configuration.getFunctionResolver().hasFunction("ADDED1")).isTrue();
-    assertThat(configuration.getFunctionResolver().hasFunction("ADDED2")).isTrue();
+    assertThat(configuration.getFunctionIfcResolver().hasFunction("ADDED1")).isTrue();
+    assertThat(configuration.getFunctionIfcResolver().hasFunction("ADDED2")).isTrue();
   }
 
   @Test
@@ -84,22 +84,22 @@ class ExpressionConfigurationTest {
 
   @Test
   void testCustomOperatorDictionary() {
-    OperatorResolver mockedOperatorDictionary = Mockito.mock(OperatorResolver.class);
+    OperatorIfcResolver mockedOperatorDictionary = Mockito.mock(OperatorIfcResolver.class);
 
     ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().operatorResolver(mockedOperatorDictionary).build();
+        ExpressionConfiguration.builder().operatorIfcResolver(mockedOperatorDictionary).build();
 
-    assertThat(configuration.getOperatorResolver()).isEqualTo(mockedOperatorDictionary);
+    assertThat(configuration.getOperatorIfcResolver()).isEqualTo(mockedOperatorDictionary);
   }
 
   @Test
   void testCustomFunctionDictionary() {
-    FunctionResolver mockedFunctionDictionary = Mockito.mock(FunctionResolver.class);
+    FunctionIfcResolver mockedFunctionDictionary = Mockito.mock(FunctionIfcResolver.class);
 
     ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().functionResolver(mockedFunctionDictionary).build();
+        ExpressionConfiguration.builder().functionIfcResolver(mockedFunctionDictionary).build();
 
-    assertThat(configuration.getFunctionResolver()).isEqualTo(mockedFunctionDictionary);
+    assertThat(configuration.getFunctionIfcResolver()).isEqualTo(mockedFunctionDictionary);
   }
 
   @Test
@@ -107,8 +107,8 @@ class ExpressionConfigurationTest {
     Map<String, EvaluationValue> constants =
         new HashMap<>() {
           {
-            put("A", new EvaluationValue("a"));
-            put("B", new EvaluationValue("b"));
+            put("A", EvaluationValue.of("a"));
+            put("B", EvaluationValue.of("b"));
           }
         };
     ExpressionConfiguration configuration =

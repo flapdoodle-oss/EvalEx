@@ -36,7 +36,7 @@ public class RandomFunction implements FunctionIfc {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     SecureRandom secureRandom = new SecureRandom();
 

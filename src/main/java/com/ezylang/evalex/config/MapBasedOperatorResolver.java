@@ -1,6 +1,7 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.operators.*;
+import com.ezylang.evalex.operatorsx.*;
+import com.ezylang.evalex.operatorsx.Operator;
 import org.immutables.value.Value;
 
 import java.util.Map;
@@ -13,14 +14,15 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 	protected abstract Map<String, AbstractPostfixOperator> postfixOperators();
 
 	@Override
-	public OperatorIfc getOperator(OperatorType type, String operatorString) {
-		switch (type) {
-			case INFIX_OPERATOR:
-				return infixOperators().get(operatorString);
-			case PREFIX_OPERATOR:
-				return prefixOperators().get(operatorString);
-			case POSTFIX_OPERATOR:
-				return postfixOperators().get(operatorString);
+	public <T extends Operator> T getOperator(Class<T> type, String operatorString) {
+		if (AbstractInfixOperator.class.isAssignableFrom(type)) {
+			return type.cast(infixOperators().get(operatorString));
+		}
+		if (AbstractPrefixOperator.class.isAssignableFrom(type)) {
+			return type.cast(prefixOperators().get(operatorString));
+		}
+		if (AbstractPostfixOperator.class.isAssignableFrom(type)) {
+			return type.cast(postfixOperators().get(operatorString));
 		}
 		throw new IllegalArgumentException("operator type unknown: "+type+"("+operatorString+")");
 	}

@@ -23,6 +23,7 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /** Returns the maximum value of all parameters. */
 public class MaxFunction extends SingleArgumentFunction {
@@ -33,13 +34,13 @@ public class MaxFunction extends SingleArgumentFunction {
   
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
     BigDecimal max = null;
     for (EvaluationValue parameter : parameterValues) {
       if (max == null || parameter.getNumberValue().compareTo(max) > 0) {
         max = parameter.getNumberValue();
       }
     }
-    return new EvaluationValue(max);
+    return EvaluationValue.of(max);
   }
 }

@@ -23,6 +23,7 @@ import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /** Returns the minimum value of all parameters. */
 public class MinFunction extends SingleArgumentFunction {
@@ -33,13 +34,13 @@ public class MinFunction extends SingleArgumentFunction {
 
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
     BigDecimal min = null;
     for (EvaluationValue parameter : parameterValues) {
       if (min == null || parameter.getNumberValue().compareTo(min) < 0) {
         min = parameter.getNumberValue();
       }
     }
-    return new EvaluationValue(min);
+    return EvaluationValue.of(min);
   }
 }

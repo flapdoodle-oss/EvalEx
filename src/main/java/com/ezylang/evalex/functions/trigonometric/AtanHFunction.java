@@ -22,15 +22,17 @@ import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the hyperbolic arc-sine. */
 public class AtanHFunction extends SingleArgumentFunction {
   @Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
       throws EvaluationException {
 
     /* Formula: atanh(x) = 0.5*ln((1 + x)/(1 - x)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = parameterValues.get(0).getNumberValue().doubleValue();
     if (Math.abs(value) >= 1) {
       throw new EvaluationException(functionToken, "Absolute value must be less than 1");
     }

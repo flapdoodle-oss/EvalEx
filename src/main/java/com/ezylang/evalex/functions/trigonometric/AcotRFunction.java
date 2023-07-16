@@ -20,15 +20,17 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
+import java.util.List;
+
 /** Returns the arc-co-tangent (in radians). */
 public class AcotRFunction extends NonZeroFunction {
 
 	@Override
   public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
 
     /* Formula: acot(x) = (pi / 2) - atan(x) */
     return expression.convertDoubleValue(
-        (Math.PI / 2) - Math.atan(parameterValues[0].getNumberValue().doubleValue()));
+        (Math.PI / 2) - Math.atan(parameterValues.get(0).getNumberValue().doubleValue()));
   }
 }
