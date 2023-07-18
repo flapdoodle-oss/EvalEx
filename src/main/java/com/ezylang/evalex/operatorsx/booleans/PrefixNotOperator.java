@@ -16,11 +16,11 @@
 package com.ezylang.evalex.operatorsx.booleans;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 /** Boolean negation of value. */
 public class PrefixNotOperator extends AbstractPrefixOperator {
@@ -31,7 +31,7 @@ public class PrefixNotOperator extends AbstractPrefixOperator {
   
   @Override
   public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+      ExpressionX expression, Token operatorToken, Value<?> operand) throws EvaluationException {
     return Value.of(!requireValueType(operatorToken, operand, Value.BooleanValue.class).wrapped());
   }
 }

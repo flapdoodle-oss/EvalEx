@@ -15,12 +15,11 @@
 */
 package com.ezylang.evalex.operatorsx.booleans;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 /** Equality of two values. */
 public class InfixEqualsOperator extends AbstractInfixOperator {
@@ -31,7 +30,7 @@ public class InfixEqualsOperator extends AbstractInfixOperator {
 
   @Override
   public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> a, Value<?> b) {
+      ExpressionX expression, Token operatorToken, Value<?> a, Value<?> b) {
     return Value.of(a.wrapped().equals(b.wrapped()));
   }
 }

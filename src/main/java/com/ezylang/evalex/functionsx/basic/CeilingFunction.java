@@ -15,27 +15,24 @@
 */
 package com.ezylang.evalex.functionsx.basic;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
+import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.functionsx.AbstractFunction;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 import java.math.RoundingMode;
-import java.util.List;
 
 /** Rounds the given value an integer using the rounding mode {@link RoundingMode#CEILING} */
 public class CeilingFunction extends AbstractFunction.Single<Value.NumberValue> {
 
-  protected CeilingFunction() {
+  public CeilingFunction() {
     super(Value.NumberValue.class);
   }
   
   @Override
   public Value<?> evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value) {
+		VariableResolverX variableResolver, ExpressionX expression, Token functionToken, Value.NumberValue value) {
 
     return Value.of(value.wrapped().setScale(0, RoundingMode.CEILING));
   }

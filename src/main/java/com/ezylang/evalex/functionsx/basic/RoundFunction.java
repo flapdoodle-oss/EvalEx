@@ -15,38 +15,32 @@
 */
 package com.ezylang.evalex.functionsx.basic;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameterDefinition;
-import com.ezylang.evalex.parser.Token;
-
-import java.util.List;
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.functionsx.AbstractFunction;
+import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
+import com.ezylang.evalex.parserx.Token;
 
 /**
  * Rounds the given value to the specified scale, using the {@link java.math.MathContext} of the
  * expression configuration.
  */
-public class RoundFunction extends AbstractFunction {
+public class RoundFunction extends AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {
 
   public RoundFunction() {
-    super(FunctionParameterDefinition.of("value"),
-      FunctionParameterDefinition.of("scale"));
+    super(FunctionParameterDefinition.of(Value.NumberValue.class, "value"),
+      FunctionParameterDefinition.of(Value.NumberValue.class, "scale"));
   }
 
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
-
-    EvaluationValue value = parameterValues.get(0);
-    EvaluationValue precision = parameterValues.get(1);
-
-    return EvaluationValue.of(
+  @Override public Value<?> evaluate(VariableResolverX variableResolver, ExpressionX expression, Token functionToken, Value.NumberValue value,
+    Value.NumberValue precision) throws EvaluationException {
+    return Value.of(
         value
-            .getNumberValue()
+            .wrapped()
             .setScale(
-                precision.getNumberValue().intValue(),
+                precision.wrapped().intValue(),
                 expression.getConfiguration().getMathContext().getRoundingMode()));
   }
 }

@@ -16,10 +16,10 @@
 package com.ezylang.evalex.operatorsx.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 import java.math.BigDecimal;
 
@@ -33,7 +33,7 @@ public class InfixDivisionOperator extends
 
   @Override
   public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
+      ExpressionX expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
       throws EvaluationException {
     Value.NumberValue left = requireValueType(operatorToken, leftOperand, Value.NumberValue.class);
     Value.NumberValue right = requireValueType(operatorToken, rightOperand, Value.NumberValue.class);

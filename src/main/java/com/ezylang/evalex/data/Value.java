@@ -1,9 +1,8 @@
 package com.ezylang.evalex.data;
 
-import com.ezylang.evalex.parser.ASTNode;
+import com.ezylang.evalex.parserx.ASTNode;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -92,6 +91,11 @@ public abstract class Value<T> {
 
 	public static NumberValue of(BigDecimal value) {
 		return ImmutableNumberValue.of(value);
+	}
+
+	public static NumberValue of(double value) {
+		// new BigDecimal(Double.toString(value), mathContext); ???
+		return Value.of(BigDecimal.valueOf(value));
 	}
 
 	public static BooleanValue of(Boolean value) {

@@ -16,14 +16,13 @@
 package com.ezylang.evalex.operatorsx.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 import java.time.Duration;
-import java.time.Instant;
 
 /** Subtraction of two numbers. */
 public class InfixMinusOperator extends AbstractInfixOperator {
@@ -34,7 +33,7 @@ public class InfixMinusOperator extends AbstractInfixOperator {
 
   @Override
   public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
+      ExpressionX expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
       throws EvaluationException {
 
     return evaluate(operatorToken, leftOperand, rightOperand)

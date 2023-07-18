@@ -16,12 +16,11 @@
 package com.ezylang.evalex.operatorsx.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 /** Unary prefix plus. */
 public class PrefixPlusOperator extends AbstractPrefixOperator {
@@ -30,7 +29,7 @@ public class PrefixPlusOperator extends AbstractPrefixOperator {
     super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
   }
 
-  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+  @Override public Value<?> evaluate(ExpressionX expression, Token operatorToken, Value<?> operand) throws EvaluationException {
     return Value.of(requireValueType(operatorToken, operand, Value.NumberValue.class).wrapped().plus(expression.getConfiguration().getMathContext()));
   }
 }

@@ -4,7 +4,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operators.Precedence;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 import java.util.Optional;
 import java.util.function.BiFunction;

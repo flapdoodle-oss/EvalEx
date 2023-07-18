@@ -15,24 +15,22 @@
 */
 package com.ezylang.evalex.functionsx.basic;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
-import com.ezylang.evalex.parser.Token;
-
-import java.util.List;
+import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.functionsx.AbstractFunction;
 
 /** Boolean negation function. */
-public class NotFunction extends SingleArgumentFunction {
+public class NotFunction extends AbstractFunction.Single<Value.BooleanValue> {
 
-  @Override
-  public EvaluationValue evaluate(
-    VariableResolver variableResolver,
-    Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+  public NotFunction() {
+    super(Value.BooleanValue.class);
+  }
 
-    boolean result = parameterValues.get(0).getBooleanValue();
+  @Override public Value<?> evaluate(VariableResolverX variableResolver, ExpressionX expression, com.ezylang.evalex.parserx.Token functionToken,
+    Value.BooleanValue parameterValue) {
+    boolean result = parameterValue.wrapped();
 
-    return EvaluationValue.of(!result);
+    return Value.of(!result);
   }
 }

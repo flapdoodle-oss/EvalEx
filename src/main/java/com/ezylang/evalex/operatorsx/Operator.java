@@ -15,11 +15,7 @@
 */
 package com.ezylang.evalex.operatorsx;
 
-import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.OperatorType;
-import com.ezylang.evalex.parser.Token;
 
 /**
  * Interface that is required for all operators in an operator dictionary for evaluation of

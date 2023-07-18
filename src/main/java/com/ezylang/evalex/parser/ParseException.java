@@ -37,4 +37,12 @@ public class ParseException extends BaseException {
         token.getValue(),
         message);
   }
+
+  public ParseException(com.ezylang.evalex.parserx.Token token, String message) {
+    super(
+      token.getStartPosition(),
+      token.getStartPosition() + token.getValue().length() - 1,
+      token.getValue(),
+      message);
+  }
 }

@@ -4,7 +4,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operators.Precedence;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 public abstract class AbstractBaseOperator implements Operator {
 
@@ -46,5 +46,9 @@ public abstract class AbstractBaseOperator implements Operator {
 			return type.cast(value);
 		}
 		throw new EvaluationException(operatorToken, "type missmatch: "+value+" is not a "+type);
+	}
+
+	protected static Value.NumberValue numberValue(Token operatorToken, Value<?> value) throws EvaluationException {
+		return requireValueType(operatorToken, value, Value.NumberValue.class);
 	}
 }

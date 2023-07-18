@@ -16,11 +16,11 @@
 package com.ezylang.evalex.operatorsx.booleans;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 /** Boolean AND of two values. */
 public class InfixAndOperator extends AbstractInfixOperator {
@@ -31,7 +31,7 @@ public class InfixAndOperator extends AbstractInfixOperator {
   
   @Override
   public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) throws EvaluationException {
+      ExpressionX expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) throws EvaluationException {
     Value.BooleanValue left = requireValueType(operatorToken, leftExpression, Value.BooleanValue.class);
     Value.BooleanValue right = requireValueType(operatorToken, rightExpression, Value.BooleanValue.class);
 

@@ -1,10 +1,8 @@
 package com.ezylang.evalex.functionsx.validations;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.functionsx.validations.ParameterValidator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 import java.math.BigDecimal;
 

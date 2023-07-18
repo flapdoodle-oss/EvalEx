@@ -17,7 +17,7 @@ package com.ezylang.evalex.functionsx;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.functionsx.validations.ParameterValidator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 import org.immutables.builder.Builder;
 import org.immutables.value.Value;
 
@@ -43,6 +43,9 @@ public interface FunctionParameterDefinition<T extends com.ezylang.evalex.data.V
     return false;
   }
 
+  @Value.Default
+  default boolean isOptional() { return false; }
+
   /**
    * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
    * com.ezylang.evalex.parser.ASTNode} will be passed as a parameter value.
@@ -66,6 +69,10 @@ public interface FunctionParameterDefinition<T extends com.ezylang.evalex.data.V
 
   static <T extends com.ezylang.evalex.data.Value<?>> ImmutableFunctionParameterDefinition<T> varArgWith(Class<T> type, String name) {
     return builder(type).name(name).isVarArg(true).build();
+  }
+
+  static <T extends com.ezylang.evalex.data.Value<?>> ImmutableFunctionParameterDefinition<T> optionalWith(Class<T> type, String name) {
+    return builder(type).name(name).isOptional(true).build();
   }
 
   static <T extends com.ezylang.evalex.data.Value<?>> ImmutableFunctionParameterDefinition<T> lazyWith(Class<T> type, String name) {

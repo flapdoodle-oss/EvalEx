@@ -1,6 +1,5 @@
 package com.ezylang.evalex.operatorsx;
 
-import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operators.Precedence;
 

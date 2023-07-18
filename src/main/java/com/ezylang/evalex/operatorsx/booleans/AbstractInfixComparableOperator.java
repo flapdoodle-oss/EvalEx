@@ -1,11 +1,11 @@
 package com.ezylang.evalex.operatorsx.booleans;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 public abstract class AbstractInfixComparableOperator extends AbstractInfixOperator {
 
@@ -18,7 +18,7 @@ public abstract class AbstractInfixComparableOperator extends AbstractInfixOpera
 	}
 
 	@Override
-	public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+	public Value<?> evaluate(ExpressionX expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
 		if (leftOperand.getClass() == rightOperand.getClass()) {
 			if (leftOperand instanceof Value.ComparableValue) {
 				return evaluateComparable(expression, operatorToken, (Value.ComparableValue) leftOperand, (Value.ComparableValue) rightOperand);
@@ -28,5 +28,5 @@ public abstract class AbstractInfixComparableOperator extends AbstractInfixOpera
 		throw new EvaluationException(operatorToken, "different types: "+leftOperand+", "+rightOperand);
 	}
 
-	protected abstract <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(Expression expression, Token operatorToken, V leftOperand, V rightOperand);
+	protected abstract <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(ExpressionX expression, Token operatorToken, V leftOperand, V rightOperand);
 }

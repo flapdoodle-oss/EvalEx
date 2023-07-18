@@ -1,6 +1,8 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.operatorsx.*;
+import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
+import com.ezylang.evalex.operatorsx.AbstractPostfixOperator;
+import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
 import com.ezylang.evalex.operatorsx.Operator;
 import org.immutables.value.Value;
 
@@ -15,13 +17,13 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 
 	@Override
 	public <T extends Operator> T getOperator(Class<T> type, String operatorString) {
-		if (AbstractInfixOperator.class.isAssignableFrom(type)) {
+		if (type.isAssignableFrom(AbstractInfixOperator.class)) {
 			return type.cast(infixOperators().get(operatorString));
 		}
-		if (AbstractPrefixOperator.class.isAssignableFrom(type)) {
+		if (type.isAssignableFrom(AbstractPrefixOperator.class)) {
 			return type.cast(prefixOperators().get(operatorString));
 		}
-		if (AbstractPostfixOperator.class.isAssignableFrom(type)) {
+		if (type.isAssignableFrom(AbstractPostfixOperator.class)) {
 			return type.cast(postfixOperators().get(operatorString));
 		}
 		throw new IllegalArgumentException("operator type unknown: "+type+"("+operatorString+")");
@@ -29,5 +31,29 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 
 	public static ImmutableMapBasedOperatorResolver.Builder builder() {
 		return ImmutableMapBasedOperatorResolver.builder();
+	}
+
+	public static ImmutableMapBasedOperatorResolver of(Map.Entry<String, Operator> ... operators) {
+		ImmutableMapBasedOperatorResolver.Builder builder = ImmutableMapBasedOperatorResolver.builder();
+		for (Map.Entry<String, Operator> entry : operators) {
+			Operator value = entry.getValue();
+			boolean foundType=false;
+			if (value instanceof AbstractInfixOperator) {
+				builder.putInfixOperators(entry.getKey(), (AbstractInfixOperator) value);
+				foundType=true;
+			}
+			if (value instanceof AbstractPrefixOperator) {
+				builder.putPrefixOperators(entry.getKey(), (AbstractPrefixOperator) value);
+				foundType=true;
+			}
+			if (value instanceof AbstractPostfixOperator) {
+				builder.putPostfixOperators(entry.getKey(), (AbstractPostfixOperator) value);
+				foundType=true;
+			}
+			if (!foundType) {
+				throw new IllegalArgumentException("unknown type: "+value);
+			}
+		}
+		return builder.build();
 	}
 }

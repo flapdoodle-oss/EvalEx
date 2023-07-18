@@ -16,13 +16,11 @@
 package com.ezylang.evalex.functionsx;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
-import com.ezylang.evalex.functionsx.validations.ParameterValidator;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.parserx.Token;
 
 import java.util.List;
 
@@ -51,11 +49,11 @@ public interface Function {
    * @throws EvaluationException In case there were problems during evaluation.
    */
   Value<?> evaluate(
-    VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    VariableResolverX variableResolver, ExpressionX expression, Token functionToken, List<Value<?>> parameterValues)
       throws EvaluationException;
 
   default Value<?> evaluateUnvalidated(
-    VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    VariableResolverX variableResolver, ExpressionX expression, Token functionToken, List<Value<?>> parameterValues)
     throws EvaluationException {
     validatePreEvaluation(functionToken, parameterValues);
     return evaluate(variableResolver, expression, functionToken, parameterValues);
@@ -78,6 +76,7 @@ public interface Function {
 //        validator.validate(token, parameterValues[i]);
 //      }
     }
+    // TODO check min, max number of parameters..
   }
   /**
    * Checks whether the function has a variable number of arguments parameter.

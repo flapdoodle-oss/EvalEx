@@ -15,10 +15,10 @@
 */
 package com.ezylang.evalex.operatorsx.booleans;
 
-import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.Precedence;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.Token;
 
 /** Greater or equals of two values. */
 public class InfixGreaterEqualsOperator extends AbstractInfixComparableOperator {
@@ -27,7 +27,7 @@ public class InfixGreaterEqualsOperator extends AbstractInfixComparableOperator 
     super(Precedence.OPERATOR_PRECEDENCE_COMPARISON);
   }
 
-  @Override protected <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(Expression expression, Token operatorToken,
+  @Override protected <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(ExpressionX expression, Token operatorToken,
     V leftOperand, V rightOperand) {
     return Value.of(leftOperand.compareTo(rightOperand) >= 0);
   }
