@@ -47,7 +47,7 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 
 		public <L extends Value<?>, R extends Value<?>> Evaluator using(Class<L> leftType, Class<R> rightType, Evaluation<L, R> function)
 			throws EvaluationException {
-			if (leftType.isInstance(leftOperand) && rightType.isInstance(rightOperand)) {
+			if (result.isEmpty() && leftType.isInstance(leftOperand) && rightType.isInstance(rightOperand)) {
 				result = Optional.of(function.evaluate(leftType.cast(leftOperand), rightType.cast(rightOperand)));
 			}
 			return this;

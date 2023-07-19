@@ -20,7 +20,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.parser.ASTNode;
-import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.MathContext;

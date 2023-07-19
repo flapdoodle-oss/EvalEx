@@ -1,20 +1,27 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.functionsx.Function;
 import com.ezylang.evalex.operatorsx.InfixOperator;
 import com.ezylang.evalex.operatorsx.PostfixOperator;
 import com.ezylang.evalex.operatorsx.PrefixOperator;
+import com.ezylang.evalex.parserx.ShuntingYardConverter;
+import com.ezylang.evalex.parserx.Tokenizer;
 import com.ezylang.evalex.parserx.ASTNode;
+import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parserx.Token;
+import de.flapdoodle.types.Either;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.*;
 
+@org.immutables.value.Value.Immutable
 public abstract class ExpressionX {
 	public abstract Configuration getConfiguration();
 
@@ -25,6 +32,38 @@ public abstract class ExpressionX {
 		TreeMap<String, Value<?>> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		map.putAll(getConfiguration().getDefaultConstants());
 		return Collections.unmodifiableMap(map);
+	}
+
+	/**
+	 * Returns the root ode of the parsed abstract syntax tree.
+	 *
+	 * @return The abstract syntax tree root node.
+	 * @throws ParseException If there were problems while parsing the expression.
+	 */
+	@org.immutables.value.Value.Derived
+	public Either<com.ezylang.evalex.parserx.ASTNode, ParseException> getAbstractSyntaxTree() {
+		Tokenizer tokenizer = new com.ezylang.evalex.parserx.Tokenizer(expressionString(), getConfiguration());
+		try {
+			ShuntingYardConverter converter =
+					new ShuntingYardConverter(expressionString(), tokenizer.parse(), getConfiguration());
+			return Either.left(converter.toAbstractSyntaxTree());
+		} catch (ParseException px) {
+			return Either.right(px);
+		}
+	}
+
+	/**
+	 * Evaluates the expression by parsing it (if not done before) and the evaluating it.
+	 *
+	 * @return The evaluation result value.
+	 * @throws EvaluationException If there were problems while evaluating the expression.
+	 * @throws ParseException If there were problems while parsing the expression.
+	 */
+	public Value<?> evaluate(VariableResolverX variableResolver) throws EvaluationException, ParseException {
+		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();
+		if (ast.isLeft()) {
+			return evaluateSubtree(variableResolver, ast.left());
+		} else throw ast.right();
 	}
 
 	/**
@@ -163,4 +202,10 @@ public abstract class ExpressionX {
 		}
 	}
 
+	public static ExpressionX of(String expressionString, Configuration configuration) {
+		return ImmutableExpressionX.builder()
+				.expressionString(expressionString)
+				.configuration(configuration)
+				.build();
+	}
 }

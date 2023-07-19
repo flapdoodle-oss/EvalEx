@@ -1,4 +1,4 @@
-package com.ezylang.evalex.parser;
+package com.ezylang.evalex;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

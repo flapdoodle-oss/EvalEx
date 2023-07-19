@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.parser;
 
+import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
 class TokenizerVariableNameTest extends BaseParserTest {

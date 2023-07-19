@@ -21,17 +21,13 @@ import com.ezylang.evalex.config.OperatorResolver;
 import com.ezylang.evalex.functionsx.Function;
 import com.ezylang.evalex.operatorsx.InfixOperator;
 import com.ezylang.evalex.operatorsx.Operator;
-import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operatorsx.PostfixOperator;
 import com.ezylang.evalex.operatorsx.PrefixOperator;
-import com.ezylang.evalex.parser.ParseException;
-import com.ezylang.evalex.parser.TokenType;
-import com.ezylang.evalex.parserx.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezylang.evalex.parser.TokenType.*;
+import static com.ezylang.evalex.parserx.TokenType.*;
 
 /**
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens

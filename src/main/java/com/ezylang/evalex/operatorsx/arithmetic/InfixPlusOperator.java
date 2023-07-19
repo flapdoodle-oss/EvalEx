@@ -39,6 +39,7 @@ public class InfixPlusOperator extends AbstractInfixOperator {
       .using(Value.DateTimeValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))
       .using(Value.DurationValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))
       .using(Value.DateTimeValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().plus(Duration.ofMillis(r.wrapped().longValue()))))
+      .using(Value.class, Value.class, (l, r) -> Value.of(l.wrapped().toString()+r.wrapped()))
       .get();
   }
 }

@@ -17,6 +17,7 @@ package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
+import com.ezylang.evalex.parserx.ParseException;
 
 import java.util.List;
 

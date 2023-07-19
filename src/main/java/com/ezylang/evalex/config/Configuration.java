@@ -85,20 +85,20 @@ public abstract class Configuration {
 	}
 
 	@Value.Auxiliary
-	public Configuration withAdditionalOperators(Map.Entry<String, Operator>... operators) {
+	public ImmutableConfiguration withAdditionalOperators(Map.Entry<String, Operator>... operators) {
 		return ImmutableConfiguration.copyOf(this)
 			.withOperatorResolver(MapBasedOperatorResolver.of(operators)
 				.andThen(getOperatorResolver()));
 	}
 
 	@Value.Auxiliary
-	public Configuration withAdditionalFunctions(Map.Entry<String, Function> ... functions) {
+	public ImmutableConfiguration withAdditionalFunctions(Map.Entry<String, Function> ... functions) {
 		return ImmutableConfiguration.copyOf(this)
 			.withFunctionResolver(MapBasedFunctionResolver.of(functions)
 				.andThen(getFunctionResolver()));
 	}
 
-	public static Configuration defaultConfiguration() {
+	public static ImmutableConfiguration defaultConfiguration() {
 		return ImmutableConfiguration.builder().build();
 	}
 }

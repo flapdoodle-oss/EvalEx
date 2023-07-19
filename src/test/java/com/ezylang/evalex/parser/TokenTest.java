@@ -17,6 +17,7 @@ package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.operators.OperatorType;
+import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

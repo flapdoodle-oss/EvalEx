@@ -15,6 +15,7 @@
 */
 package com.ezylang.evalex.parser;
 
+import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

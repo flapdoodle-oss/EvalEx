@@ -18,9 +18,9 @@ package com.ezylang.evalex.data;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ASTNode;
-import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parser.Token;
-import com.ezylang.evalex.parser.TokenType;
+import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

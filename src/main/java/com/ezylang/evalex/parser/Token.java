@@ -15,8 +15,10 @@
 */
 package com.ezylang.evalex.parser;
 
+import com.ezylang.evalex.Nullable;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
+import com.ezylang.evalex.parserx.TokenType;
 import org.immutables.value.Value;
 
 /**

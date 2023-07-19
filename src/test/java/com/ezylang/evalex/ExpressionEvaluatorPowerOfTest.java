@@ -15,10 +15,7 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -18,6 +18,7 @@ package com.ezylang.evalex.parser;
 import com.ezylang.evalex.functions.basic.MinFunction;
 import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
+import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package com.ezylang.evalex.parser;
+package com.ezylang.evalex.parserx;
 
 import com.ezylang.evalex.BaseException;
 import lombok.ToString;
@@ -30,7 +30,7 @@ public class ParseException extends BaseException {
     super(1, expression.length(), expression, message);
   }
 
-  public ParseException(Token token, String message) {
+  public ParseException(com.ezylang.evalex.parser.Token token, String message) {
     super(
         token.getStartPosition(),
         token.getStartPosition() + token.getValue().length() - 1,

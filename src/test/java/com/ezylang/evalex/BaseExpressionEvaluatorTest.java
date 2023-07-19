@@ -18,7 +18,7 @@ package com.ezylang.evalex;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parserx.ParseException;
 
 public abstract class BaseExpressionEvaluatorTest {
 

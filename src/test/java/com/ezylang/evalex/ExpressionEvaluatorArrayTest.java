@@ -16,7 +16,7 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

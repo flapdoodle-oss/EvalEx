@@ -13,13 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package com.ezylang.evalex.parser;
+package com.ezylang.evalex.parserx;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.functionsx.Function;
+import com.ezylang.evalex.operatorsx.Operator;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class ShuntingYardConverter {
 
   private final String originalExpression;
 
-  private final ExpressionConfiguration configuration;
+  private final Configuration configuration;
 
   private final Deque<Token> operatorStack = new ArrayDeque<>();
   private final Deque<ASTNode> operandStack = new ArrayDeque<>();
@@ -52,7 +50,7 @@ public class ShuntingYardConverter {
   public ShuntingYardConverter(
       String originalExpression,
       List<Token> expressionTokens,
-      ExpressionConfiguration configuration) {
+      Configuration configuration) {
     this.originalExpression = originalExpression;
     this.expressionTokens = expressionTokens;
     this.configuration = configuration;
@@ -161,7 +159,7 @@ public class ShuntingYardConverter {
 
   private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
       throws ParseException {
-    FunctionIfc function = functionToken.getFunctionDefinition();
+    Function function = functionToken.getFunctionDefinition();
     if (parameters.size() < function.parameterDefinitions().size()) {
       throw new ParseException(functionToken, "Not enough parameters for function");
     }
@@ -256,7 +254,7 @@ public class ShuntingYardConverter {
   }
 
   private boolean isNextOperatorOfHigherPrecedence(
-      OperatorIfc currentOperator, OperatorIfc nextOperator) {
+      Operator currentOperator, Operator nextOperator) {
     // structure operator (null) has always a higher precedence than other operators
     if (nextOperator == null) {
       return true;

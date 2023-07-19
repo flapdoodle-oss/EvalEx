@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class TestConfigurationXProvider {
 
-	public static final Configuration StandardConfigurationWithAdditionalTestOperators =
+	public static final ImmutableConfiguration StandardConfigurationWithAdditionalTestOperators =
 		Configuration.defaultConfiguration()
 			.withAdditionalOperators(
 				Map.entry("++", new PrefixPlusPlusOperator()),

@@ -18,6 +18,8 @@ package com.ezylang.evalex.parser;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.*;
+import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

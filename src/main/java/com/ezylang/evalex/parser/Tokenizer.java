@@ -21,11 +21,13 @@ import com.ezylang.evalex.config.OperatorIfcResolver;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.OperatorType;
+import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parserx.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezylang.evalex.parser.TokenType.*;
+import static com.ezylang.evalex.parserx.TokenType.*;
 
 /**
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens

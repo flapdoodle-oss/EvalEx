@@ -21,6 +21,8 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.parser.*;
+import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parserx.TokenType;
 import lombok.Getter;
 
 import java.math.BigDecimal;

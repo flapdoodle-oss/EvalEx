@@ -18,7 +18,7 @@ package com.ezylang.evalex;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.Token;
-import com.ezylang.evalex.parser.TokenType;
+import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -1,4 +1,4 @@
-package com.ezylang.evalex.parser;
+package com.ezylang.evalex.parserx;
 
 public enum TokenType {
 	BRACE_OPEN,
