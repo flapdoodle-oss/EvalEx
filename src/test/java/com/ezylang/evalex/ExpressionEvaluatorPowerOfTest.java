@@ -15,8 +15,13 @@
 */
 package com.ezylang.evalex;
 
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.operatorsx.arithmetic.InfixPowerOfOperator;
 import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,18 +29,21 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testPrecedenceDefault() throws ParseException, EvaluationException {
-    assertThat(evaluate("-2^2")).isEqualTo("4");
+    assertThat(evaluate("-2^2")).isEqualTo("4.0");
   }
 
-//  @Test
-//  void testPrecedenceHigher() throws ParseException, EvaluationException {
-//    ExpressionConfiguration config =
-//        ExpressionConfiguration.builder()
-//            .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER)
-//            .build();
-//
-//    Expression expression = new Expression("-2^2", config);
-//
-//    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("-4");
-//  }
+  @Test
+  void testPrecedenceHigher() throws ParseException, EvaluationException {
+    Configuration config =
+        Configuration.defaultConfiguration()
+          .withAdditionalOperators(Map.entry("^", new InfixPowerOfOperator() {
+            @Override public int getPrecedence() {
+              return 100;
+            }
+          }));
+
+    ExpressionX expression = ExpressionX.of("-2^2", config);
+
+    assertThat(expression.evaluate(VariableResolverX.empty()).wrapped().toString()).isEqualTo("-4.0");
+  }
 }

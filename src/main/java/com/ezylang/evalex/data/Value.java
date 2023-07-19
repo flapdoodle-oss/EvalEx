@@ -1,10 +1,17 @@
 package com.ezylang.evalex.data;
 
+import com.ezylang.evalex.Nullable;
 import com.ezylang.evalex.parserx.ASTNode;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class Value<T> {
 	@org.immutables.value.Value.Parameter
@@ -12,6 +19,19 @@ public abstract class Value<T> {
 
 	@org.immutables.value.Value.Derived
 	public abstract DataType dataType();
+
+	@org.immutables.value.Value.Immutable
+	public static abstract class NullValue extends Value<Void> {
+
+		@Override
+		@Nullable
+		public abstract Void wrapped();
+
+		@Override
+		public DataType dataType() {
+			return DataType.NULL;
+		}
+	}
 
 	public static abstract class ComparableValue<T extends Comparable<T>> extends Value<T> implements Comparable<Value<T>> {
 		@org.immutables.value.Value.Auxiliary
@@ -98,6 +118,12 @@ public abstract class Value<T> {
 		return Value.of(BigDecimal.valueOf(value));
 	}
 
+	private static NullValue NULL=ImmutableNullValue.builder().build();
+
+	public static NullValue ofNull() {
+		return NULL;
+	}
+
 	public static BooleanValue of(Boolean value) {
 		return ImmutableBooleanValue.of(value);
 	}
@@ -118,7 +144,28 @@ public abstract class Value<T> {
 		return ImmutableStructureValue.of(value);
 	}
 
+	public static <T> StructureValue of(Function<T, Value<?>> mapper, Map<String, T> map) {
+		return of(ValueMap.of(map.entrySet().stream()
+			.collect(Collectors.toMap(Map.Entry::getKey, entry -> mapper.apply(entry.getValue())))));
+	}
+
 	public static ExpressionValue of(ASTNode value) {
 		return ImmutableExpressionValue.of(value);
+	}
+
+	public static ArrayValue of(Collection<? extends Value<?>> array) {
+		return ImmutableArrayValue.of(ValueArray.of(array));
+	}
+
+	public static <T> ArrayValue of(Function<T, Value<?>> mapper, Collection<? extends T> array) {
+		return of(array.stream().map(mapper).collect(Collectors.toList()));
+	}
+
+	public static <T> ArrayValue of(Function<T, Value<?>> mapper, T ... array) {
+		return of(Stream.of(array).map(mapper).collect(Collectors.toList()));
+	}
+
+	public static ArrayValue of(Value<?> ... array) {
+		return of(ValueArray.of(Arrays.asList(array)));
 	}
 }

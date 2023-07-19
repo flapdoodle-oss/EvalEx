@@ -18,11 +18,11 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,9 +59,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
-        "IF(1, 4/2, 4/0) : 2",
-        "IF(1, 4/IF(0, 5/0, 2*2), 4/0) : 1",
-        "IF(1, 6/IF(0, 5/0, 2*IF(1, 3, 6/0)), 4/0) : 1"
+        "IF(true, 4/2, 4/0) : 2",
+        "IF(true, 4/IF(false, 5/0, 2*2), 4/0) : 1",
+        "IF(true, 6/IF(false, 5/0, 2*IF(true, 3, 6/0)), 4/0) : 1"
       })
   void testIf(String expression, String expectedResult) throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
@@ -124,8 +124,8 @@ class BasicFunctionsTest extends BaseEvaluationTest {
       })
   void testRoundUp(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().mathContext(new MathContext(32, RoundingMode.UP)).build();
+    Configuration configuration =
+        Configuration.builder().mathContext(new MathContext(32, RoundingMode.UP)).build();
     assertExpressionHasExpectedResult(expression, expectedResult, configuration);
   }
 
@@ -159,7 +159,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
       })
   void testSqrt(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
@@ -173,12 +173,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
-        "NOT(0) : true",
-        "NOT(1) : false",
-        "NOT(20) : false",
-        "NOT(\"true\") : false",
-        "NOT(\"false\") : true",
-        "NOT(2-4/2) : true",
+//        "NOT(0) : true",
+//        "NOT(1) : false",
+//        "NOT(20) : false",
+//        "NOT(\"true\") : false",
+//        "NOT(\"false\") : true",
+//        "NOT(2-4/2) : true",
+        "NOT(true) : false",
+        "NOT(false) : true",
       })
   void testBooleanNegation(String expression, String expectedResult)
       throws EvaluationException, ParseException {
@@ -280,7 +282,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
       })
   void testLog(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
@@ -308,7 +310,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
       })
   void testLog10(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test

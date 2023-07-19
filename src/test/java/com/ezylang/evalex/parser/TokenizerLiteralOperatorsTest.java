@@ -15,15 +15,21 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.*;
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
+import com.ezylang.evalex.operatorsx.AbstractPostfixOperator;
+import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+
+import com.ezylang.evalex.parserx.Token;
 
 class TokenizerLiteralOperatorsTest extends BaseParserTest {
 
@@ -53,51 +59,45 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
       Token.of(28, ")", TokenType.BRACE_CLOSE));
   }
 
-  static class AndOperator extends AbstractInfixOperator {
+  static class AndOperator extends AbstractInfixOperator.Typed<Value.BooleanValue, Value.BooleanValue> {
     protected AndOperator() {
-      super(Precedence.OPERATOR_PRECEDENCE_AND);
+      super(Precedence.OPERATOR_PRECEDENCE_AND, Value.BooleanValue.class, Value.BooleanValue.class);
     }
 
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return EvaluationValue.of(operands[0].getBooleanValue() && operands[1].getBooleanValue());
+    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+      throws EvaluationException {
+      return Value.of(leftOperand.wrapped() && rightOperand.wrapped());
     }
   }
 
-  static class OrOperator extends AbstractInfixOperator {
+  static class OrOperator extends AbstractInfixOperator.Typed<Value.BooleanValue, Value.BooleanValue> {
     protected OrOperator() {
-      super(Precedence.OPERATOR_PRECEDENCE_OR);
+      super(Precedence.OPERATOR_PRECEDENCE_OR, Value.BooleanValue.class, Value.BooleanValue.class);
     }
-    
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return EvaluationValue.of(operands[0].getBooleanValue() || operands[1].getBooleanValue());
+
+    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+      throws EvaluationException {
+      return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
     }
   }
 
-  static class NotOperator extends AbstractPrefixOperator {
+  static class NotOperator extends AbstractPrefixOperator.Typed<Value.BooleanValue> {
     protected NotOperator() {
-      super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+      super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.BooleanValue.class);
     }
 
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return EvaluationValue.of(!operands[0].getBooleanValue());
+    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+      return Value.of(!operand.wrapped());
     }
   }
 
-  static class DeniedOperator extends AbstractPostfixOperator {
+  static class DeniedOperator extends AbstractPostfixOperator.Typed<Value.BooleanValue> {
     protected DeniedOperator() {
-        super(Precedence.OPERATOR_PRECEDENCE_UNARY);
+        super(Precedence.OPERATOR_PRECEDENCE_UNARY, Value.BooleanValue.class);
       }
 
-      @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return EvaluationValue.of(!operands[0].getBooleanValue());
+    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+      return Value.of(!operand.wrapped());
     }
   }
 }

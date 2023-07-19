@@ -16,9 +16,18 @@ public abstract class ValueMap {
 		return values().get(name);
 	}
 
-//	public static ImmVa bu(Iterable<? extends Value<?>> values) {
+	//	public static ImmVa bu(Iterable<? extends Value<?>> values) {
 //		return ImmutableValueArray.builder()
 //			.values(values)
 //			.build();
 //	}
+	public static ImmutableValueMap.Builder builder() {
+		return ImmutableValueMap.builder();
+	}
+
+	public static ImmutableValueMap of(Map<String, Value<?>> map) {
+		return builder()
+			.putAllValues(map)
+			.build();
+	}
 }

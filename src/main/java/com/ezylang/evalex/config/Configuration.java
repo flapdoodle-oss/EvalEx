@@ -55,7 +55,7 @@ public abstract class Configuration {
 			com.ezylang.evalex.data.Value.of(
 				new BigDecimal(
 					"2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-		//constants.put("NULL", com.ezylang.evalex.data.Value.of(null));
+		constants.put("NULL", com.ezylang.evalex.data.Value.ofNull());
 		return constants;
 	}
 
@@ -84,6 +84,7 @@ public abstract class Configuration {
 		return true;
 	}
 
+	// TODO its override, not addition
 	@Value.Auxiliary
 	public ImmutableConfiguration withAdditionalOperators(Map.Entry<String, Operator>... operators) {
 		return ImmutableConfiguration.copyOf(this)
@@ -91,6 +92,7 @@ public abstract class Configuration {
 				.andThen(getOperatorResolver()));
 	}
 
+	// TODO its override, not addition
 	@Value.Auxiliary
 	public ImmutableConfiguration withAdditionalFunctions(Map.Entry<String, Function> ... functions) {
 		return ImmutableConfiguration.copyOf(this)
@@ -98,7 +100,15 @@ public abstract class Configuration {
 				.andThen(getFunctionResolver()));
 	}
 
+	public ImmutableConfiguration withAdditionalFunctions(String name, Function function) {
+		return withAdditionalFunctions(Map.entry(name, function));
+	}
+
 	public static ImmutableConfiguration defaultConfiguration() {
-		return ImmutableConfiguration.builder().build();
+		return builder().build();
+	}
+
+	public static ImmutableConfiguration.Builder builder() {
+		return ImmutableConfiguration.builder();
 	}
 }

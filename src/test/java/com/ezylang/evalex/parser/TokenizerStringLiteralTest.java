@@ -23,6 +23,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ezylang.evalex.parserx.Tokenizer;
+import com.ezylang.evalex.parserx.Token;
+
 class TokenizerStringLiteralTest extends BaseParserTest {
 
   @Test

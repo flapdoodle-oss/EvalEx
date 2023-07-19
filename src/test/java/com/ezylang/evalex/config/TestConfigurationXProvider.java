@@ -1,9 +1,7 @@
 package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.ExpressionX;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.functionsx.AbstractFunction;
@@ -11,25 +9,6 @@ import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractPostfixOperator;
 import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
-import com.ezylang.evalex.parser.Token;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
-import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.ExpressionX;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
-import com.ezylang.evalex.functionsx.AbstractFunction;
-import com.ezylang.evalex.operators.Precedence;
-import com.ezylang.evalex.operatorsx.*;
-import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.util.List;

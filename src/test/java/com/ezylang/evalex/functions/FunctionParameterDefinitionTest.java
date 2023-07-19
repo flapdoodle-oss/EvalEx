@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions;
 
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,19 +26,15 @@ class FunctionParameterDefinitionTest {
   @Test
   void testCreation() {
     FunctionParameterDefinition definition =
-        FunctionParameterDefinition.builder()
+        FunctionParameterDefinition.builder(Value.StringValue.class)
             .name("name")
             .isVarArg(true)
             .isLazy(true)
             .build();
 
     assertThat(definition.getName()).isEqualTo("name");
+    assertThat(definition.parameterType()).isEqualTo(Value.StringValue.class);
     assertThat(definition.isVarArg()).isTrue();
     assertThat(definition.isLazy()).isTrue();
-
-    assertThat(definition)
-        .hasToString(
-            "FunctionParameterDefinition{name=name, isVarArg=true, isLazy=true,"
-                + " validators=[]}");
   }
 }

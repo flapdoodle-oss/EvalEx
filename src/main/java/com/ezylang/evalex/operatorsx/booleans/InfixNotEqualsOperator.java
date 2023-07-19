@@ -21,6 +21,8 @@ import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
 import com.ezylang.evalex.parserx.Token;
 
+import java.util.Objects;
+
 /** No equality of two values. */
 public class InfixNotEqualsOperator extends AbstractInfixOperator {
 
@@ -32,6 +34,6 @@ public class InfixNotEqualsOperator extends AbstractInfixOperator {
   public Value<?> evaluate(
       ExpressionX expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) {
 
-    return Value.of(!leftExpression.wrapped().equals(rightExpression.wrapped()));
+    return Value.of(!Objects.equals(leftExpression.wrapped(), rightExpression.wrapped()));
   }
 }

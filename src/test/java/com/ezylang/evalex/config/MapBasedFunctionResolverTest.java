@@ -15,23 +15,23 @@
 */
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.functions.basic.MaxFunction;
-import com.ezylang.evalex.functions.basic.MinFunction;
+import com.ezylang.evalex.functionsx.Function;
+import com.ezylang.evalex.functionsx.basic.MaxFunction;
+import com.ezylang.evalex.functionsx.basic.MinFunction;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MapBasedFunctionIfcResolverTest {
+class MapBasedFunctionResolverTest {
 
   @Test
   void testCreationOfFunctions() {
-    FunctionIfc min = new MinFunction();
-    FunctionIfc max = new MaxFunction();
+    Function min = new MinFunction();
+    Function max = new MaxFunction();
 
     @SuppressWarnings({"unchecked", "varargs"})
-		FunctionIfcResolver dictionary =
-        MapBasedFunctionIfcResolver.builder().putFunctions("min", min).putFunctions("max", max).build();
+		FunctionResolver dictionary =
+        MapBasedFunctionResolver.builder().putFunctions("min", min).putFunctions("max", max).build();
 
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("max")).isTrue();
@@ -44,12 +44,12 @@ class MapBasedFunctionIfcResolverTest {
 
   @Test
   void testCaseInsensitivity() {
-    FunctionIfc min = new MinFunction();
-    FunctionIfc max = new MaxFunction();
+    Function min = new MinFunction();
+    Function max = new MaxFunction();
 
     @SuppressWarnings({"unchecked", "varargs"})
-		FunctionIfcResolver dictionary =
-      MapBasedFunctionIfcResolver.builder().putFunctions("Min", min).putFunctions("MAX", max).build();
+		FunctionResolver dictionary =
+      MapBasedFunctionResolver.builder().putFunctions("Min", min).putFunctions("MAX", max).build();
 
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("MIN")).isTrue();

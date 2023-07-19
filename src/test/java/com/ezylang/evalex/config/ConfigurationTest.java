@@ -17,7 +17,6 @@ package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.config.TestConfigurationXProvider.DummyFunction;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operatorsx.InfixOperator;
 import com.ezylang.evalex.operatorsx.arithmetic.InfixPlusOperator;
 import org.junit.jupiter.api.Test;

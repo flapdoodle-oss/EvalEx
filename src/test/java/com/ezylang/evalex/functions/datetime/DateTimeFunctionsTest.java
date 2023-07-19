@@ -17,8 +17,8 @@ package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.config.TestConfigurationProvider;
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.config.TestConfigurationXProvider;
 import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -27,10 +27,9 @@ import java.time.ZoneId;
 
 class DateTimeFunctionsTest extends BaseEvaluationTest {
 
-  private static final ExpressionConfiguration DateTimeTestConfiguration =
-      TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
-          .defaultZoneId(ZoneId.of("UTC+2"))
-          .build();
+  private static final Configuration DateTimeTestConfiguration =
+      TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators
+        .withDefaultZoneId(ZoneId.of("UTC+2"));
 
   @ParameterizedTest
   @CsvSource(
@@ -122,7 +121,7 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
       })
   void testDateTimeToEpoch(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest

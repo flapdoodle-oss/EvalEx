@@ -15,14 +15,14 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.data.ImmutableValueMap;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.ValueMap;
+import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,23 +30,26 @@ class ExpressionEvaluatorCombinedTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testOrderPositionExample() throws ParseException, EvaluationException {
-    Map<String, Object> order = new HashMap<>();
-    order.put("id", 12345);
-    order.put("name", "Mary");
-    Map<String, Object> position = new HashMap<>();
-    position.put("article", 3114);
-    position.put("amount", 3);
-    position.put("price", new BigDecimal("14.95"));
-    order.put("positions", List.of(position));
+    ImmutableValueMap position = ValueMap.builder()
+      .putValues("article", Value.of(3114))
+      .putValues("amount", Value.of(3))
+      .putValues("price", Value.of(new BigDecimal("14.95")))
+      .build();
+
+    ImmutableValueMap order = ValueMap.builder()
+      .putValues("id", Value.of(12345))
+      .putValues("name", Value.of("Mary"))
+      .putValues("positions", Value.of(Value::of, position))
+      .build();
 
     Expression expression1 = new Expression("order.positions[x].amount * order.positions[x].price");
     Expression expression =
       expression1;
 
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("order", order)
-      .and("x", 0)
+    VariableResolverX variableResolver = VariableResolverX.builder()
+      .with("order", Value.of(order))
+      .and("x", Value.of(0))
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("44.85");
+    assertThat(evaluate("order.positions[x].amount * order.positions[x].price", variableResolver)).isEqualTo("44.850");
   }
 }

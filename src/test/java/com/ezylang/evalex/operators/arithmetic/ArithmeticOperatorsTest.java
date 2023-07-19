@@ -16,9 +16,7 @@
 package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.BaseEvaluationTest;
-import com.ezylang.evalex.BaseEvaluationXTest;
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.config.TestConfigurationXProvider;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.parserx.ParseException;
@@ -27,12 +25,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.math.BigDecimal;
 import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ArithmeticOperatorsTest extends BaseEvaluationXTest {
+class ArithmeticOperatorsTest extends BaseEvaluationTest {
 
   @ParameterizedTest
   @ValueSource(
@@ -110,7 +107,7 @@ class ArithmeticOperatorsTest extends BaseEvaluationXTest {
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(
         expression,
-        Value.of(expectedResult),
+        expectedResult,
         TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators
                 .withDefaultZoneId(ZoneId.of("UTC+2")));
   }
@@ -203,7 +200,7 @@ class ArithmeticOperatorsTest extends BaseEvaluationXTest {
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(
         expression,
-        Value.of(expectedResult),
+        expectedResult,
         TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators
                 .withDefaultZoneId(ZoneId.of("UTC+2")));
   }
@@ -247,7 +244,8 @@ class ArithmeticOperatorsTest extends BaseEvaluationXTest {
     assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
-  private static Value.NumberValue numberValueOf(String doubleAsString) {
-    return Value.of(new BigDecimal(doubleAsString));
-  }
+//  private static Value.DateTimeValue utcDateTime(String utcDateAsString) {
+//    DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX");
+//    return Value.of()
+//  }
 }

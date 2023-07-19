@@ -15,17 +15,24 @@
 */
 package com.ezylang.evalex.parser;
 
+import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.operators.OperatorType;
+import com.ezylang.evalex.operatorsx.InfixOperator;
 import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
+import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parserx.Tokenizer;
+import com.ezylang.evalex.parserx.Token;
+import com.ezylang.evalex.parserx.ASTNode;
+import com.ezylang.evalex.parserx.ShuntingYardConverter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenTest {
 
-  final ExpressionConfiguration expressionConfiguration =
-      ExpressionConfiguration.defaultConfiguration();
+  final Configuration expressionConfiguration =
+      Configuration.defaultConfiguration();
 
   @Test
   void testTokenCreation() {
@@ -51,7 +58,7 @@ class TokenTest {
           3,
           "MAX",
           TokenType.FUNCTION,
-          expressionConfiguration.getFunctionIfcResolver().getFunction("MAX"));
+          expressionConfiguration.getFunctionResolver().getFunction("MAX"));
 
     assertThat(token.getStartPosition()).isEqualTo(3);
     assertThat(token.getValue()).isEqualTo("MAX");
@@ -67,7 +74,7 @@ class TokenTest {
           1,
           "+",
           TokenType.INFIX_OPERATOR,
-				expressionConfiguration.getOperatorIfcResolver().getOperator(OperatorType.INFIX_OPERATOR, "+"));
+				expressionConfiguration.getOperatorResolver().getOperator(InfixOperator.class, "+"));
 
     assertThat(token.getStartPosition()).isEqualTo(1);
     assertThat(token.getValue()).isEqualTo("+");

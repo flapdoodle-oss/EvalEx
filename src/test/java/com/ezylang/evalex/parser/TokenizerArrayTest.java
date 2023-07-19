@@ -15,10 +15,12 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
+import com.ezylang.evalex.parserx.Tokenizer;
+import com.ezylang.evalex.parserx.Token;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -96,7 +98,7 @@ class TokenizerArrayTest extends BaseParserTest {
 
   @Test
   void testArraysNotAllowedOpen() {
-    ExpressionConfiguration config = ExpressionConfiguration.builder().arraysAllowed(false).build();
+    Configuration config = Configuration.builder().isArraysAllowed(false).build();
 
     assertThatThrownBy(() -> new Tokenizer("a[0]", config).parse())
         .isEqualTo(new ParseException(2, 2, "[", "Undefined operator '['"));
@@ -104,7 +106,7 @@ class TokenizerArrayTest extends BaseParserTest {
 
   @Test
   void testArraysNotAllowedClose() {
-    ExpressionConfiguration config = ExpressionConfiguration.builder().arraysAllowed(false).build();
+    Configuration config = Configuration.builder().isArraysAllowed(false).build();
 
     assertThatThrownBy(() -> new Tokenizer("]", config).parse())
         .isEqualTo(new ParseException(1, 1, "]", "Undefined operator ']'"));

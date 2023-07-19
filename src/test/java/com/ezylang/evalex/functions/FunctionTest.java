@@ -15,10 +15,13 @@
 */
 package com.ezylang.evalex.functions;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.functionsx.AbstractFunction;
+import com.ezylang.evalex.functionsx.Function;
+import com.ezylang.evalex.parserx.Token;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -30,7 +33,7 @@ class FunctionTest {
 
   @Test
   void testParameterDefinition() {
-    FunctionIfc function = new CorrectFunctionDefinitionFunction();
+    Function function = new CorrectFunctionDefinitionFunction();
 
     assertThat(function.parameterDefinitions().get(0).getName()).isEqualTo("default");
     assertThat(function.parameterDefinitions().get(0).isLazy()).isFalse();
@@ -47,7 +50,7 @@ class FunctionTest {
 
   @Test
   void testParameterIsLazy() {
-    FunctionIfc function = new CorrectFunctionDefinitionFunction();
+    Function function = new CorrectFunctionDefinitionFunction();
 
     assertThat(function.parameterIsLazy(0)).isFalse();
     assertThat(function.parameterIsLazy(1)).isTrue();
@@ -63,34 +66,33 @@ class FunctionTest {
         .hasMessage("Only last parameter may be defined as variable argument");
   }
 
-  private static class CorrectFunctionDefinitionFunction extends AbstractFunction {
+  private static class CorrectFunctionDefinitionFunction extends com.ezylang.evalex.functionsx.AbstractFunction {
 
     protected CorrectFunctionDefinitionFunction() {
       super(
-        FunctionParameterDefinition.of("default"),
-        FunctionParameterDefinition.lazyWith("lazy"),
-        FunctionParameterDefinition.varArgWith("vararg")
+        com.ezylang.evalex.functionsx.FunctionParameterDefinition.of(Value.class,"default"),
+        com.ezylang.evalex.functionsx.FunctionParameterDefinition.lazyWith(Value.class,"lazy"),
+        com.ezylang.evalex.functionsx.FunctionParameterDefinition.varArgWith(Value.class,"vararg")
       );
     }
-    @Override
-    public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
-      return EvaluationValue.of("OK");
+
+    @Override public Value<?> evaluate(VariableResolverX variableResolver, ExpressionX expression, Token functionToken, List<Value<?>> parameterValues)
+      throws EvaluationException {
+      return Value.of("OK");
     }
   }
 
   private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
     public WrongVarargFunctionDefinitionFunction() {
       super(
-        FunctionParameterDefinition.of("default"),
-        FunctionParameterDefinition.varArgWith("vararg"),
-        FunctionParameterDefinition.of("another")
+        com.ezylang.evalex.functionsx.FunctionParameterDefinition.of(Value.class,"default"),
+        com.ezylang.evalex.functionsx.FunctionParameterDefinition.varArgWith(Value.class, "vararg"),
+        com.ezylang.evalex.functionsx.FunctionParameterDefinition.of(Value.class,"another")
       );
     }
-    @Override
-    public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
-      return EvaluationValue.of("OK");
+    @Override public Value<?> evaluate(VariableResolverX variableResolver, ExpressionX expression, Token functionToken, List<Value<?>> parameterValues)
+      throws EvaluationException {
+      return Value.of("OK");
     }
   }
 }

@@ -20,7 +20,9 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.functions.SingleArgumentFunction;
-import com.ezylang.evalex.operators.*;
+import com.ezylang.evalex.operators.AbstractPostfixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;

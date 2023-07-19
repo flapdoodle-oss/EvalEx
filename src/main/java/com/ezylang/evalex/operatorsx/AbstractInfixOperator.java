@@ -1,6 +1,7 @@
 package com.ezylang.evalex.operatorsx;
 
 import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.OperatorType;
 import com.ezylang.evalex.operators.Precedence;
@@ -59,5 +60,30 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 			}
 			return result.get();
 		}
+	}
+
+	public static abstract class Typed<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
+
+		private final Class<L> leftType;
+		private final Class<R> rightType;
+
+		protected Typed(Precedence precedence, boolean leftAssociative, Class<L> leftType, Class<R> rightType) {
+			super(precedence, leftAssociative);
+			this.leftType = leftType;
+			this.rightType = rightType;
+		}
+
+		protected Typed(Precedence precedence, Class<L> leftType, Class<R> rightType) {
+			super(precedence);
+			this.leftType = leftType;
+			this.rightType = rightType;
+		}
+
+		@Override
+		public final Value<?> evaluate(ExpressionX expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, leftOperand, leftType), requireValueType(operatorToken, rightOperand, rightType));
+		}
+
+		protected abstract Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, L leftOperand, R rightOperand) throws EvaluationException;
 	}
 }

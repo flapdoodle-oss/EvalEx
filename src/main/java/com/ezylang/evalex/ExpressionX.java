@@ -9,11 +9,7 @@ import com.ezylang.evalex.functionsx.Function;
 import com.ezylang.evalex.operatorsx.InfixOperator;
 import com.ezylang.evalex.operatorsx.PostfixOperator;
 import com.ezylang.evalex.operatorsx.PrefixOperator;
-import com.ezylang.evalex.parserx.ShuntingYardConverter;
-import com.ezylang.evalex.parserx.Tokenizer;
-import com.ezylang.evalex.parserx.ASTNode;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.Token;
+import com.ezylang.evalex.parserx.*;
 import de.flapdoodle.types.Either;
 
 import java.math.BigDecimal;
@@ -51,6 +47,62 @@ public abstract class ExpressionX {
 			return Either.right(px);
 		}
 	}
+
+	@Deprecated
+	@org.immutables.value.Value.Auxiliary
+	public void validate() throws ParseException {
+		if (!getAbstractSyntaxTree().isLeft()) throw getAbstractSyntaxTree().right();
+	}
+
+	public List<ASTNode> getAllASTNodes() throws ParseException {
+		Either<ASTNode, ParseException> tree = getAbstractSyntaxTree();
+		if (tree.isLeft())
+			return getAllASTNodesForNode(tree.left());
+			else throw tree.right();
+	}
+
+	private List<ASTNode> getAllASTNodesForNode(ASTNode node) {
+		List<ASTNode> nodes = new ArrayList<>();
+		nodes.add(node);
+		for (ASTNode child : node.getParameters()) {
+			nodes.addAll(getAllASTNodesForNode(child));
+		}
+		return nodes;
+	}
+
+	public Set<String> getUsedVariables() throws ParseException {
+		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+
+		for (ASTNode node : getAllASTNodes()) {
+			if (node.getToken().getType() == TokenType.VARIABLE_OR_CONSTANT
+				&& !getConstants().containsKey(node.getToken().getValue())) {
+				variables.add(node.getToken().getValue());
+			}
+		}
+
+		return variables;
+	}
+
+	public Set<String> getUndefinedVariables(VariableResolverX variableResolver) throws ParseException {
+		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+		for (String variable : getUsedVariables()) {
+			if (variableResolver.getData(variable) == null) {
+				variables.add(variable);
+			}
+		}
+		return variables;
+	}
+
+
+
+	@org.immutables.value.Value.Auxiliary
+	public ASTNode createExpressionNode(String expression) throws ParseException {
+		Tokenizer tokenizer = new Tokenizer(expression, getConfiguration());
+		ShuntingYardConverter converter =
+			new ShuntingYardConverter(expression, tokenizer.parse(), getConfiguration());
+		return converter.toAbstractSyntaxTree();
+	}
+
 
 	/**
 	 * Evaluates the expression by parsing it (if not done before) and the evaluating it.
@@ -200,6 +252,13 @@ public abstract class ExpressionX {
 		} else {
 			return Value.of(new BigDecimal(value, mathContext));
 		}
+	}
+
+	public static ExpressionX of(String expressionString) {
+		return ImmutableExpressionX.builder()
+			.expressionString(expressionString)
+			.configuration(Configuration.defaultConfiguration())
+			.build();
 	}
 
 	public static ExpressionX of(String expressionString, Configuration configuration) {

@@ -21,6 +21,8 @@ import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
 import com.ezylang.evalex.parserx.Token;
 
+import java.util.Objects;
+
 /** Equality of two values. */
 public class InfixEqualsOperator extends AbstractInfixOperator {
 
@@ -31,6 +33,6 @@ public class InfixEqualsOperator extends AbstractInfixOperator {
   @Override
   public Value<?> evaluate(
       ExpressionX expression, Token operatorToken, Value<?> a, Value<?> b) {
-    return Value.of(a.wrapped().equals(b.wrapped()));
+    return Value.of(Objects.equals(a.wrapped(), b.wrapped()));
   }
 }

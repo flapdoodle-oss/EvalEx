@@ -27,12 +27,14 @@ class PrefixNotOperatorTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
-        "!0 : true",
-        "!1 : false",
-        "!2.6 : false",
-        "!-2 : false",
-        "!\"true\" : false",
-        "!\"false\" : true",
+//        "!0 : true",
+//        "!1 : false",
+//        "!2.6 : false",
+//        "!-2 : false",
+//        "!\"true\" : false",
+//        "!\"false\" : true",
+        "!true : false",
+        "!false : true",
         "!(1==1) : false",
         "!(2==3) : true"
       })

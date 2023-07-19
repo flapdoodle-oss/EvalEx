@@ -39,7 +39,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcos(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -52,7 +52,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcosH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -76,7 +76,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcosR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -88,7 +88,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcot(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -136,7 +136,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAsin(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
@@ -163,7 +163,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAsinH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -176,7 +176,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAsinR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
@@ -203,7 +203,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtan(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -222,7 +222,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtan2(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -241,7 +241,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtan2R(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -254,7 +254,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtanH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -278,7 +278,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtanR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -304,7 +304,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCSCH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -371,7 +371,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCos(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -384,7 +384,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCosH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -398,7 +398,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCosR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -453,7 +453,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testDeg(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -469,7 +469,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testRad(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -495,7 +495,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testSecH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
@@ -538,7 +538,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       value = {"SIN(0) : 0", "SIN(1) : 0.01745240643728351", "SIN(90) : 1", "SIN(-90) : -1"})
   void testSin(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -551,7 +551,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testSinH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -565,7 +565,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testSinR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -579,7 +579,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testTan(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -592,7 +592,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testTanH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -606,6 +606,6 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testTanR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 }

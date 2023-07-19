@@ -21,6 +21,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.parserx.Token;
+import de.flapdoodle.types.Pair;
 
 import java.util.List;
 
@@ -36,6 +37,20 @@ public interface Function {
    * @return The parameter definition list.
    */
   List<FunctionParameterDefinition<?>> parameterDefinitions();
+
+  default int minArgs() {
+    if (parameterDefinitions().isEmpty()) return 0;
+    FunctionParameterDefinition<?> last = parameterDefinitions().get(parameterDefinitions().size() - 1);
+    return parameterDefinitions().size() - (last.isOptional() ? 1 : 0);
+  }
+
+  default int maxArgs() {
+    if (parameterDefinitions().isEmpty()) return 0;
+    FunctionParameterDefinition<?> last = parameterDefinitions().get(parameterDefinitions().size() - 1);
+    return last.isVarArg()
+      ? Integer.MAX_VALUE
+      : parameterDefinitions().size();
+  }
 
   /**
    * Performs the function logic and returns an evaluation result.
@@ -77,6 +92,7 @@ public interface Function {
 //      }
     }
     // TODO check min, max number of parameters..
+    // see com.ezylang.evalex.parserx.ShuntingYardConverter.validateFunctionParameters
   }
   /**
    * Checks whether the function has a variable number of arguments parameter.
@@ -85,6 +101,10 @@ public interface Function {
    */
   default boolean hasVarArgs() {
     return !parameterDefinitions().isEmpty() && parameterDefinitions().get(parameterDefinitions().size()-1).isVarArg();
+  }
+
+  default boolean hasOptional() {
+    return !parameterDefinitions().isEmpty() && parameterDefinitions().get(parameterDefinitions().size()-1).isOptional();
   }
 
   /**

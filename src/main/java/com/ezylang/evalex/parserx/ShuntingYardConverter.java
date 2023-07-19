@@ -160,13 +160,25 @@ public class ShuntingYardConverter {
   private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
       throws ParseException {
     Function function = functionToken.getFunctionDefinition();
-    if (parameters.size() < function.parameterDefinitions().size()) {
+    if (parameters.size() < function.minArgs()) {
       throw new ParseException(functionToken, "Not enough parameters for function");
     }
-    if (!function.hasVarArgs()
-        && parameters.size() > function.parameterDefinitions().size()) {
+    if (parameters.size() > function.maxArgs()) {
       throw new ParseException(functionToken, "Too many parameters for function");
     }
+//    if (function.hasOptional()) {
+//      if (parameters.size() < function.parameterDefinitions().size()-1) {
+//        throw new ParseException(functionToken, "Not enough parameters for function");
+//      }
+//    } else {
+//      if (parameters.size() < function.parameterDefinitions().size()) {
+//        throw new ParseException(functionToken, "Not enough parameters for function");
+//      }
+//    }
+//    if (!function.hasVarArgs()
+//        && parameters.size() > function.parameterDefinitions().size()) {
+//      throw new ParseException(functionToken, "Too many parameters for function");
+//    }
   }
 
   /**

@@ -19,6 +19,8 @@ import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import com.ezylang.evalex.parserx.Tokenizer;
+import com.ezylang.evalex.parserx.Token;
 
 import static com.ezylang.evalex.parserx.TokenType.NUMBER_LITERAL;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

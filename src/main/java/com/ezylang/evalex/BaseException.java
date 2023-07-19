@@ -19,15 +19,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-/** Base exception class used in EvalEx. */
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-@ToString
+import java.util.Objects;
+
+/**
+ * Base exception class used in EvalEx.
+ */
 public class BaseException extends Exception {
 
-  @Getter @EqualsAndHashCode.Include private final int startPosition;
-  @Getter @EqualsAndHashCode.Include private final int endPosition;
-  @Getter @EqualsAndHashCode.Include private final String tokenString;
-  @Getter @EqualsAndHashCode.Include private final String message;
+  private final int startPosition;
+  private final int endPosition;
+  private final String tokenString;
+  private final String message;
 
   public BaseException(int startPosition, int endPosition, String tokenString, String message) {
     super(message);
@@ -35,5 +37,35 @@ public class BaseException extends Exception {
     this.endPosition = endPosition;
     this.tokenString = tokenString;
     this.message = super.getMessage();
+  }
+
+  public String toString() {
+    return "BaseException(startPosition=" + this.startPosition + ", endPosition=" + this.endPosition + ", tokenString=" + this.tokenString + ", message="
+      + this.message + ")";
+  }
+
+  public int getStartPosition() {
+    return this.startPosition;
+  }
+  public int getEndPosition() {
+    return this.endPosition;
+  }
+  public String getTokenString() {
+    return this.tokenString;
+  }
+  public String getMessage() {
+    return this.message;
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BaseException that = (BaseException) o;
+    return startPosition == that.startPosition && endPosition == that.endPosition && Objects.equals(tokenString, that.tokenString)
+      && Objects.equals(message, that.message);
+  }
+
+  @Override public int hashCode() {
+    return Objects.hash(startPosition, endPosition, tokenString, message);
   }
 }

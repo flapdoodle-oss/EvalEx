@@ -15,10 +15,12 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.TestConfigurationProvider.DummyFunction;
+import com.ezylang.evalex.config.TestConfigurationXProvider.DummyFunction;
 import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
+import com.ezylang.evalex.parserx.Tokenizer;
+import com.ezylang.evalex.parserx.Token;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -26,7 +28,7 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
   @Test
   void testSimple() throws ParseException {
-    configuration.withAdditionalFunctionIfc("f", new DummyFunction());
+    configuration = configuration.withAdditionalFunctions("f", new DummyFunction());
     assertAllTokensParsedCorrectly(
         "f(x)",
       Token.of(1, "f", TokenType.FUNCTION),
@@ -37,7 +39,7 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
   @Test
   void testBlanks() throws ParseException {
-    configuration.withAdditionalFunctionIfc("f", new DummyFunction());
+    configuration = configuration.withAdditionalFunctions("f", new DummyFunction());
     assertAllTokensParsedCorrectly(
         "f (x)",
       Token.of(1, "f", TokenType.FUNCTION),
@@ -48,7 +50,7 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
   @Test
   void testUnderscores() throws ParseException {
-    configuration.withAdditionalFunctionIfc("_f_x_", new DummyFunction());
+    configuration = configuration.withAdditionalFunctions("_f_x_", new DummyFunction());
     assertAllTokensParsedCorrectly(
         "_f_x_(x)",
       Token.of(1, "_f_x_", TokenType.FUNCTION),
@@ -59,7 +61,7 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
   @Test
   void testWithNumbers() throws ParseException {
-    configuration.withAdditionalFunctionIfc("f1x2", new DummyFunction());
+    configuration = configuration.withAdditionalFunctions("f1x2", new DummyFunction());
     assertAllTokensParsedCorrectly(
         "f1x2(x)",
       Token.of(1, "f1x2", TokenType.FUNCTION),

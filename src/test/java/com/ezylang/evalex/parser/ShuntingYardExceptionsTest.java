@@ -15,11 +15,14 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.operators.arithmetic.InfixMultiplicationOperator;
-import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
+import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.operatorsx.arithmetic.InfixMultiplicationOperator;
+import com.ezylang.evalex.operatorsx.arithmetic.PrefixMinusOperator;
 import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parserx.ShuntingYardConverter;
+import com.ezylang.evalex.parserx.Token;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -32,6 +35,10 @@ import static com.ezylang.evalex.parserx.TokenType.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShuntingYardExceptionsTest extends BaseParserTest {
+
+  static {
+    Assertions.setMaxStackTraceElementsDisplayed(20);
+  }
 
   @Test
   void testUnexpectedToken() {
@@ -62,27 +69,27 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testEmptyExpression() {
-    Expression expression = new Expression("");
+    ExpressionX expression = ExpressionX.of("");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
 
   @Test
   void testEmptyExpressionBraces() {
-    Expression expression = new Expression("()");
+    ExpressionX expression = ExpressionX.of("()");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
 
   @Test
   void testComma() {
-    Expression expression = new Expression(",");
+    ExpressionX expression = ExpressionX.of(",");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -119,27 +126,27 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testFunctionNotEnoughParameters() {
-    Expression expression = new Expression("ROUND(2)");
+    ExpressionX expression = ExpressionX.of("ROUND(2)");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Not enough parameters for function");
   }
 
   @Test
   void testFunctionNotEnoughParametersForVarArgs() {
-    Expression expression = new Expression("MIN()");
+    ExpressionX expression = ExpressionX.of("MIN()");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Not enough parameters for function");
   }
 
   @Test
   void testFunctionTooManyParameters() {
-    Expression expression = new Expression("ROUND(1,2,3)");
+    ExpressionX expression = ExpressionX.of("ROUND(1,2,3)");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many parameters for function");
   }
@@ -159,9 +166,9 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
         "E.1"
       })
   void testTooManyOperands(String expressionString) {
-    Expression expression = new Expression(expressionString);
+    ExpressionX expression = ExpressionX.of(expressionString);
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many operands");
   }
@@ -171,9 +178,9 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
       delimiter = ':',
       value = {"(x+y)*(a-) : 10", "a** : 3", "5+, : 3"})
   void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
-    Expression expression = new Expression(expressionString);
+    ExpressionX expression = ExpressionX.of(expressionString);
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(VariableResolverX.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Unexpected token after infix operator")
         .extracting("startPosition")

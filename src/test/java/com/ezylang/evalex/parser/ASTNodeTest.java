@@ -15,10 +15,12 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.functions.basic.MinFunction;
-import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
-import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
+import com.ezylang.evalex.functionsx.basic.MinFunction;
+import com.ezylang.evalex.operatorsx.arithmetic.InfixPlusOperator;
+import com.ezylang.evalex.operatorsx.arithmetic.PrefixMinusOperator;
 import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.parserx.Token;
+import com.ezylang.evalex.parserx.ASTNode;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
