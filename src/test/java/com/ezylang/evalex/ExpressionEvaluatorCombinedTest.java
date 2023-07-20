@@ -18,8 +18,8 @@ package com.ezylang.evalex;
 import com.ezylang.evalex.data.ImmutableValueMap;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.ValueMap;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -42,11 +42,7 @@ class ExpressionEvaluatorCombinedTest extends BaseExpressionEvaluatorTest {
       .putValues("positions", Value.of(Value::of, position))
       .build();
 
-    Expression expression1 = new Expression("order.positions[x].amount * order.positions[x].price");
-    Expression expression =
-      expression1;
-
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("order", Value.of(order))
       .and("x", Value.of(0))
       .build();

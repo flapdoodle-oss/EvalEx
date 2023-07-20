@@ -15,21 +15,17 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** Returns the secant (in degrees). */
 public class SecFunction extends NonZeroFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
-
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
     /* Formula: sec(x) = 1 / cos(x) */
-    return expression.convertDoubleValue(
-        1 / Math.cos(Math.toRadians(parameterValues.get(0).getNumberValue().doubleValue())));
+    return Value.of(1.0 / Math.cos(Math.toRadians(parameterValue.wrapped().doubleValue())));
   }
 }

@@ -15,28 +15,27 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** Returns the angle of atan2 (in radians). */
-public class Atan2RFunction extends AbstractFunction {
-	public Atan2RFunction() {
-		super(FunctionParameterDefinition.of("y"), FunctionParameterDefinition.of("x"));
-	}
-	
-	@Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+public class Atan2RFunction extends  AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {
 
-    return expression.convertDoubleValue(
+	public Atan2RFunction() {
+		super(
+			com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.NumberValue.class, "y"), FunctionParameterDefinition.of(Value.NumberValue.class, "x"));
+	}
+
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue y, Value.NumberValue x) throws EvaluationException {
+    return Value.of(
         Math.atan2(
-            parameterValues.get(0).getNumberValue().doubleValue(),
-            parameterValues.get(1).getNumberValue().doubleValue()));
+            y.wrapped().doubleValue(),
+            x.wrapped().doubleValue()));
   }
 }

@@ -16,34 +16,33 @@
 package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 
-public abstract class AbstractDateTimeParseFunction extends SingleArgumentFunction {
+public abstract class AbstractDateTimeParseFunction extends AbstractFunction.SingleVararg<Value.StringValue> {
   protected AbstractDateTimeParseFunction() {
-    super(FunctionParameterDefinition.varArgWith("value"));
+    super(FunctionParameterDefinition.varArgWith(Value.StringValue.class, "value"));
   }
-  
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+
+  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+    List<Value.StringValue> parameterValues) {
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
     Instant instant;
 
     if (parameterValues.size() < 2) {
-      instant = parse(parameterValues.get(0).getStringValue(), null, zoneId);
+      instant = parse(parameterValues.get(0).wrapped(), null, zoneId);
     } else {
       instant =
-          parse(parameterValues.get(0).getStringValue(), parameterValues.get(1).getStringValue(), zoneId);
+          parse(parameterValues.get(0).wrapped(), parameterValues.get(1).wrapped(), zoneId);
     }
-    return EvaluationValue.of(instant);
+    return Value.of(instant);
   }
 
   protected abstract Instant parse(String value, String format, ZoneId zoneId);

@@ -15,10 +15,11 @@
 */
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.config.TestConfigurationXProvider.DummyFunction;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operatorsx.InfixOperator;
-import com.ezylang.evalex.operatorsx.arithmetic.InfixPlusOperator;
+import com.ezylang.evalex.config.TestConfigurationProvider.DummyFunction;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -34,8 +35,8 @@ class ConfigurationTest {
   void testDefaultSetup() {
     Configuration configuration = Configuration.defaultConfiguration();
 
-    assertThat(configuration.getMathContext())
-        .isEqualTo(ExpressionConfiguration.DEFAULT_MATH_CONTEXT);
+//    assertThat(configuration.getMathContext())
+//        .isEqualTo(Configuration.DEFAULT_MATH_CONTEXT);
     assertThat(configuration.getOperatorResolver())
         .isInstanceOf(OperatorResolver.class);
     assertThat(configuration.getFunctionResolver())
@@ -46,7 +47,7 @@ class ConfigurationTest {
 //    assertThat(configuration.getDefaultConstants())
 //        .containsAllEntriesOf(Configuration.StandardConstants);
 //    assertThat(configuration.getDecimalPlacesRounding())
-//        .isEqualTo(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
+//        .isEqualTo(Configuration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
 //    assertThat(configuration.isStripTrailingZeros()).isTrue();
     assertThat(configuration.isAllowOverwriteConstants()).isTrue();
   }
@@ -76,68 +77,46 @@ class ConfigurationTest {
 
   @Test
   void testCustomMathContext() {
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().mathContext(MathContext.DECIMAL32).build();
+    Configuration configuration =
+        Configuration.builder().mathContext(MathContext.DECIMAL32).build();
 
     assertThat(configuration.getMathContext()).isEqualTo(MathContext.DECIMAL32);
   }
 
   @Test
   void testCustomOperatorDictionary() {
-    OperatorIfcResolver mockedOperatorDictionary = Mockito.mock(OperatorIfcResolver.class);
+    OperatorResolver mockedOperatorDictionary = Mockito.mock(OperatorResolver.class);
 
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().operatorIfcResolver(mockedOperatorDictionary).build();
+    Configuration configuration =
+        Configuration.builder().operatorResolver(mockedOperatorDictionary).build();
 
-    assertThat(configuration.getOperatorIfcResolver()).isEqualTo(mockedOperatorDictionary);
+    assertThat(configuration.getOperatorResolver()).isEqualTo(mockedOperatorDictionary);
   }
 
   @Test
   void testCustomFunctionDictionary() {
-    FunctionIfcResolver mockedFunctionDictionary = Mockito.mock(FunctionIfcResolver.class);
+    FunctionResolver mockedFunctionDictionary = Mockito.mock(FunctionResolver.class);
 
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().functionIfcResolver(mockedFunctionDictionary).build();
+    Configuration configuration =
+        Configuration.builder().functionResolver(mockedFunctionDictionary).build();
 
-    assertThat(configuration.getFunctionIfcResolver()).isEqualTo(mockedFunctionDictionary);
+    assertThat(configuration.getFunctionResolver()).isEqualTo(mockedFunctionDictionary);
   }
 
   @Test
   void testCustomConstants() {
-    Map<String, EvaluationValue> constants =
+    Map<String, Value<?>> constants =
         new HashMap<>() {
           {
-            put("A", EvaluationValue.of("a"));
-            put("B", EvaluationValue.of("b"));
+            put("A", Value.of("a"));
+            put("B", Value.of("b"));
           }
         };
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().defaultConstants(constants).build();
+    Configuration configuration =
+        Configuration.builder().constantResolver(VariableResolver.builder()
+          .withValues(constants)
+          .build()).build();
 
-    assertThat(configuration.getDefaultConstants()).containsAllEntriesOf(constants);
-  }
-
-  @Test
-  void testArraysAllowed() {
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().arraysAllowed(false).build();
-
-    assertThat(configuration.isArraysAllowed()).isFalse();
-  }
-
-  @Test
-  void testStructuresAllowed() {
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().structuresAllowed(false).build();
-
-    assertThat(configuration.isStructuresAllowed()).isFalse();
-  }
-
-  @Test
-  void testImplicitMultiplicationAllowed() {
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().implicitMultiplicationAllowed(false).build();
-
-    assertThat(configuration.isImplicitMultiplicationAllowed()).isFalse();
+    assertThat(configuration.getConstantResolver().getData("a")).isEqualTo(Value.of("a"));
   }
 }

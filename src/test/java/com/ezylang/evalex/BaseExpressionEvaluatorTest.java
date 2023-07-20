@@ -16,30 +16,30 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.config.Configuration;
-import com.ezylang.evalex.config.TestConfigurationXProvider;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.parser.ParseException;
 
 import java.math.BigDecimal;
 
 public abstract class BaseExpressionEvaluatorTest {
 
   final Configuration configuration =
-      TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators;
+      TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
 
   protected String evaluate(String expressionString) throws ParseException, EvaluationException {
-    ExpressionX expression = createExpression(expressionString);
-    return expression.evaluate(VariableResolverX.empty()).wrapped().toString();
+    Expression expression = createExpression(expressionString);
+    return expression.evaluate(VariableResolver.empty()).wrapped().toString();
   }
 
-  protected String evaluate(String expressionString, VariableResolverX variableResolver) throws ParseException, EvaluationException {
-    ExpressionX expression = createExpression(expressionString);
+  protected String evaluate(String expressionString, VariableResolver variableResolver) throws ParseException, EvaluationException {
+    Expression expression = createExpression(expressionString);
     return expression.evaluate(variableResolver).wrapped().toString();
   }
 
-  ExpressionX createExpression(String expressionString) {
-    return ExpressionX.of(expressionString, configuration);
+  Expression createExpression(String expressionString) {
+    return Expression.of(expressionString, configuration);
   }
 
   protected static Value.NumberValue numberValueOf(String doubleAsString) {

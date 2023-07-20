@@ -16,7 +16,6 @@
 package com.ezylang.evalex.functions;
 
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

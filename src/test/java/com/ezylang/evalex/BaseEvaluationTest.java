@@ -16,10 +16,10 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.config.Configuration;
-import com.ezylang.evalex.config.TestConfigurationXProvider;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.parser.ParseException;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Percentage;
 
@@ -35,7 +35,7 @@ public abstract class BaseEvaluationTest {
     assertThat(
       evaluate(
         expression,
-        TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators).wrapped().toString())
+        TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators).wrapped().toString())
       .isEqualTo(expectedResult);
   }
 
@@ -44,7 +44,7 @@ public abstract class BaseEvaluationTest {
     assertThat(
             evaluate(
                     expression,
-                    TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators))
+                    TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators))
         .isEqualTo(expectedResult);
   }
 
@@ -53,7 +53,7 @@ public abstract class BaseEvaluationTest {
     assertThat(
             evaluate(
                     expression,
-                    TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators))
+                    TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators))
             .isInstanceOf(Value.NumberValue.class)
             .extracting(Value::wrapped, InstanceOfAssertFactories.BIG_DECIMAL)
             .isCloseTo(expectedResult.wrapped(), Percentage.withPercentage(0.99999));
@@ -80,9 +80,9 @@ public abstract class BaseEvaluationTest {
 
   private Value<?> evaluate(String expressionString, Configuration configuration)
       throws EvaluationException, ParseException {
-    ExpressionX expression = ExpressionX.of(expressionString, configuration);
+    Expression expression = Expression.of(expressionString, configuration);
 
-    return expression.evaluate(VariableResolverX.empty());
+    return expression.evaluate(VariableResolver.empty());
   }
 
   protected static Value.NumberValue numberValueOf(String doubleAsString) {

@@ -16,7 +16,7 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.data.*;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -37,7 +37,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("order", Value::of, structure)
       .build();
     assertThat(evaluate("order.environment_id", variableResolver)).isEqualTo("12345");
@@ -54,7 +54,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
         .build()))
       .build();
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("order", structure1)
       .build();
     assertThat(evaluate("order.e_id_e.var_x.e", variableResolver)).isEqualTo("765");
@@ -69,7 +69,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", Value::of, structure)
       .build();
     assertThat(evaluate("a.b",variableResolver)).isEqualTo("99");
@@ -83,7 +83,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
         .build()))
       .build();
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", structure)
       .build();
     assertThat(evaluate("a.b.c", variableResolver)).isEqualTo("95");
@@ -92,8 +92,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
   @Test
   void testThrowsUnsupportedDataTypeForStructure() {
     assertThatThrownBy(() -> {
-      VariableResolverX variableResolver = VariableResolverX.builder().with("a", "aString").build();
-      ExpressionX expression = createExpression("a.b");
+      VariableResolver variableResolver = VariableResolver.builder().with("a", "aString").build();
+      Expression expression = createExpression("a.b");
       expression.evaluate(variableResolver);
     })
         .isInstanceOf(EvaluationException.class)
@@ -107,10 +107,10 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
     assertThatThrownBy(
             () -> {
-              VariableResolverX variableResolver = VariableResolverX.builder()
+              VariableResolver variableResolver = VariableResolver.builder()
                 .with("a", Value::of, testStructure)
                 .build();
-              ExpressionX expression = createExpression("a.field1 + a.field2");
+              Expression expression = createExpression("a.field1 + a.field2");
               expression.evaluate(variableResolver);
             })
         .isInstanceOf(EvaluationException.class)
@@ -125,7 +125,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     testStructure.put("field 1", new BigDecimal(88));
 
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", Value::of, testStructure)
       .build();
     assertThat(evaluate("a.\"field 1\"", variableResolver)).isEqualTo("88");
@@ -141,7 +141,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
       )))
       .build();
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", structure)
       .build();
     assertThat(evaluate("a.\"prop b\"[0].\"prop c\"", variableResolver)).isEqualTo("99.0");
@@ -155,7 +155,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
       )))
       .build();
 
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", structure)
       .build();
     assertThat(evaluate("a.\"b prop\"[1]", variableResolver)).isEqualTo("2.0");

@@ -1,7 +1,7 @@
 package com.ezylang.evalex.data;
 
 import com.ezylang.evalex.Nullable;
-import com.ezylang.evalex.parserx.ASTNode;
+import com.ezylang.evalex.parser.ASTNode;
 
 import java.math.BigDecimal;
 import java.time.Duration;

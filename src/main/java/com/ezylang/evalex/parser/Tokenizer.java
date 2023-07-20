@@ -15,19 +15,19 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.config.FunctionIfcResolver;
-import com.ezylang.evalex.config.OperatorIfcResolver;
-import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.operators.OperatorType;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.config.FunctionResolver;
+import com.ezylang.evalex.config.OperatorResolver;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.Operator;
+import com.ezylang.evalex.operators.PostfixOperator;
+import com.ezylang.evalex.operators.PrefixOperator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezylang.evalex.parserx.TokenType.*;
+import static com.ezylang.evalex.parser.TokenType.*;
 
 /**
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens
@@ -37,11 +37,11 @@ public class Tokenizer {
 
   private final String expressionString;
 
-  private final OperatorIfcResolver operatorDictionary;
+  private final OperatorResolver operatorDictionary;
 
-  private final FunctionIfcResolver functionDictionary;
+  private final FunctionResolver functionDictionary;
 
-  private final ExpressionConfiguration configuration;
+  private final Configuration configuration;
 
   private final List<Token> tokens = new ArrayList<>();
 
@@ -53,11 +53,11 @@ public class Tokenizer {
 
   private int arrayBalance;
 
-  public Tokenizer(String expressionString, ExpressionConfiguration configuration) {
+  public Tokenizer(String expressionString, Configuration configuration) {
     this.expressionString = expressionString;
     this.configuration = configuration;
-    this.operatorDictionary = configuration.getOperatorIfcResolver();
-    this.functionDictionary = configuration.getFunctionIfcResolver();
+    this.operatorDictionary = configuration.getOperatorResolver();
+    this.functionDictionary = configuration.getFunctionResolver();
   }
 
   /**
@@ -76,7 +76,7 @@ public class Tokenizer {
                 currentToken.getStartPosition(),
                 "*",
                 TokenType.INFIX_OPERATOR,
-              operatorDictionary.getOperator(OperatorType.INFIX_OPERATOR, "*"));
+              operatorDictionary.getOperator(InfixOperator.class, "*"));
           tokens.add(multiplication);
         } else {
           throw new ParseException(currentToken, "Missing operator");
@@ -230,25 +230,25 @@ public class Tokenizer {
       String tokenString = tokenValue.toString();
       String possibleNextOperator = tokenString + (char) peekNextChar();
       boolean possibleNextOperatorFound =
-          (prefixOperatorAllowed() && operatorDictionary.hasOperator(OperatorType.PREFIX_OPERATOR, possibleNextOperator))
+          (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, possibleNextOperator))
               || (postfixOperatorAllowed()
-                  && operatorDictionary.hasOperator(OperatorType.POSTFIX_OPERATOR, possibleNextOperator))
+                  && operatorDictionary.hasOperator(PostfixOperator.class, possibleNextOperator))
               || (infixOperatorAllowed()
-                  && operatorDictionary.hasOperator(OperatorType.INFIX_OPERATOR, possibleNextOperator));
+                  && operatorDictionary.hasOperator(InfixOperator.class, possibleNextOperator));
       consumeChar();
       if (!possibleNextOperatorFound) {
         break;
       }
     }
     String tokenString = tokenValue.toString();
-    if (prefixOperatorAllowed() && operatorDictionary.hasOperator(OperatorType.PREFIX_OPERATOR, tokenString)) {
-      OperatorIfc operator = operatorDictionary.getOperator(OperatorType.PREFIX_OPERATOR, tokenString);
+    if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
+      Operator operator = operatorDictionary.getOperator(PrefixOperator.class, tokenString);
       return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR, operator);
-    } else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(OperatorType.POSTFIX_OPERATOR, tokenString)) {
-      OperatorIfc operator = operatorDictionary.getOperator(OperatorType.POSTFIX_OPERATOR, tokenString);
+    } else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
+      Operator operator = operatorDictionary.getOperator(PostfixOperator.class, tokenString);
       return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR, operator);
-    } else if (operatorDictionary.hasOperator(OperatorType.INFIX_OPERATOR, tokenString)) {
-      OperatorIfc operator = operatorDictionary.getOperator(OperatorType.INFIX_OPERATOR, tokenString);
+    } else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
+      Operator operator = operatorDictionary.getOperator(InfixOperator.class, tokenString);
       return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
     } else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
       return Token.of(tokenStartIndex, tokenString, STRUCTURE_SEPARATOR);
@@ -415,24 +415,24 @@ public class Tokenizer {
     }
     String tokenName = tokenValue.toString();
 
-    if (prefixOperatorAllowed() && operatorDictionary.hasOperator(OperatorType.PREFIX_OPERATOR, tokenName)) {
+    if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenName)) {
       return Token.of(
           tokenStartIndex,
           tokenName,
           TokenType.PREFIX_OPERATOR,
-        operatorDictionary.getOperator(OperatorType.PREFIX_OPERATOR, tokenName));
-    } else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(OperatorType.POSTFIX_OPERATOR, tokenName)) {
+        operatorDictionary.getOperator(PrefixOperator.class, tokenName));
+    } else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenName)) {
       return Token.of(
           tokenStartIndex,
           tokenName,
           TokenType.POSTFIX_OPERATOR,
-        operatorDictionary.getOperator(OperatorType.POSTFIX_OPERATOR, tokenName));
-    } else if (operatorDictionary.hasOperator(OperatorType.INFIX_OPERATOR, tokenName)) {
+        operatorDictionary.getOperator(PostfixOperator.class, tokenName));
+    } else if (operatorDictionary.hasOperator(InfixOperator.class, tokenName)) {
       return Token.of(
           tokenStartIndex,
           tokenName,
           TokenType.INFIX_OPERATOR,
-        operatorDictionary.getOperator(OperatorType.INFIX_OPERATOR, tokenName));
+        operatorDictionary.getOperator(InfixOperator.class, tokenName));
     }
 
     skipBlanks();
@@ -444,7 +444,7 @@ public class Tokenizer {
             tokenName,
             "Undefined function '" + tokenName + "'");
       }
-      FunctionIfc function = functionDictionary.getFunction(tokenName);
+      Function function = functionDictionary.getFunction(tokenName);
       return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION, function);
     } else {
       return Token.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);

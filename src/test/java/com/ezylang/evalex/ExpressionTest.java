@@ -16,12 +16,12 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.operatorsx.InfixOperator;
-import com.ezylang.evalex.operatorsx.PostfixOperator;
-import com.ezylang.evalex.operatorsx.PrefixOperator;
-import com.ezylang.evalex.parserx.ASTNode;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.operators.PostfixOperator;
+import com.ezylang.evalex.operators.PrefixOperator;
+import com.ezylang.evalex.parser.ASTNode;
+import com.ezylang.evalex.parser.ParseException;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +36,7 @@ class ExpressionTest {
 
   @Test
   void testExpressionDefaults() {
-    ExpressionX expression = ExpressionX.of("a+b");
+    Expression expression = Expression.of("a+b");
 
     assertThat(expression.expressionString()).isEqualTo("a+b");
 //    assertThat(expression.getConfiguration().getMathContext())
@@ -52,23 +52,23 @@ class ExpressionTest {
 
   @Test
   void testValidateOK() throws ParseException {
-    ExpressionX.of("1+1").validate();
+    Expression.of("1+1").validate();
   }
 
   @Test
   void testValidateFail() {
-    assertThatThrownBy(() -> ExpressionX.of("2#3").validate())
+    assertThatThrownBy(() -> Expression.of("2#3").validate())
         .isInstanceOf(ParseException.class)
         .hasMessage("Undefined operator '#'");
   }
 
   @Test
   void testExpressionNode() throws ParseException, EvaluationException {
-    ExpressionX expression = ExpressionX.of("a*b");
+    Expression expression = Expression.of("a*b");
     ASTNode subExpression = expression.createExpressionNode("4+3");
 
-    ExpressionX expression1 = expression;
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", Value.of(2)).and("b", Value.of(subExpression))
       .build();
     Value<?> result = expression1.evaluate(variableResolver);
@@ -78,14 +78,14 @@ class ExpressionTest {
 
   @Test
   void testWithValues() throws ParseException, EvaluationException {
-    ExpressionX expression = ExpressionX.of("(a + b) * (a - b)");
+    Expression expression = Expression.of("(a + b) * (a - b)");
 
     Map<String, Value<?>> values = new HashMap<>();
     values.put("a", Value.of(3.5));
     values.put("b", Value.of(2.5));
 
-    ExpressionX expression1 = expression;
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
       .withValues(values)
       .build();
     Value.NumberValue result = (Value.NumberValue) expression1.evaluate(variableResolver);
@@ -95,14 +95,14 @@ class ExpressionTest {
 
   @Test
   void testWithValuesDoubleMap() throws ParseException, EvaluationException {
-    ExpressionX expression = ExpressionX.of("a+b");
+    Expression expression = Expression.of("a+b");
 
     Map<String, Value.NumberValue> values = new HashMap<>();
     values.put("a", Value.of(3.9));
     values.put("b", Value.of(3.1));
 
-		ExpressionX expression1 = expression;
-    VariableResolverX variableResolver = VariableResolverX.builder()
+		Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
       .withValues(values)
       .build();
     Value<?> result = expression1.evaluate(variableResolver);
@@ -112,15 +112,15 @@ class ExpressionTest {
 
   @Test
   void testWithValuesStringMap() throws ParseException, EvaluationException {
-    ExpressionX expression = ExpressionX.of("a+b+c");
+    Expression expression = Expression.of("a+b+c");
 
     Map<String, Value.StringValue> values = new HashMap<>();
     values.put("a", Value.of("Hello"));
     values.put("b", Value.of(" "));
     values.put("c", Value.of("world"));
 
-    ExpressionX expression1 = expression;
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
       .withValues(values)
       .build();
     Value<?> result = expression1.evaluate(variableResolver);
@@ -130,15 +130,15 @@ class ExpressionTest {
 
   @Test
   void testWithValuesMixedMap() throws ParseException, EvaluationException {
-    ExpressionX expression = ExpressionX.of("a+b+c");
+    Expression expression = Expression.of("a+b+c");
 
     Map<String, Value<?>> values = new HashMap<>();
     values.put("a", Value.of(true));
     values.put("b", Value.of(" "));
     values.put("c", Value.of(24.7));
 
-    ExpressionX expression1 = expression;
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    Expression expression1 = expression;
+    VariableResolver variableResolver = VariableResolver.builder()
       .withValues(values)
       .build();
 		Value<?> result = expression1.evaluate(variableResolver);
@@ -148,8 +148,8 @@ class ExpressionTest {
 
   @Test
   void testDefaultExpressionOwnsOwnConfigurationEntries() {
-    ExpressionX expression1 = ExpressionX.of("1+1");
-    ExpressionX expression2 = ExpressionX.of("1+1");
+    Expression expression1 = Expression.of("1+1");
+    Expression expression2 = Expression.of("1+1");
 
     assertThat(expression1.getConfiguration().getOperatorResolver())
         .isNotSameAs(expression2.getConfiguration().getOperatorResolver());
@@ -161,15 +161,15 @@ class ExpressionTest {
 
   @Test
   void testDoubleConverterDefaultMathContext() {
-//    ExpressionX defaultMathContextExpression = ExpressionX.of("1");
+//    Expression defaultMathContextExpression = Expression.of("1");
     assertThat(Value.of(1.67987654321).wrapped())
         .isEqualByComparingTo("1.67987654321");
   }
 
 //  @Test
 //  void testDoubleConverterLimitedMathContext() {
-//    ExpressionX limitedMathContextExpression =
-//        ExpressionX.of(
+//    Expression limitedMathContextExpression =
+//        Expression.of(
 //            "1", Configuration.builder().mathContext(new MathContext(3)).build());
 //    assertThat(limitedMathContextExpression.convertDoubleValue(1.6789).getNumberValue())
 //        .isEqualByComparingTo("1.68");
@@ -177,7 +177,7 @@ class ExpressionTest {
 
   @Test
   void testGetAllASTNodes() throws ParseException {
-    ExpressionX expression = ExpressionX.of("1+2/3");
+    Expression expression = Expression.of("1+2/3");
     List<ASTNode> nodes = expression.getAllASTNodes();
     assertThat(nodes.get(0).getToken().getValue()).isEqualTo("+");
     assertThat(nodes.get(1).getToken().getValue()).isEqualTo("1");
@@ -188,33 +188,33 @@ class ExpressionTest {
 
   @Test
   void testGetUsedVariables() throws ParseException {
-    ExpressionX expression = ExpressionX.of("a/2*PI+MIN(e,b)");
+    Expression expression = Expression.of("a/2*PI+MIN(e,b)");
     assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("a", "b");
   }
 
   @Test
   void testGetUsedVariablesLongNames() throws ParseException {
-    ExpressionX expression = ExpressionX.of("var1/2*PI+MIN(var2,var3)");
+    Expression expression = Expression.of("var1/2*PI+MIN(var2,var3)");
     assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("var1", "var2", "var3");
   }
 
   @Test
   void testGetUsedVariablesNoVariables() throws ParseException {
-    ExpressionX expression = ExpressionX.of("1/2");
+    Expression expression = Expression.of("1/2");
     assertThat(expression.getUsedVariables()).isEmpty();
   }
 
   @Test
   void testGetUsedVariablesCaseSensitivity() throws ParseException {
-    ExpressionX expression = ExpressionX.of("a+B*b-A/PI*(1/2)*pi+e-E+a");
+    Expression expression = Expression.of("a+B*b-A/PI*(1/2)*pi+e-E+a");
     assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("a", "b");
   }
 
   @Test
   void testGetUndefinedVariables() throws ParseException {
-    ExpressionX expression1 = ExpressionX.of("a+A+b+B+c+C+E+e+PI+x");
-    ExpressionX expression = expression1;
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    Expression expression1 = Expression.of("a+A+b+B+c+C+E+e+PI+x");
+    Expression expression = expression1;
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("x", Value.of(1))
       .build();
     assertThat(expression.getUndefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");

@@ -1,9 +1,9 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
-import com.ezylang.evalex.operatorsx.AbstractPostfixOperator;
-import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
-import com.ezylang.evalex.operatorsx.Operator;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.AbstractPostfixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
+import com.ezylang.evalex.operators.Operator;
 import org.immutables.value.Value;
 
 import java.util.Map;

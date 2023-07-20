@@ -15,12 +15,8 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.TestConfigurationXProvider.DummyFunction;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.config.TestConfigurationProvider.DummyFunction;
 import org.junit.jupiter.api.Test;
-import com.ezylang.evalex.parserx.Tokenizer;
-import com.ezylang.evalex.parserx.Token;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

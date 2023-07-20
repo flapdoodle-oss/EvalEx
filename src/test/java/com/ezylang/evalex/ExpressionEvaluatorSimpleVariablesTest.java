@@ -16,8 +16,8 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testSingleStringVariable() throws ParseException, EvaluationException {
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", "hello")
       .build();
     Value<?> result = createExpression("a").evaluate(variableResolver);
@@ -38,7 +38,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testSingleNumberVariable() throws ParseException, EvaluationException {
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", BigDecimal.valueOf(9))
       .build();
     Value<?> result = createExpression("a").evaluate(variableResolver);
@@ -47,7 +47,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testNumbers() throws ParseException, EvaluationException {
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("a", BigDecimal.valueOf(9))
       .with("b", BigDecimal.valueOf(5))
       .build();
@@ -57,7 +57,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testStrings() throws ParseException, EvaluationException {
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("prefix", "Hello")
       .with("infix", " ")
       .with("postfix", "world")
@@ -68,7 +68,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testStringNumberCombined() throws ParseException, EvaluationException {
-    VariableResolverX variableResolver = VariableResolverX.builder()
+    VariableResolver variableResolver = VariableResolver.builder()
       .with("prefix", "Hello")
       .with("infix", BigDecimal.valueOf(2))
       .with("postfix", "world")
@@ -79,7 +79,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testUnknownVariable() {
-    assertThatThrownBy(() -> createExpression("a").evaluate(VariableResolverX.empty()))
+    assertThatThrownBy(() -> createExpression("a").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Variable or constant value for 'a' not found");
   }

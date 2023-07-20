@@ -15,21 +15,17 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** Returns the co-secant (in radians). */
 public class CscRFunction extends NonZeroFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
-
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
     /* Formula: csc(x) = 1 / sin(x) */
-    return expression.convertDoubleValue(
-        1 / Math.sin(parameterValues.get(0).getNumberValue().doubleValue()));
+    return Value.of(1 / Math.sin(parameterValue.wrapped().doubleValue()));
   }
 }

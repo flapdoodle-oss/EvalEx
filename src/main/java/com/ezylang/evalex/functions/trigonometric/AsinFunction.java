@@ -17,37 +17,33 @@ package com.ezylang.evalex.functions.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
 
 /** Returns the arc-sine (in degrees). */
-public class AsinFunction extends SingleArgumentFunction {
+public class AsinFunction extends AbstractNumberFunction {
 
   private static final BigDecimal MINUS_ONE = valueOf(-1);
 
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues)
-      throws EvaluationException {
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) throws EvaluationException {
 
-    BigDecimal parameterValue = parameterValues.get(0).getNumberValue();
+    BigDecimal value = parameterValue.wrapped();
 
-    if (parameterValue.compareTo(ONE) > 0) {
+    if (value.compareTo(ONE) > 0) {
       throw new EvaluationException(
-          functionToken, "Illegal asin(x) for x > 1: x = " + parameterValue);
+          functionToken, "Illegal asin(x) for x > 1: x = " + value);
     }
-    if (parameterValue.compareTo(MINUS_ONE) < 0) {
+    if (value.compareTo(MINUS_ONE) < 0) {
       throw new EvaluationException(
-          functionToken, "Illegal asin(x) for x < -1: x = " + parameterValue);
+          functionToken, "Illegal asin(x) for x < -1: x = " + value);
     }
-    return expression.convertDoubleValue(Math.toDegrees(Math.asin(parameterValue.doubleValue())));
+    return Value.of(Math.toDegrees(Math.asin(value.doubleValue())));
   }
 }

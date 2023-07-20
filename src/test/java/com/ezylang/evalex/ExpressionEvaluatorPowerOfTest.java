@@ -16,9 +16,9 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.config.Configuration;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.operatorsx.arithmetic.InfixPowerOfOperator;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.operators.arithmetic.InfixPowerOfOperator;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -42,8 +42,8 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
             }
           }));
 
-    ExpressionX expression = ExpressionX.of("-2^2", config);
+    Expression expression = Expression.of("-2^2", config);
 
-    assertThat(expression.evaluate(VariableResolverX.empty()).wrapped().toString()).isEqualTo("-4.0");
+    assertThat(expression.evaluate(VariableResolver.empty()).wrapped().toString()).isEqualTo("-4.0");
   }
 }

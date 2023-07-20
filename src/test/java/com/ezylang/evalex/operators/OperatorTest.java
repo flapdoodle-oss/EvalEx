@@ -15,18 +15,16 @@
 */
 package com.ezylang.evalex.operators;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// löschen??
 class OperatorTest {
 
   @Test
   void testPrefixOperator() {
-    OperatorIfc operator = new CorrectPrefixOperator();
+    Operator operator = new CorrectPrefixOperator();
 
     assertThat(operator.getPrecedence()).isEqualTo(Precedence.OPERATOR_PRECEDENCE_UNARY.value());
     assertThat(operator.isLeftAssociative()).isFalse();
@@ -36,7 +34,7 @@ class OperatorTest {
 
   @Test
   void testPostfixOperator() {
-    OperatorIfc operator = new CorrectPostfixOperator();
+    Operator operator = new CorrectPostfixOperator();
 
     assertThat(operator.getPrecedence()).isEqualTo(88);
     assertThat(operator.isLeftAssociative()).isTrue();
@@ -46,7 +44,7 @@ class OperatorTest {
 
   @Test
   void testInfixOperator() {
-    OperatorIfc operator = new CorrectInfixOperator();
+    Operator operator = new CorrectInfixOperator();
 
     assertThat(operator.getPrecedence()).isEqualTo(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE.value());
     assertThat(operator.isLeftAssociative()).isTrue();
@@ -80,12 +78,6 @@ class OperatorTest {
 
     protected DummyAnnotationOperator(OperatorType type, Precedence precedence, boolean leftAssociative) {
       super(type, precedence, leftAssociative);
-    }
-
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return EvaluationValue.of("OK");
     }
   }
 }

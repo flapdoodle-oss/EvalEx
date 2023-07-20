@@ -15,22 +15,19 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** Returns the arc hyperbolic cotangent. */
-public class AcotHFunction extends SingleArgumentFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+public class AcotHFunction extends AbstractNumberFunction {
 
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) throws EvaluationException {
     /* Formula: acoth(x) = log((x + 1) / (x - 1)) * 0.5 */
-    double value = parameterValues.get(0).getNumberValue().doubleValue();
-    return expression.convertDoubleValue(Math.log((value + 1) / (value - 1)) * 0.5);
+    double value = parameterValue.wrapped().doubleValue();
+    return Value.of(Math.log((value + 1) / (value - 1)) * 0.5);
   }
 }

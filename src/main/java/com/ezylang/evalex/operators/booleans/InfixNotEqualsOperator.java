@@ -16,10 +16,12 @@
 package com.ezylang.evalex.operators.booleans;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.AbstractInfixOperator;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
+
+import java.util.Objects;
 
 /** No equality of two values. */
 public class InfixNotEqualsOperator extends AbstractInfixOperator {
@@ -29,8 +31,9 @@ public class InfixNotEqualsOperator extends AbstractInfixOperator {
   }
 
   @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return EvaluationValue.of(!operands[0].equals(operands[1]));
+  public Value<?> evaluate(
+      Expression expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) {
+
+    return Value.of(!Objects.equals(leftExpression.wrapped(), rightExpression.wrapped()));
   }
 }

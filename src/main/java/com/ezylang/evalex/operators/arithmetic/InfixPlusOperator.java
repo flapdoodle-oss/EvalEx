@@ -15,8 +15,9 @@
 */
 package com.ezylang.evalex.operators.arithmetic;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.AbstractInfixOperator;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
@@ -32,30 +33,13 @@ public class InfixPlusOperator extends AbstractInfixOperator {
     super(Precedence.OPERATOR_PRECEDENCE_ADDITIVE);
   }
 
-  @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    EvaluationValue leftOperand = operands[0];
-    EvaluationValue rightOperand = operands[1];
-
-    if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-      return EvaluationValue.of(
-          leftOperand
-              .getNumberValue()
-              .add(rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
-    } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
-      return EvaluationValue.of(
-          leftOperand.getDateTimeValue().plus(rightOperand.getDurationValue()));
-    } else if (leftOperand.isDurationValue() && rightOperand.isDurationValue()) {
-      return EvaluationValue.of(
-          leftOperand.getDurationValue().plus(rightOperand.getDurationValue()));
-    } else if (leftOperand.isDateTimeValue() && rightOperand.isNumberValue()) {
-      return EvaluationValue.of(
-          leftOperand
-              .getDateTimeValue()
-              .plus(Duration.ofMillis(rightOperand.getNumberValue().longValue())));
-    } else {
-      return EvaluationValue.of(leftOperand.getStringValue() + rightOperand.getStringValue());
-    }
+  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+    return evaluate(operatorToken, leftOperand, rightOperand)
+      .using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().add(r.wrapped(), expression.getConfiguration().getMathContext())))
+      .using(Value.DateTimeValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))
+      .using(Value.DurationValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))
+      .using(Value.DateTimeValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().plus(Duration.ofMillis(r.wrapped().longValue()))))
+      .using(Value.class, Value.class, (l, r) -> Value.of(l.wrapped().toString()+r.wrapped()))
+      .get();
   }
 }

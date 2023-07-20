@@ -1,12 +1,12 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.functionsx.Function;
-import com.ezylang.evalex.functionsx.basic.*;
-import com.ezylang.evalex.functionsx.datetime.*;
-import com.ezylang.evalex.functionsx.string.StringContains;
-import com.ezylang.evalex.functionsx.string.StringLowerFunction;
-import com.ezylang.evalex.functionsx.string.StringUpperFunction;
-import com.ezylang.evalex.functionsx.trigonometric.*;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.functions.basic.*;
+import com.ezylang.evalex.functions.datetime.*;
+import com.ezylang.evalex.functions.string.StringContains;
+import com.ezylang.evalex.functions.string.StringLowerFunction;
+import com.ezylang.evalex.functions.string.StringUpperFunction;
+import com.ezylang.evalex.functions.trigonometric.*;
 
 public interface FunctionResolver {
 	default boolean hasFunction(String functionName) {

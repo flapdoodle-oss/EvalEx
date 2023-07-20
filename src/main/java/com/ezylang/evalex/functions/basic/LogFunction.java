@@ -16,30 +16,24 @@
 package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
 import com.ezylang.evalex.functions.validations.NonZeroNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** The natural logarithm (base e) of a value */
-public class LogFunction extends SingleArgumentFunction {
+public class LogFunction extends AbstractFunction.Single<Value.NumberValue> {
 
   public LogFunction() {
-    super(FunctionParameterDefinition.of("value")
+    super(FunctionParameterDefinition.of( Value.NumberValue.class,"value")
       .withValidators(new NonNegativeNumberValidator(), new NonZeroNumberValidator()));
   }
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue parameterValue) {
+    double d = parameterValue.wrapped().doubleValue();
 
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
-
-    double d = parameterValues.get(0).getNumberValue().doubleValue();
-
-    return expression.convertDoubleValue(Math.log(d));
+    return Value.of(Math.log(d));
   }
 }

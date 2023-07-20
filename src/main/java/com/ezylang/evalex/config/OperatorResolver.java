@@ -1,8 +1,8 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.operatorsx.Operator;
-import com.ezylang.evalex.operatorsx.arithmetic.*;
-import com.ezylang.evalex.operatorsx.booleans.*;
+import com.ezylang.evalex.operators.Operator;
+import com.ezylang.evalex.operators.arithmetic.*;
+import com.ezylang.evalex.operators.booleans.*;
 
 public interface OperatorResolver {
 	default <T extends Operator> boolean hasOperator(Class<T> type, String operatorString) {

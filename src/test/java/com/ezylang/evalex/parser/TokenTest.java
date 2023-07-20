@@ -16,16 +16,8 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.config.Configuration;
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.operators.OperatorType;
-import com.ezylang.evalex.operatorsx.InfixOperator;
-import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.operators.InfixOperator;
 import org.junit.jupiter.api.Test;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.Tokenizer;
-import com.ezylang.evalex.parserx.Token;
-import com.ezylang.evalex.parserx.ASTNode;
-import com.ezylang.evalex.parserx.ShuntingYardConverter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

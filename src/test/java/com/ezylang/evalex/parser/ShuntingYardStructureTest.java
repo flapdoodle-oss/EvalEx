@@ -16,7 +16,6 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,16 +45,16 @@ class ShuntingYardStructureTest extends BaseParserTest {
 
   @Test
   void testExceptionStructureEnd() {
-    Expression expression = new Expression("a.");
-    assertThatThrownBy(expression::getAbstractSyntaxTree)
+    Expression expression = Expression.of("a.");
+    assertThatThrownBy(expression::validate)
         .isInstanceOf(ParseException.class)
         .hasMessage("Missing second operand for operator");
   }
 
   @Test
   void testExceptionStructureStart() {
-    Expression expression = new Expression(".a");
-    assertThatThrownBy(expression::getAbstractSyntaxTree)
+    Expression expression = Expression.of(".a");
+    assertThatThrownBy(expression::validate)
         .isInstanceOf(ParseException.class)
         .hasMessage("Structure separator not allowed here");
   }

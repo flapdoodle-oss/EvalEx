@@ -16,14 +16,9 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.config.Configuration;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import com.ezylang.evalex.parserx.Tokenizer;
-import com.ezylang.evalex.parserx.Token;
 
 class TokenizerStructureTest extends BaseParserTest {
 

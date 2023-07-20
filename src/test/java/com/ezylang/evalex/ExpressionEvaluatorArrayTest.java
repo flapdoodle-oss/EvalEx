@@ -16,8 +16,8 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -31,24 +31,24 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
   @Test
   void testSimpleArray() throws ParseException, EvaluationException {
     Value.ArrayValue array = Value.of(Value::of, List.of(new BigDecimal(99)));
-    assertThat(evaluate("a[0]", VariableResolverX.builder().with("a", array).build())).isEqualTo("99");
+    assertThat(evaluate("a[0]", VariableResolver.builder().with("a", array).build())).isEqualTo("99");
   }
 
   @Test
   void testMultipleEntriesArray() throws ParseException, EvaluationException {
     Value.ArrayValue array = Value.of(Value::of, new BigDecimal(2), new BigDecimal(4), new BigDecimal(6));
-    assertThat(evaluate("a[0]+a[1]+a[2]", VariableResolverX. builder().with("a", array).build())).isEqualTo("12");
+    assertThat(evaluate("a[0]+a[1]+a[2]", VariableResolver. builder().with("a", array).build())).isEqualTo("12");
   }
 
   @Test
   void testExpressionArray() throws ParseException, EvaluationException {
     Value.ArrayValue array = Value.of(Value::of, new BigDecimal(3));
-    assertThat(evaluate("a[4-x]", VariableResolverX. builder().with("a", array).and("x", Value.of(new BigDecimal(4))).build())).isEqualTo("3");
+    assertThat(evaluate("a[4-x]", VariableResolver. builder().with("a", array).and("x", Value.of(new BigDecimal(4))).build())).isEqualTo("3");
   }
 
   @Test
   void testNestedArray() throws ParseException, EvaluationException {
-    VariableResolverX variableResolver = VariableResolverX. builder()
+    VariableResolver variableResolver = VariableResolver. builder()
       .with("a", Value.of(Value::of, List.of(new BigDecimal(3))))
       .and("b", Value.of(Value::of, new BigDecimal(2), new BigDecimal(4), new BigDecimal(6)))
       .and("x", Value.of(new BigDecimal(6)))
@@ -59,13 +59,13 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
   @Test
   void testStringArray() throws ParseException, EvaluationException {
     Value.ArrayValue array = Value.of(Value::of, "Hello", "beautiful", "world");
-    assertThat(evaluate("a[0] + \" \" + a[1] + \" \" + a[2]", VariableResolverX. builder().with("a", array).build())).isEqualTo("Hello beautiful world");
+    assertThat(evaluate("a[0] + \" \" + a[1] + \" \" + a[2]", VariableResolver. builder().with("a", array).build())).isEqualTo("Hello beautiful world");
   }
 
   @Test
   void testBooleanArray() throws ParseException, EvaluationException {
     Value.ArrayValue array = Value.of(Value::of, true, true, false);
-    assertThat(evaluate("a[0] + \" \" + a[1] + \" \" + a[2]", VariableResolverX. builder().with("a", array).build())).isEqualTo("true true false");
+    assertThat(evaluate("a[0] + \" \" + a[1] + \" \" + a[2]", VariableResolver. builder().with("a", array).build())).isEqualTo("true true false");
   }
 
   @Test
@@ -75,25 +75,25 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
       Value.of(Value::of, new BigDecimal(4), new BigDecimal(8))
     );
 
-    assertThat(evaluate("a[0][0]", VariableResolverX. builder().with("a", array).build())).isEqualTo("1");
-    assertThat(evaluate("a[0][1]", VariableResolverX. builder().with("a", array).build())).isEqualTo("2");
-    assertThat(evaluate("a[1][0]", VariableResolverX. builder().with("a", array).build())).isEqualTo("4");
-    assertThat(evaluate("a[1][1]", VariableResolverX. builder().with("a", array).build())).isEqualTo("8");
+    assertThat(evaluate("a[0][0]", VariableResolver. builder().with("a", array).build())).isEqualTo("1");
+    assertThat(evaluate("a[0][1]", VariableResolver. builder().with("a", array).build())).isEqualTo("2");
+    assertThat(evaluate("a[1][0]", VariableResolver. builder().with("a", array).build())).isEqualTo("4");
+    assertThat(evaluate("a[1][1]", VariableResolver. builder().with("a", array).build())).isEqualTo("8");
   }
 
   @Test
   void testMixedArray() throws ParseException, EvaluationException {
     Value.ArrayValue array = Value.of(Value.of("Hello"), Value.of(new BigDecimal(4)), Value.of(true));
 
-    assertThat(evaluate("a[0]", VariableResolverX. builder().with("a", array).build())).isEqualTo("Hello");
-    assertThat(evaluate("a[1]", VariableResolverX. builder().with("a", array).build())).isEqualTo("4");
-    assertThat(evaluate("a[2]", VariableResolverX. builder().with("a", array).build())).isEqualTo("true");
+    assertThat(evaluate("a[0]", VariableResolver. builder().with("a", array).build())).isEqualTo("Hello");
+    assertThat(evaluate("a[1]", VariableResolver. builder().with("a", array).build())).isEqualTo("4");
+    assertThat(evaluate("a[2]", VariableResolver. builder().with("a", array).build())).isEqualTo("true");
   }
 
   @Test
   void testThrowsUnsupportedDataTypeForArray() {
     assertThatThrownBy(() -> {
-      evaluate("a[0]", VariableResolverX. builder().with("a", Value.of("aString")).build());
+      evaluate("a[0]", VariableResolver. builder().with("a", Value.of("aString")).build());
     })
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");
@@ -104,7 +104,7 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
     assertThatThrownBy(
             () -> {
               Value.ArrayValue array = Value.of(Value::of, "Hello");
-              evaluate("a[b]", VariableResolverX. builder().with("a", array).and("b", Value.of("anotherString")).build());
+              evaluate("a[b]", VariableResolver. builder().with("a", array).and("b", Value.of("anotherString")).build());
             })
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");

@@ -17,7 +17,7 @@ package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.AbstractInfixOperator;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
@@ -32,38 +32,22 @@ public class InfixMinusOperator extends AbstractInfixOperator {
   }
 
   @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands)
+  public Value<?> evaluate(
+      Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
       throws EvaluationException {
-    EvaluationValue leftOperand = operands[0];
-    EvaluationValue rightOperand = operands[1];
 
-    if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-      return EvaluationValue.of(
-          leftOperand
-              .getNumberValue()
-              .subtract(
-                  rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
-
-    } else if (leftOperand.isDateTimeValue() && rightOperand.isDateTimeValue()) {
-      return EvaluationValue.of(
-          Duration.ofMillis(
-              leftOperand.getDateTimeValue().toEpochMilli()
-                  - rightOperand.getDateTimeValue().toEpochMilli()));
-
-    } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
-      return EvaluationValue.of(
-          leftOperand.getDateTimeValue().minus(rightOperand.getDurationValue()));
-    } else if (leftOperand.isDurationValue() && rightOperand.isDurationValue()) {
-      return EvaluationValue.of(
-          leftOperand.getDurationValue().minus(rightOperand.getDurationValue()));
-    } else if (leftOperand.isDateTimeValue() && rightOperand.isNumberValue()) {
-      return EvaluationValue.of(
-          leftOperand
-              .getDateTimeValue()
-              .minus(Duration.ofMillis(rightOperand.getNumberValue().longValue())));
-    } else {
-      throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
-    }
+    return evaluate(operatorToken, leftOperand, rightOperand)
+      .using(Value.NumberValue.class, Value.NumberValue.class,
+        (l, r) -> Value.of(l.wrapped().subtract(r.wrapped(), expression.getConfiguration().getMathContext())))
+      .using(Value.DateTimeValue.class, Value.DateTimeValue.class,
+        (l, r) -> Value.of(Duration.ofMillis(l.wrapped().toEpochMilli() - r.wrapped().toEpochMilli())))
+      .using(Value.DateTimeValue.class, Value.DurationValue.class,
+        (l, r) -> Value.of(l.wrapped().minus(r.wrapped())))
+      .using(Value.DurationValue.class, Value.DurationValue.class,
+        (l, r) -> Value.of(l.wrapped().minus(r.wrapped())))
+      // TODO remove this
+      .using(Value.DateTimeValue.class, Value.NumberValue.class,
+        (l, r) -> Value.of(l.wrapped().minus(Duration.ofMillis(r.wrapped().longValue()))))
+      .get();
   }
 }

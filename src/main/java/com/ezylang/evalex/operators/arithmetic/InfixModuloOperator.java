@@ -17,7 +17,7 @@ package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.AbstractInfixOperator;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
@@ -31,26 +31,14 @@ public class InfixModuloOperator extends AbstractInfixOperator {
     super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE);
   }
 
-  @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands)
-      throws EvaluationException {
-    EvaluationValue leftOperand = operands[0];
-    EvaluationValue rightOperand = operands[1];
-
-    if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-
-      if (rightOperand.getNumberValue().equals(BigDecimal.ZERO)) {
-        throw new EvaluationException(operatorToken, "Division by zero");
-      }
-
-      return EvaluationValue.of(
-          leftOperand
-              .getNumberValue()
-              .remainder(
-                  rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
-    } else {
-      throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
-    }
+  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+    return evaluate(operatorToken, leftOperand, rightOperand)
+      .using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> {
+        if (r.wrapped().equals(BigDecimal.ZERO)) {
+          throw new EvaluationException(operatorToken, "Division by zero");
+        }
+        return Value.of(l.wrapped().remainder(r.wrapped(), expression.getConfiguration().getMathContext()));
+      })
+      .get();
   }
 }

@@ -29,12 +29,12 @@ public enum DataType {
 	 */
 	DURATION,
 	/**
-	 * A list evaluation values. Stored as {@link java.util.List<EvaluationValue>}.
+	 * A list evaluation values. Stored as {@link java.util.List<Value>}.
 	 */
 	ARRAY,
 	/**
 	 * A structure with pairs of name/value members. Name is a string and the value is a {@link
-	 * EvaluationValue}. Stored as a {@link java.util.Map}.
+	 * Value}. Stored as a {@link java.util.Map}.
 	 */
 	STRUCTURE,
 	/**

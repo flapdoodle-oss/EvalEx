@@ -15,9 +15,9 @@
 */
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.functionsx.Function;
-import com.ezylang.evalex.functionsx.basic.MaxFunction;
-import com.ezylang.evalex.functionsx.basic.MinFunction;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.functions.basic.MaxFunction;
+import com.ezylang.evalex.functions.basic.MinFunction;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

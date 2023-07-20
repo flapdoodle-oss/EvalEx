@@ -15,8 +15,9 @@
 */
 package com.ezylang.evalex.operators.booleans;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.operators.AbstractPrefixOperator;
 import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
@@ -29,8 +30,8 @@ public class PrefixNotOperator extends AbstractPrefixOperator {
   }
   
   @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return EvaluationValue.of(!operands[0].getBooleanValue());
+  public Value<?> evaluate(
+      Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+    return Value.of(!requireValueType(operatorToken, operand, Value.BooleanValue.class).wrapped());
   }
 }

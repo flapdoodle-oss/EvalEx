@@ -18,8 +18,8 @@ package com.ezylang.evalex.functions.datetime;
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.config.Configuration;
-import com.ezylang.evalex.config.TestConfigurationXProvider;
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.config.TestConfigurationProvider;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -28,7 +28,7 @@ import java.time.ZoneId;
 class DateTimeFunctionsTest extends BaseEvaluationTest {
 
   private static final Configuration DateTimeTestConfiguration =
-      TestConfigurationXProvider.StandardConfigurationWithAdditionalTestOperators
+      TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators
         .withDefaultZoneId(ZoneId.of("UTC+2"));
 
   @ParameterizedTest

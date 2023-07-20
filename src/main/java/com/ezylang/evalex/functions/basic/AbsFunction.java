@@ -16,21 +16,22 @@
 package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
+import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** Absolute (non-negative) value. */
-public class AbsFunction extends SingleArgumentFunction {
+public class AbsFunction extends AbstractFunction.Single<Value.NumberValue> {
+
+	public AbsFunction() {
+		super(Value.NumberValue.class);
+	}
 
 	@Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+  public Value<?> evaluate(
+		VariableResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue parameterValue) {
 
-    return EvaluationValue.of(
-        parameterValues.get(0).getNumberValue().abs(expression.getConfiguration().getMathContext()));
+    return Value.of(parameterValue.wrapped().abs(expression.getConfiguration().getMathContext()));
   }
 }

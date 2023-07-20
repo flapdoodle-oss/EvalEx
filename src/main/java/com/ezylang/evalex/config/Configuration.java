@@ -1,8 +1,8 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functionsx.Function;
-import com.ezylang.evalex.operatorsx.Operator;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.operators.Operator;
 import org.immutables.value.Value;
 
 import java.math.BigDecimal;
@@ -39,8 +39,8 @@ public abstract class Configuration {
 //		return standardConstants();
 //	}
 	@Value.Default
-	public VariableResolverX getConstantResolver() {
-		return VariableResolverX.builder()
+	public VariableResolver getConstantResolver() {
+		return VariableResolver.builder()
 				.withValues(standardConstants())
 				.build();
 	}
@@ -90,16 +90,16 @@ public abstract class Configuration {
 	}
 
 	// TODO its override, not addition
-	@Value.Auxiliary
-	public ImmutableConfiguration withAdditionalOperators(Map.Entry<String, Operator>... operators) {
+	@SafeVarargs @Value.Auxiliary
+	public final ImmutableConfiguration withAdditionalOperators(Map.Entry<String, Operator>... operators) {
 		return ImmutableConfiguration.copyOf(this)
 			.withOperatorResolver(MapBasedOperatorResolver.of(operators)
 				.andThen(getOperatorResolver()));
 	}
 
 	// TODO its override, not addition
-	@Value.Auxiliary
-	public ImmutableConfiguration withAdditionalFunctions(Map.Entry<String, Function> ... functions) {
+	@SafeVarargs @Value.Auxiliary
+	public final ImmutableConfiguration withAdditionalFunctions(Map.Entry<String, Function> ... functions) {
 		return ImmutableConfiguration.copyOf(this)
 			.withFunctionResolver(MapBasedFunctionResolver.of(functions)
 				.andThen(getFunctionResolver()));

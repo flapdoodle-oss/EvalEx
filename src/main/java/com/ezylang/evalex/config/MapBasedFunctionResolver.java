@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Value.Immutable
 public abstract class MapBasedFunctionResolver implements FunctionResolver {
-	protected abstract Map<String, com.ezylang.evalex.functionsx.Function> functions();
+	protected abstract Map<String, com.ezylang.evalex.functions.Function> functions();
 
 	@Value.Lazy
 	protected Map<String, String> lowerCaseToKey() {
@@ -17,13 +17,13 @@ public abstract class MapBasedFunctionResolver implements FunctionResolver {
 
 	@Value.Auxiliary
 	@Override
-	public com.ezylang.evalex.functionsx.Function getFunction(String functionName) {
+	public com.ezylang.evalex.functions.Function getFunction(String functionName) {
 		return functions().get(lowerCaseToKey().get(functionName.toLowerCase()));
 	}
 
-	public static ImmutableMapBasedFunctionResolver of(Map.Entry<String, com.ezylang.evalex.functionsx.Function> ...entries) {
+	public static ImmutableMapBasedFunctionResolver of(Map.Entry<String, com.ezylang.evalex.functions.Function> ...entries) {
 		ImmutableMapBasedFunctionResolver.Builder builder = ImmutableMapBasedFunctionResolver.builder();
-		for (Map.Entry<String, com.ezylang.evalex.functionsx.Function> entry : entries) {
+		for (Map.Entry<String, com.ezylang.evalex.functions.Function> entry : entries) {
 			builder.putFunctions(entry);
 		}
 		return builder.build();

@@ -15,7 +15,7 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.parserx.ParseException;
+import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 

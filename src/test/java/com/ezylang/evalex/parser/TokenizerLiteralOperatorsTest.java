@@ -16,20 +16,16 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.operatorsx.AbstractInfixOperator;
-import com.ezylang.evalex.operatorsx.AbstractPostfixOperator;
-import com.ezylang.evalex.operatorsx.AbstractPrefixOperator;
 import com.ezylang.evalex.operators.Precedence;
-import com.ezylang.evalex.parserx.ParseException;
-import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.AbstractPostfixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
-
-import com.ezylang.evalex.parserx.Token;
 
 class TokenizerLiteralOperatorsTest extends BaseParserTest {
 
@@ -64,7 +60,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
       super(Precedence.OPERATOR_PRECEDENCE_AND, Value.BooleanValue.class, Value.BooleanValue.class);
     }
 
-    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+    @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
       throws EvaluationException {
       return Value.of(leftOperand.wrapped() && rightOperand.wrapped());
     }
@@ -75,7 +71,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
       super(Precedence.OPERATOR_PRECEDENCE_OR, Value.BooleanValue.class, Value.BooleanValue.class);
     }
 
-    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+    @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
       throws EvaluationException {
       return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
     }
@@ -86,7 +82,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
       super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.BooleanValue.class);
     }
 
-    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+    @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
       return Value.of(!operand.wrapped());
     }
   }
@@ -96,7 +92,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
         super(Precedence.OPERATOR_PRECEDENCE_UNARY, Value.BooleanValue.class);
       }
 
-    @Override protected Value<?> evaluateTyped(ExpressionX expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+    @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
       return Value.of(!operand.wrapped());
     }
   }

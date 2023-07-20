@@ -16,12 +16,10 @@
 package com.ezylang.evalex.functions;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.ExpressionX;
+import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functionsx.AbstractFunction;
-import com.ezylang.evalex.functionsx.Function;
-import com.ezylang.evalex.parserx.Token;
+import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -66,17 +64,17 @@ class FunctionTest {
         .hasMessage("Only last parameter may be defined as variable argument");
   }
 
-  private static class CorrectFunctionDefinitionFunction extends com.ezylang.evalex.functionsx.AbstractFunction {
+  private static class CorrectFunctionDefinitionFunction extends com.ezylang.evalex.functions.AbstractFunction {
 
     protected CorrectFunctionDefinitionFunction() {
       super(
-        com.ezylang.evalex.functionsx.FunctionParameterDefinition.of(Value.class,"default"),
-        com.ezylang.evalex.functionsx.FunctionParameterDefinition.lazyWith(Value.class,"lazy"),
-        com.ezylang.evalex.functionsx.FunctionParameterDefinition.varArgWith(Value.class,"vararg")
+        com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.class,"default"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.lazyWith(Value.class,"lazy"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.varArgWith(Value.class,"vararg")
       );
     }
 
-    @Override public Value<?> evaluate(VariableResolverX variableResolver, ExpressionX expression, Token functionToken, List<Value<?>> parameterValues)
+    @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
       throws EvaluationException {
       return Value.of("OK");
     }
@@ -85,12 +83,12 @@ class FunctionTest {
   private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
     public WrongVarargFunctionDefinitionFunction() {
       super(
-        com.ezylang.evalex.functionsx.FunctionParameterDefinition.of(Value.class,"default"),
-        com.ezylang.evalex.functionsx.FunctionParameterDefinition.varArgWith(Value.class, "vararg"),
-        com.ezylang.evalex.functionsx.FunctionParameterDefinition.of(Value.class,"another")
+        com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.class,"default"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.varArgWith(Value.class, "vararg"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.class,"another")
       );
     }
-    @Override public Value<?> evaluate(VariableResolverX variableResolver, ExpressionX expression, Token functionToken, List<Value<?>> parameterValues)
+    @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
       throws EvaluationException {
       return Value.of("OK");
     }

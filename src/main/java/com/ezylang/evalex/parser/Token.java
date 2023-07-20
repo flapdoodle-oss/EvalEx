@@ -16,9 +16,8 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.Nullable;
-import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.parserx.TokenType;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.operators.Operator;
 import org.immutables.value.Value;
 
 /**
@@ -42,21 +41,30 @@ public interface Token {
 
   @Nullable
   @Value.Auxiliary
-  FunctionIfc getFunctionDefinition();
+  Function getFunctionDefinition();
 
   @Nullable
   @Value.Auxiliary
-  OperatorIfc getOperatorDefinition();
+  Operator getOperatorDefinition();
+
+  @Value.Auxiliary
+  default <T extends Operator> T operatorDefinition(Class<T> operatorType) {
+    Operator def = getOperatorDefinition();
+    if (operatorType.isInstance(def)) {
+      return operatorType.cast(def);
+    }
+    throw new IllegalArgumentException("operator definition does not match: "+operatorType+" -> "+def);
+  }
 
   static Token of(int startPosition, String value, TokenType type) {
     return ImmutableToken.of(startPosition, value, type);
   }
 
-  static Token of(int startPosition, String value, TokenType type, FunctionIfc functionDefinition) {
+  static Token of(int startPosition, String value, TokenType type, Function functionDefinition) {
     return ImmutableToken.of(startPosition, value, type).withFunctionDefinition(functionDefinition);
   }
 
-  static Token of(int startPosition, String value, TokenType type, OperatorIfc operatorDefinition) {
+  static Token of(int startPosition, String value, TokenType type, Operator operatorDefinition) {
     return ImmutableToken.of(startPosition, value, type).withOperatorDefinition(operatorDefinition);
   }
 }

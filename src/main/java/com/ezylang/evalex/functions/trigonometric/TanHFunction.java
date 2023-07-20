@@ -15,21 +15,18 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
-import java.util.List;
-
 /** Returns the hyperbolic tangent of a value. */
-public class TanHFunction extends SingleArgumentFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+public class TanHFunction extends AbstractNumberFunction {
 
-    return expression.convertDoubleValue(
-        Math.tanh(parameterValues.get(0).getNumberValue().doubleValue()));
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
+    return Value.of(
+        Math.tanh(parameterValue.wrapped().doubleValue()));
   }
 }

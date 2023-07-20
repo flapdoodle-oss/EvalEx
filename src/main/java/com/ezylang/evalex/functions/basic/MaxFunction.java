@@ -16,31 +16,30 @@
 package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameterDefinition;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 /** Returns the maximum value of all parameters. */
-public class MaxFunction extends SingleArgumentFunction {
+public class MaxFunction extends AbstractFunction.SingleVararg<Value.NumberValue> {
 
   public MaxFunction() {
-    super(FunctionParameterDefinition.varArgWith("value"));
+    super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class, "value"));
   }
-  
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, List<EvaluationValue> parameterValues) {
+
+  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+    List<Value.NumberValue> parameterValues) {
     BigDecimal max = null;
-    for (EvaluationValue parameter : parameterValues) {
-      if (max == null || parameter.getNumberValue().compareTo(max) > 0) {
-        max = parameter.getNumberValue();
+    for (Value.NumberValue parameter : parameterValues) {
+      if (max == null || parameter.wrapped().compareTo(max) > 0) {
+        max = parameter.wrapped();
       }
     }
-    return EvaluationValue.of(max);
+    return Value.of(max);
   }
 }
