@@ -16,17 +16,11 @@
 package com.ezylang.evalex.functionsx.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.ExpressionX;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
-import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;

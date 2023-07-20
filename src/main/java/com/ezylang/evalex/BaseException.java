@@ -15,10 +15,6 @@
 */
 package com.ezylang.evalex;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.util.Objects;
 
 /**

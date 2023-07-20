@@ -1,8 +1,7 @@
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.functionsx.Function;
-import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import com.ezylang.evalex.operatorsx.Operator;
 import org.immutables.value.Value;
 
@@ -35,9 +34,15 @@ public abstract class Configuration {
 	}
 
 
+//	@Value.Default
+//	public Map<String, com.ezylang.evalex.data.Value<?>> getDefaultConstants() {
+//		return standardConstants();
+//	}
 	@Value.Default
-	public Map<String, com.ezylang.evalex.data.Value<?>> getDefaultConstants() {
-		return standardConstants();
+	public VariableResolverX getConstantResolver() {
+		return VariableResolverX.builder()
+				.withValues(standardConstants())
+				.build();
 	}
 
 	private static Map<String, com.ezylang.evalex.data.Value<?>> standardConstants() {

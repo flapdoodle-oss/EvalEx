@@ -18,16 +18,20 @@ package com.ezylang.evalex.functions.basic;
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.ExpressionX;
 import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.parserx.Token;
 import com.ezylang.evalex.parserx.ParseException;
 import com.ezylang.evalex.parserx.TokenType;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
+import com.ezylang.evalex.functionsx.basic.NotFunction;
 
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -164,7 +168,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testSqrtNegative() {
-    assertThatThrownBy(() -> new Expression("SQRT(-1)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> ExpressionX.of("SQRT(-1)").evaluate(VariableResolverX.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
@@ -188,34 +192,36 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   }
 
   @Test
-  void testNotFunctionDirectly() {
+  void testNotFunctionDirectly() throws EvaluationException {
     // somehow, code coverage for the NotFunction traditional tests does not work on Google build
-    NotFunction notFunction = new NotFunction();
-    Expression expressionMock = Mockito.mock(Expression.class);
+    NotFunction notFunction = new com.ezylang.evalex.functionsx.basic.NotFunction();
+    ExpressionX expressionMock = Mockito.mock(ExpressionX.class);
     Token token = Token.of(1, "NOT", TokenType.FUNCTION, notFunction);
 
-    VariableResolver variableResolver = VariableResolver.empty();
+    VariableResolverX variableResolver = VariableResolverX.empty();
     
     assertThat(
             notFunction
-                .evaluate(variableResolver, expressionMock, token, Arrays.asList(EvaluationValue.of(true)))
-                .getBooleanValue())
+                .evaluate(variableResolver, expressionMock, token, Arrays.asList(Value.of(true)))
+                .wrapped())
+            .asInstanceOf(InstanceOfAssertFactories.BOOLEAN)
         .isFalse();
     assertThat(
             notFunction
-                .evaluate(variableResolver, expressionMock, token, Arrays.asList(EvaluationValue.of(false)))
-                .getBooleanValue())
+                .evaluate(variableResolver, expressionMock, token, Arrays.asList(Value.of(false)))
+                .wrapped())
+            .asInstanceOf(InstanceOfAssertFactories.BOOLEAN)
         .isTrue();
   }
 
   @Test
   void testRandom() throws EvaluationException, ParseException {
-    Expression expression1 = new Expression("RANDOM()");
-    EvaluationValue r1 = expression1.evaluate(VariableResolver.empty());
-    Expression expression = new Expression("RANDOM()");
-    EvaluationValue r2 = expression.evaluate(VariableResolver.empty());
+    ExpressionX expression1 = ExpressionX.of("RANDOM()");
+    Value<?> r1 = expression1.evaluate(VariableResolverX.empty());
+    ExpressionX expression = ExpressionX.of("RANDOM()");
+    Value<?> r2 = expression.evaluate(VariableResolverX.empty());
 
-    assertThat(r1).isNotEqualByComparingTo(r2);
+    assertThat(r1.wrapped()).isNotEqualTo(r2.wrapped());
   }
 
   @ParameterizedTest
@@ -287,14 +293,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testLogNegative() {
-    assertThatThrownBy(() -> new Expression("LOG(-1)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> ExpressionX.of("LOG(-1)").evaluate(VariableResolverX.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
 
   @Test
   void testLogZero() {
-    assertThatThrownBy(() -> new Expression("LOG(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> ExpressionX.of("LOG(0)").evaluate(VariableResolverX.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -315,14 +321,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testLog10Negative() {
-    assertThatThrownBy(() -> new Expression("LOG10(-1)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> ExpressionX.of("LOG10(-1)").evaluate(VariableResolverX.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
 
   @Test
   void testLog10Zero() {
-    assertThatThrownBy(() -> new Expression("LOG10(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> ExpressionX.of("LOG10(0)").evaluate(VariableResolverX.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }

@@ -87,7 +87,7 @@ public class ExpressionConfiguration {
   @Builder.Default
   @Getter
   @SuppressWarnings("unchecked")
-  private FunctionIfcResolver functionIfcResolver = FunctionIfcResolver.defaults();
+  private FunctionIfcResolver functionIfcResolver = null; // FunctionIfcResolver.defaults();
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;

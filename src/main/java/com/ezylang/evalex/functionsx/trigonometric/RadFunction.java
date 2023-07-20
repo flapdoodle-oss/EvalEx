@@ -16,17 +16,10 @@
 package com.ezylang.evalex.functionsx.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.ExpressionX;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
 import com.ezylang.evalex.functionsx.AbstractFunction;
-import com.ezylang.evalex.parser.Token;
-
-import java.util.List;
 
 /**
  * Converts an angle measured in degrees to an approximately equivalent angle measured in radians.

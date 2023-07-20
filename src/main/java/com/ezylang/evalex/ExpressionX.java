@@ -3,7 +3,6 @@ package com.ezylang.evalex;
 import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.functionsx.Function;
 import com.ezylang.evalex.operatorsx.InfixOperator;
@@ -23,11 +22,31 @@ public abstract class ExpressionX {
 
 	public abstract String expressionString();
 
-	@org.immutables.value.Value.Derived
-	public Map<String, Value<?>> getConstants() {
-		TreeMap<String, Value<?>> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		map.putAll(getConfiguration().getDefaultConstants());
-		return Collections.unmodifiableMap(map);
+//	@org.immutables.value.Value.Default
+//	public Map<String, Value<?>> getConstants() {
+//		TreeMap<String, Value<?>> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+//		map.putAll(getConfiguration().getDefaultConstants());
+//		return Collections.unmodifiableMap(map);
+//	}
+	@org.immutables.value.Value.Default
+	public VariableResolverX getConstantResolver() {
+		return getConfiguration().getConstantResolver();
+	}
+
+	@org.immutables.value.Value.Auxiliary
+	public ExpressionX withConstant(String variable, Value<?> value) {
+		if (getConstantResolver().getData(variable)==null || getConfiguration().isAllowOverwriteConstants()) {
+			return ImmutableExpressionX.builder().from(this)
+//					.putAllConstants(getConstants())
+					.constantResolver(VariableResolverX.builder()
+							.with(variable, value)
+							.build().andThen(getConstantResolver()))
+//					.putConstants(variable, value)
+					.build();
+		} else {
+			throw new UnsupportedOperationException(
+					String.format("Can't set value for constant '%s'", variable));
+		}
 	}
 
 	/**
@@ -75,7 +94,7 @@ public abstract class ExpressionX {
 
 		for (ASTNode node : getAllASTNodes()) {
 			if (node.getToken().getType() == TokenType.VARIABLE_OR_CONSTANT
-				&& !getConstants().containsKey(node.getToken().getValue())) {
+				&& !getConstantResolver().has(node.getToken().getValue())) {
 				variables.add(node.getToken().getValue());
 			}
 		}
@@ -181,7 +200,7 @@ public abstract class ExpressionX {
 	}
 
 	private Value<?> getVariableOrConstant(VariableResolverX variableResolver, Token token) throws EvaluationException {
-		Value<?> result = getConstants().get(token.getValue());
+		Value<?> result = getConstantResolver().getData(token.getValue());
 		if (result == null) {
 			result = variableResolver.getData(token.getValue());
 		}

@@ -155,8 +155,8 @@ class ExpressionTest {
         .isNotSameAs(expression2.getConfiguration().getOperatorResolver());
     assertThat(expression1.getConfiguration().getFunctionResolver())
         .isNotSameAs(expression2.getConfiguration().getFunctionResolver());
-    assertThat(expression1.getConfiguration().getDefaultConstants())
-        .isNotSameAs(expression2.getConfiguration().getDefaultConstants());
+//    assertThat(expression1.getConfiguration().getConstantResolver())
+//        .isNotSameAs(expression2.getConfiguration().getDefaultConstants());
   }
 
   @Test

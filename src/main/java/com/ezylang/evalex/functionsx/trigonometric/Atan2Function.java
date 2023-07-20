@@ -17,14 +17,11 @@ package com.ezylang.evalex.functionsx.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.ExpressionX;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
 import com.ezylang.evalex.functionsx.AbstractFunction;
+import com.ezylang.evalex.functionsx.FunctionParameterDefinition;
 import com.ezylang.evalex.parserx.Token;
-
-import java.util.List;
 
 /** Returns the angle of atan2 (in degrees). */
 public class Atan2Function extends AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {

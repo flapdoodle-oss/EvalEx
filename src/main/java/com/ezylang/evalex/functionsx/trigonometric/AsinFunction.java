@@ -16,17 +16,11 @@
 package com.ezylang.evalex.functionsx.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
-import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.ExpressionX;
-import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
-import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.data.VariableResolverX;
-import com.ezylang.evalex.functions.SingleArgumentFunction;
-import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
@@ -43,11 +37,11 @@ public class AsinFunction extends AbstractNumberFunction {
 
     if (value.compareTo(ONE) > 0) {
       throw new EvaluationException(
-          functionToken, "Illegal asin(x) for x > 1: x = " + parameterValue);
+          functionToken, "Illegal asin(x) for x > 1: x = " + value);
     }
     if (value.compareTo(MINUS_ONE) < 0) {
       throw new EvaluationException(
-          functionToken, "Illegal asin(x) for x < -1: x = " + parameterValue);
+          functionToken, "Illegal asin(x) for x < -1: x = " + value);
     }
     return Value.of(Math.toDegrees(Math.asin(value.doubleValue())));
   }

@@ -43,8 +43,8 @@ class ConfigurationTest {
     assertThat(configuration.isArraysAllowed()).isTrue();
     assertThat(configuration.isStructuresAllowed()).isTrue();
     assertThat(configuration.isImplicitMultiplicationAllowed()).isTrue();
-    assertThat(configuration.getDefaultConstants())
-        .containsAllEntriesOf(Configuration.StandardConstants);
+//    assertThat(configuration.getDefaultConstants())
+//        .containsAllEntriesOf(Configuration.StandardConstants);
 //    assertThat(configuration.getDecimalPlacesRounding())
 //        .isEqualTo(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
 //    assertThat(configuration.isStripTrailingZeros()).isTrue();

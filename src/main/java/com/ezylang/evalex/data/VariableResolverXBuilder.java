@@ -1,9 +1,9 @@
 package com.ezylang.evalex.data;
 
-import com.ezylang.evalex.ImmutableExpressionX;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 public class VariableResolverXBuilder {
@@ -78,7 +78,8 @@ public class VariableResolverXBuilder {
 
 
 	public VariableResolverX build() {
-		Map<String, Value<?>> clone = new TreeMap<>(variables);
+		TreeMap<String, Value<?>> clone = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		clone.putAll(variables);
 		return clone::get;
 	}
 }

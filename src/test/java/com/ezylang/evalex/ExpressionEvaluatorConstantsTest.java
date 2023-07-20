@@ -15,9 +15,9 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.parserx.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,44 +50,42 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testCustomConstantsMixedCase() throws EvaluationException, ParseException {
-    Map<String, EvaluationValue> constants =
+    Map<String, Value<?>> constants =
         new HashMap<>() {
           {
-            put("A", EvaluationValue.of(new BigDecimal("2.5")));
-            put("B", EvaluationValue.of(new BigDecimal("3.9")));
+            put("A", Value.of(new BigDecimal("2.5")));
+            put("B", Value.of(new BigDecimal("3.9")));
           }
         };
 
-    ExpressionConfiguration configuration =
-        ExpressionConfiguration.builder().defaultConstants(constants).build();
+    Configuration configuration =
+        Configuration.builder().constantResolver(VariableResolverX.builder().withValues(constants).build()).build();
 
-    Expression expression = new Expression("a+B", configuration);
+    ExpressionX expression = ExpressionX.of("a+B", configuration);
 
-		assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("6.4");
+		assertThat(expression.evaluate(VariableResolverX.empty()).wrapped().toString()).isEqualTo("6.4");
   }
 
   @Test
   void testOverwriteConstantsWith() throws EvaluationException, ParseException {
-    Expression expression = new Expression("e");
-		Expression expression1 = expression.withConstant("e", 9);
-		assertThat(expression1.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("9");
+    ExpressionX expression = ExpressionX.of("e");
+		ExpressionX expression1 = expression.withConstant("e", Value.of(9));
+		assertThat(expression1.evaluate(VariableResolverX.empty()).wrapped().toString()).isEqualTo("9.0");
   }
 
   @Test
   void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
-    Map<String, Object> values = new HashMap<>();
-    values.put("E", 6);
-    Expression expression = new Expression("e");
-		Expression expression1 = expression.withConstants(values);
-		assertThat(expression1.evaluate(VariableResolver.builder().withValues(values).build()).getStringValue()).isEqualTo("6");
+    ExpressionX expression = ExpressionX.of("e");
+		ExpressionX expression1 = expression.withConstant("E", Value.of(6));
+		assertThat(expression1.evaluate(VariableResolverX.builder().with("e", Value.of(3)).build()).wrapped().toString()).isEqualTo("6.0");
   }
 
   @Test
   void testOverwriteConstantsNotAllowed() {
-    Expression expression =
-        new Expression(
-            "e", ExpressionConfiguration.builder().allowOverwriteConstants(false).build());
-    assertThatThrownBy(() -> expression.withConstant("e", 9))
+    ExpressionX expression =
+        ExpressionX.of(
+            "e", Configuration.defaultConfiguration().withIsAllowOverwriteConstants(false));
+    assertThatThrownBy(() -> expression.withConstant("e", Value.of(9)))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Can't set value for constant 'e'");
   }

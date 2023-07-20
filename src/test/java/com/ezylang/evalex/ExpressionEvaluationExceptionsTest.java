@@ -16,8 +16,9 @@
 package com.ezylang.evalex;
 
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.parser.ASTNode;
-import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.data.VariableResolverX;
+import com.ezylang.evalex.parserx.ASTNode;
+import com.ezylang.evalex.parserx.Token;
 import com.ezylang.evalex.parserx.TokenType;
 import org.junit.jupiter.api.Test;
 
@@ -27,12 +28,12 @@ class ExpressionEvaluationExceptionsTest {
 
   @Test
   void testUnexpectedToken() {
-    Expression expression = new Expression("1");
+    ExpressionX expression = ExpressionX.of("1");
 
     assertThatThrownBy(
             () -> {
               ASTNode node = new ASTNode(Token.of(1, "(", TokenType.BRACE_OPEN));
-              expression.evaluateSubtree(VariableResolver.empty(), node);
+              expression.evaluateSubtree(VariableResolverX.empty(), node);
             })
         .isInstanceOf(EvaluationException.class)
         .hasMessage(

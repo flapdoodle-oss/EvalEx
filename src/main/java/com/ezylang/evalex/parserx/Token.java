@@ -15,9 +15,9 @@
 */
 package com.ezylang.evalex.parserx;
 
+import com.ezylang.evalex.Nullable;
 import com.ezylang.evalex.functionsx.Function;
 import com.ezylang.evalex.operatorsx.Operator;
-import com.ezylang.evalex.Nullable;
 import org.immutables.value.Value;
 
 /**

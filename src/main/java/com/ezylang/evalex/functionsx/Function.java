@@ -21,7 +21,6 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolverX;
 import com.ezylang.evalex.parserx.Token;
-import de.flapdoodle.types.Pair;
 
 import java.util.List;
 
