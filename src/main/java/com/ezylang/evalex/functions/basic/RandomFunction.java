@@ -15,23 +15,30 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.List;
 
 /** Random function produces a random value between 0 and 1. */
-public class RandomFunction extends AbstractFunction {
+public class RandomFunction implements Function {
 
   @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+  public List<FunctionParameterDefinition<?>> parameterDefinitions() {
+    return Collections.emptyList();
+  }
 
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    throws EvaluationException {
     SecureRandom secureRandom = new SecureRandom();
 
-    return expression.convertDoubleValue(secureRandom.nextDouble());
+    return Value.of(secureRandom.nextDouble());
   }
 }

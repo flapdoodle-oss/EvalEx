@@ -15,22 +15,20 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Returns the hyperbolic co-tangent of a value. */
-@FunctionParameter(name = "value", nonZero = true)
-public class CotHFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+/**
+ * Returns the hyperbolic co-tangent of a value.
+ */
+public class CotHFunction extends NonZeroFunction {
 
-    /* Formula: coth(x) = 1 / tanh(x) */
-    return expression.convertDoubleValue(
-        1 / Math.tanh(parameterValues[0].getNumberValue().doubleValue()));
-  }
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
+		/* Formula: coth(x) = 1 / tanh(x) */
+		return Value.of(1 / Math.tanh(parameterValue.wrapped().doubleValue()));
+	}
 }

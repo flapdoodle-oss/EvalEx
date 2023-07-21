@@ -16,17 +16,19 @@
 package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-@FunctionParameter(name = "value")
-public class DateTimeToEpochFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return new EvaluationValue(parameterValues[0].getDateTimeValue().toEpochMilli());
+public class DateTimeToEpochFunction extends AbstractFunction.Single<Value.DateTimeValue> {
+
+	public DateTimeToEpochFunction() {
+		super(Value.DateTimeValue.class);
+	}
+
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.DateTimeValue parameterValue) {
+    return Value.of(parameterValue.wrapped().toEpochMilli());
   }
 }

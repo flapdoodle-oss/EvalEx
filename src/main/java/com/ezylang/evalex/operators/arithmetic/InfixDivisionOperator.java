@@ -17,39 +17,32 @@ package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_MULTIPLICATIVE;
-
 /** Division of two numbers. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_MULTIPLICATIVE)
-public class InfixDivisionOperator extends AbstractOperator {
+public class InfixDivisionOperator extends
+  AbstractInfixOperator {
+
+  public InfixDivisionOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE);
+  }
 
   @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands)
+  public Value<?> evaluate(
+      Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
       throws EvaluationException {
-    EvaluationValue leftOperand = operands[0];
-    EvaluationValue rightOperand = operands[1];
+    Value.NumberValue left = requireValueType(operatorToken, leftOperand, Value.NumberValue.class);
+    Value.NumberValue right = requireValueType(operatorToken, rightOperand, Value.NumberValue.class);
 
-    if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-
-      if (rightOperand.getNumberValue().equals(BigDecimal.ZERO)) {
-        throw new EvaluationException(operatorToken, "Division by zero");
-      }
-
-      return new EvaluationValue(
-          leftOperand
-              .getNumberValue()
-              .divide(
-                  rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
-    } else {
-      throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
+    if (right.wrapped().equals(BigDecimal.ZERO)) {
+      throw new EvaluationException(operatorToken, "Division by zero");
     }
+
+    return Value.of(left.wrapped().divide(right.wrapped(), expression.getConfiguration().getMathContext()));
   }
 }

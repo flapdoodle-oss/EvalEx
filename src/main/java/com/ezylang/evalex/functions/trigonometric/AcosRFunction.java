@@ -15,21 +15,20 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the arc-cosine (in radians). */
-@FunctionParameter(name = "cosine")
-public class AcosRFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class AcosRFunction extends AbstractNumberFunction {
+	public AcosRFunction() {
+		super("cosine");
+	}
 
-    return expression.convertDoubleValue(
-        Math.acos(parameterValues[0].getNumberValue().doubleValue()));
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
+    return Value.of(Math.acos(parameterValue.wrapped().doubleValue()));
   }
 }

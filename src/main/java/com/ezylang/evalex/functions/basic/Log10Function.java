@@ -16,21 +16,26 @@
 package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
+import com.ezylang.evalex.functions.validations.NonZeroNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
 /** The base 10 logarithm of a value */
-@FunctionParameter(name = "value", nonZero = true, nonNegative = true)
-public class Log10Function extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class Log10Function extends AbstractFunction.Single<Value.NumberValue> {
 
-    double d = parameterValues[0].getNumberValue().doubleValue();
+  public Log10Function() {
+    super(FunctionParameterDefinition.of(Value.NumberValue.class, "value")
+      .withValidators(new NonZeroNumberValidator(), new NonNegativeNumberValidator()));
+  }
 
-    return expression.convertDoubleValue(Math.log10(d));
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) {
+    double d = parameterValue.wrapped().doubleValue();
+    
+    return Value.of(Math.log10(d));
   }
 }

@@ -15,21 +15,17 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the trigonometric tangent of an angle (in radians). */
-@FunctionParameter(name = "value")
-public class TanRFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-
-    return expression.convertDoubleValue(
-        Math.tan(parameterValues[0].getNumberValue().doubleValue()));
+public class TanRFunction extends AbstractNumberFunction{
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
+    return Value.of(
+        Math.tan(parameterValue.wrapped().doubleValue()));
   }
 }

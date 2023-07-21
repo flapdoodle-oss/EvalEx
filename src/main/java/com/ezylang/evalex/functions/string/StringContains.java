@@ -15,22 +15,25 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns true, if the string contains the substring (case-insensitive). */
-@FunctionParameter(name = "string")
-@FunctionParameter(name = "substring")
-public class StringContains extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String string = parameterValues[0].getStringValue();
-    String substring = parameterValues[1].getStringValue();
-    return new EvaluationValue(string.toUpperCase().contains(substring.toUpperCase()));
+public class StringContains extends AbstractFunction.Tuple<Value.StringValue, Value.StringValue> {
+  public StringContains() {
+    super(
+      FunctionParameterDefinition.of(Value.StringValue.class, "string"),
+      FunctionParameterDefinition.of(Value.StringValue.class, "substring")
+    );
+  }
+
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, Value.StringValue string,
+    Value.StringValue substring) throws EvaluationException {
+    return Value.of(string.wrapped().toUpperCase().contains(substring.wrapped().toUpperCase()));
   }
 }

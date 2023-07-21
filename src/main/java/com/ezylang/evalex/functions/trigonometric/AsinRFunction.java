@@ -17,10 +17,8 @@ package com.ezylang.evalex.functions.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
@@ -29,18 +27,15 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
 
 /** Returns the arc-sine (in radians). */
-@FunctionParameter(name = "value")
-public class AsinRFunction extends AbstractFunction {
+public class AsinRFunction extends AbstractNumberFunction {
 
   private static final BigDecimal MINUS_ONE = valueOf(-1);
 
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
-      throws EvaluationException {
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValueX) throws EvaluationException {
+    BigDecimal parameterValue = parameterValueX.wrapped();
 
-    BigDecimal parameterValue = parameterValues[0].getNumberValue();
-
+    // validation
     if (parameterValue.compareTo(ONE) > 0) {
       throw new EvaluationException(
           functionToken, "Illegal asinr(x) for x > 1: x = " + parameterValue);
@@ -49,7 +44,7 @@ public class AsinRFunction extends AbstractFunction {
       throw new EvaluationException(
           functionToken, "Illegal asinr(x) for x < -1: x = " + parameterValue);
     }
-    return expression.convertDoubleValue(
-        Math.asin(parameterValues[0].getNumberValue().doubleValue()));
+    return Value.of(
+        Math.asin(parameterValueX.wrapped().doubleValue()));
   }
 }

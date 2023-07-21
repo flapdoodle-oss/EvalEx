@@ -16,26 +16,30 @@
 package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /** Returns the minimum value of all parameters. */
-@FunctionParameter(name = "value", isVarArg = true)
-public class MinFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class MinFunction extends AbstractFunction.SingleVararg<Value.NumberValue> {
+
+  public MinFunction() {
+    super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class, "value"));
+  }
+
+  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+    List<Value.NumberValue> parameterValues) {
     BigDecimal min = null;
-    for (EvaluationValue parameter : parameterValues) {
-      if (min == null || parameter.getNumberValue().compareTo(min) < 0) {
-        min = parameter.getNumberValue();
+    for (Value.NumberValue parameter : parameterValues) {
+      if (min == null || parameter.wrapped().compareTo(min) < 0) {
+        min = parameter.wrapped();
       }
     }
-    return new EvaluationValue(min);
+    return Value.of(min);
   }
 }

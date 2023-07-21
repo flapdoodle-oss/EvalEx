@@ -15,21 +15,26 @@
 */
 package com.ezylang.evalex.operators.booleans;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_AND;
-
 /** Boolean AND of two values. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_AND)
-public class InfixAndOperator extends AbstractOperator {
+public class InfixAndOperator extends AbstractInfixOperator {
 
+  public InfixAndOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_AND);
+  }
+  
   @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(operands[0].getBooleanValue() && operands[1].getBooleanValue());
+  public Value<?> evaluate(
+      Expression expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) throws EvaluationException {
+    Value.BooleanValue left = requireValueType(operatorToken, leftExpression, Value.BooleanValue.class);
+    Value.BooleanValue right = requireValueType(operatorToken, rightExpression, Value.BooleanValue.class);
+
+    return Value.of(left.wrapped() && right.wrapped());
   }
 }

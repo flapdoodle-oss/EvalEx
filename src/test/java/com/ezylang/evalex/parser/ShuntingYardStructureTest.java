@@ -45,16 +45,16 @@ class ShuntingYardStructureTest extends BaseParserTest {
 
   @Test
   void testExceptionStructureEnd() {
-    Expression expression = new Expression("a.");
-    assertThatThrownBy(expression::getAbstractSyntaxTree)
+    Expression expression = Expression.of("a.");
+    assertThatThrownBy(expression::validate)
         .isInstanceOf(ParseException.class)
         .hasMessage("Missing second operand for operator");
   }
 
   @Test
   void testExceptionStructureStart() {
-    Expression expression = new Expression(".a");
-    assertThatThrownBy(expression::getAbstractSyntaxTree)
+    Expression expression = Expression.of(".a");
+    assertThatThrownBy(expression::validate)
         .isInstanceOf(ParseException.class)
         .hasMessage("Structure separator not allowed here");
   }

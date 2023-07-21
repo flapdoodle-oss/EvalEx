@@ -16,20 +16,24 @@
 package com.ezylang.evalex.operators.booleans;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.operators.AbstractInfixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_EQUALITY;
+import java.util.Objects;
 
 /** No equality of two values. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_EQUALITY)
-public class InfixNotEqualsOperator extends AbstractOperator {
+public class InfixNotEqualsOperator extends AbstractInfixOperator {
+
+  public InfixNotEqualsOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_EQUALITY);
+  }
 
   @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(!operands[0].equals(operands[1]));
+  public Value<?> evaluate(
+      Expression expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) {
+
+    return Value.of(!Objects.equals(leftExpression.wrapped(), rightExpression.wrapped()));
   }
 }

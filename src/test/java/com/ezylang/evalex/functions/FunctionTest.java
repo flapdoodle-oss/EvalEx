@@ -15,11 +15,14 @@
 */
 package com.ezylang.evalex.functions;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.Token;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,30 +31,30 @@ class FunctionTest {
 
   @Test
   void testParameterDefinition() {
-    FunctionIfc function = new CorrectFunctionDefinitionFunction();
+    Function function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.getFunctionParameterDefinitions().get(0).getName()).isEqualTo("default");
-    assertThat(function.getFunctionParameterDefinitions().get(0).isLazy()).isFalse();
-    assertThat(function.getFunctionParameterDefinitions().get(0).isVarArg()).isFalse();
+    assertThat(function.parameterDefinitions().get(0).getName()).isEqualTo("default");
+    assertThat(function.parameterDefinitions().get(0).isLazy()).isFalse();
+    assertThat(function.parameterDefinitions().get(0).isVarArg()).isFalse();
 
-    assertThat(function.getFunctionParameterDefinitions().get(1).getName()).isEqualTo("lazy");
-    assertThat(function.getFunctionParameterDefinitions().get(1).isLazy()).isTrue();
-    assertThat(function.getFunctionParameterDefinitions().get(1).isVarArg()).isFalse();
+    assertThat(function.parameterDefinitions().get(1).getName()).isEqualTo("lazy");
+    assertThat(function.parameterDefinitions().get(1).isLazy()).isTrue();
+    assertThat(function.parameterDefinitions().get(1).isVarArg()).isFalse();
 
-    assertThat(function.getFunctionParameterDefinitions().get(2).getName()).isEqualTo("vararg");
-    assertThat(function.getFunctionParameterDefinitions().get(2).isLazy()).isFalse();
-    assertThat(function.getFunctionParameterDefinitions().get(2).isVarArg()).isTrue();
+    assertThat(function.parameterDefinitions().get(2).getName()).isEqualTo("vararg");
+    assertThat(function.parameterDefinitions().get(2).isLazy()).isFalse();
+    assertThat(function.parameterDefinitions().get(2).isVarArg()).isTrue();
   }
 
   @Test
   void testParameterIsLazy() {
-    FunctionIfc function = new CorrectFunctionDefinitionFunction();
+    Function function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.isParameterLazy(0)).isFalse();
-    assertThat(function.isParameterLazy(1)).isTrue();
-    assertThat(function.isParameterLazy(2)).isFalse();
-    assertThat(function.isParameterLazy(3)).isFalse();
-    assertThat(function.isParameterLazy(4)).isFalse();
+    assertThat(function.parameterIsLazy(0)).isFalse();
+    assertThat(function.parameterIsLazy(1)).isTrue();
+    assertThat(function.parameterIsLazy(2)).isFalse();
+    assertThat(function.parameterIsLazy(3)).isFalse();
+    assertThat(function.parameterIsLazy(4)).isFalse();
   }
 
   @Test
@@ -61,25 +64,33 @@ class FunctionTest {
         .hasMessage("Only last parameter may be defined as variable argument");
   }
 
-  @FunctionParameter(name = "default")
-  @FunctionParameter(name = "lazy", isLazy = true)
-  @FunctionParameter(name = "vararg", isVarArg = true)
-  private static class CorrectFunctionDefinitionFunction extends AbstractFunction {
-    @Override
-    public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      return new EvaluationValue("OK");
+  private static class CorrectFunctionDefinitionFunction extends com.ezylang.evalex.functions.AbstractFunction {
+
+    protected CorrectFunctionDefinitionFunction() {
+      super(
+        com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.class,"default"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.lazyWith(Value.class,"lazy"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.varArgWith(Value.class,"vararg")
+      );
+    }
+
+    @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+      throws EvaluationException {
+      return Value.of("OK");
     }
   }
 
-  @FunctionParameter(name = "default")
-  @FunctionParameter(name = "vararg", isVarArg = true)
-  @FunctionParameter(name = "another")
   private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
-    @Override
-    public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      return new EvaluationValue("OK");
+    public WrongVarargFunctionDefinitionFunction() {
+      super(
+        com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.class,"default"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.varArgWith(Value.class, "vararg"),
+        com.ezylang.evalex.functions.FunctionParameterDefinition.of(Value.class,"another")
+      );
+    }
+    @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+      throws EvaluationException {
+      return Value.of("OK");
     }
   }
 }

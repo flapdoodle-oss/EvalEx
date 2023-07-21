@@ -15,7 +15,7 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** */
 public abstract class BaseParserTest {
 
-  ExpressionConfiguration configuration =
+  Configuration configuration =
       TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
 
   void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {

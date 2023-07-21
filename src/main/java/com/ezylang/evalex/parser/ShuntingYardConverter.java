@@ -15,17 +15,16 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.functions.Function;
+import com.ezylang.evalex.operators.Operator;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import static com.ezylang.evalex.parser.Token.TokenType.*;
+import static com.ezylang.evalex.parser.TokenType.*;
 
 /**
  * The shunting yard algorithm can be used to convert a mathematical expression from an infix
@@ -43,7 +42,7 @@ public class ShuntingYardConverter {
 
   private final String originalExpression;
 
-  private final ExpressionConfiguration configuration;
+  private final Configuration configuration;
 
   private final Deque<Token> operatorStack = new ArrayDeque<>();
   private final Deque<ASTNode> operandStack = new ArrayDeque<>();
@@ -51,7 +50,7 @@ public class ShuntingYardConverter {
   public ShuntingYardConverter(
       String originalExpression,
       List<Token> expressionTokens,
-      ExpressionConfiguration configuration) {
+      Configuration configuration) {
     this.originalExpression = originalExpression;
     this.expressionTokens = expressionTokens;
     this.configuration = configuration;
@@ -65,7 +64,7 @@ public class ShuntingYardConverter {
         case VARIABLE_OR_CONSTANT:
         case NUMBER_LITERAL:
         case STRING_LITERAL:
-          operandStack.push(new ASTNode(currentToken));
+          operandStack.push(ASTNode.of(currentToken));
           break;
         case FUNCTION:
           operatorStack.push(currentToken);
@@ -130,11 +129,11 @@ public class ShuntingYardConverter {
     if (previousToken != null && previousToken.getType() == FUNCTION) {
       // start of parameter list, marker for variable number of arguments
       Token paramStart =
-          new Token(
-              currentToken.getStartPosition(),
-              currentToken.getValue(),
-              TokenType.FUNCTION_PARAM_START);
-      operandStack.push(new ASTNode(paramStart));
+        Token.of(
+            currentToken.getStartPosition(),
+            currentToken.getValue(),
+            TokenType.FUNCTION_PARAM_START);
+      operandStack.push(ASTNode.of(paramStart));
     }
     operatorStack.push(currentToken);
   }
@@ -154,20 +153,32 @@ public class ShuntingYardConverter {
         parameters.add(0, node);
       }
       validateFunctionParameters(functionToken, parameters);
-      operandStack.push(new ASTNode(functionToken, parameters.toArray(new ASTNode[0])));
+      operandStack.push(ASTNode.of(functionToken, parameters.toArray(new ASTNode[0])));
     }
   }
 
   private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
       throws ParseException {
-    FunctionIfc function = functionToken.getFunctionDefinition();
-    if (parameters.size() < function.getFunctionParameterDefinitions().size()) {
+    Function function = functionToken.getFunctionDefinition();
+    if (parameters.size() < function.minArgs()) {
       throw new ParseException(functionToken, "Not enough parameters for function");
     }
-    if (!function.hasVarArgs()
-        && parameters.size() > function.getFunctionParameterDefinitions().size()) {
+    if (parameters.size() > function.maxArgs()) {
       throw new ParseException(functionToken, "Too many parameters for function");
     }
+//    if (function.hasOptional()) {
+//      if (parameters.size() < function.parameterDefinitions().size()-1) {
+//        throw new ParseException(functionToken, "Not enough parameters for function");
+//      }
+//    } else {
+//      if (parameters.size() < function.parameterDefinitions().size()) {
+//        throw new ParseException(functionToken, "Not enough parameters for function");
+//      }
+//    }
+//    if (!function.hasVarArgs()
+//        && parameters.size() > function.parameterDefinitions().size()) {
+//      throw new ParseException(functionToken, "Too many parameters for function");
+//    }
   }
 
   /**
@@ -185,7 +196,7 @@ public class ShuntingYardConverter {
     }
     // create ARRAY_INDEX operator (just like a function name) and push it to the operator stack
     Token arrayIndex =
-        new Token(currentToken.getStartPosition(), currentToken.getValue(), ARRAY_INDEX);
+      Token.of(currentToken.getStartPosition(), currentToken.getValue(), ARRAY_INDEX);
     operatorStack.push(arrayIndex);
 
     // push the ARRAY_OPEN to the operators, too (to later match the ARRAY_CLOSE)
@@ -212,7 +223,7 @@ public class ShuntingYardConverter {
     ASTNode array = operandStack.pop();
     operands.add(0, array);
 
-    operandStack.push(new ASTNode(arrayToken, operands.toArray(new ASTNode[0])));
+    operandStack.push(ASTNode.of(arrayToken, operands.toArray(new ASTNode[0])));
   }
 
   private void processOperatorsFromStackUntilTokenType(TokenType untilTokenType)
@@ -232,13 +243,13 @@ public class ShuntingYardConverter {
 
     if (token.getType() == TokenType.PREFIX_OPERATOR
         || token.getType() == TokenType.POSTFIX_OPERATOR) {
-      operandStack.push(new ASTNode(token, operand1));
+      operandStack.push(ASTNode.of(token, operand1));
     } else {
       if (operandStack.isEmpty()) {
         throw new ParseException(token, "Missing second operand for operator");
       }
       ASTNode operand2 = operandStack.pop();
-      operandStack.push(new ASTNode(token, operand2, operand1));
+      operandStack.push(ASTNode.of(token, operand2, operand1));
     }
   }
 
@@ -255,18 +266,18 @@ public class ShuntingYardConverter {
   }
 
   private boolean isNextOperatorOfHigherPrecedence(
-      OperatorIfc currentOperator, OperatorIfc nextOperator) {
+      Operator currentOperator, Operator nextOperator) {
     // structure operator (null) has always a higher precedence than other operators
     if (nextOperator == null) {
       return true;
     }
 
     if (currentOperator.isLeftAssociative()) {
-      return currentOperator.getPrecedence(configuration)
-          <= nextOperator.getPrecedence(configuration);
+      return currentOperator.getPrecedence()
+          <= nextOperator.getPrecedence();
     } else {
-      return currentOperator.getPrecedence(configuration)
-          < nextOperator.getPrecedence(configuration);
+      return currentOperator.getPrecedence()
+          < nextOperator.getPrecedence();
     }
   }
 

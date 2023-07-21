@@ -17,26 +17,20 @@ package com.ezylang.evalex.operators.arithmetic;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.PrefixOperator;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
 /** Unary prefix minus. */
-@PrefixOperator(leftAssociative = false)
-public class PrefixMinusOperator extends AbstractOperator {
+public class PrefixMinusOperator extends AbstractPrefixOperator {
 
-  @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands)
-      throws EvaluationException {
-    EvaluationValue operand = operands[0];
+  public PrefixMinusOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+  }
 
-    if (operand.isNumberValue()) {
-      return new EvaluationValue(
-          operand.getNumberValue().negate(expression.getConfiguration().getMathContext()));
-    } else {
-      throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
-    }
+  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+    return Value.of(requireValueType(operatorToken, operand, Value.NumberValue.class)
+      .wrapped().negate(expression.getConfiguration().getMathContext()));
   }
 }

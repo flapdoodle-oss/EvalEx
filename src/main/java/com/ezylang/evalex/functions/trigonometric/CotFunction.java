@@ -15,22 +15,18 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the co-tangent of an angle (in degrees). */
-@FunctionParameter(name = "value", nonZero = true)
-public class CotFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class CotFunction extends NonZeroFunction {
 
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
     /* Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
-    return expression.convertDoubleValue(
-        1 / Math.tan(Math.toRadians(parameterValues[0].getNumberValue().doubleValue())));
+    return Value.of(1.0 / Math.tan(Math.toRadians(parameterValue.wrapped().doubleValue())));
   }
 }

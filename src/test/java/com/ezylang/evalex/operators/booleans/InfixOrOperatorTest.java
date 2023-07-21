@@ -27,14 +27,17 @@ class InfixOrOperatorTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
-        "1||1 : true",
-        "1||2 : true",
-        "0||1 : true",
-        "0||0 : false",
-        "22||33 : true",
-        "\"true\"||\"true\" : true",
-        "\"true\"||\"false\" : true",
-        "\"false\"||\"false\" : false",
+//        "1||1 : true",
+//        "1||2 : true",
+//        "0||1 : true",
+//        "0||0 : false",
+//        "22||33 : true",
+//        "\"true\"||\"true\" : true",
+//        "\"true\"||\"false\" : true",
+//        "\"false\"||\"false\" : false",
+        "true||true : true",
+        "true||false : true",
+        "false||false : false",
         "(1==1)||(2==3) : true",
         "(2>4)||(4<6) :true"
       })

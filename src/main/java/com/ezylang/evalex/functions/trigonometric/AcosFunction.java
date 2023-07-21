@@ -16,20 +16,14 @@
 package com.ezylang.evalex.functions.trigonometric;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the arc-cosine (in degrees). */
-@FunctionParameter(name = "value")
-public class AcosFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-
-    return expression.convertDoubleValue(
-        Math.toDegrees(Math.acos(parameterValues[0].getNumberValue().doubleValue())));
+public class AcosFunction extends AbstractNumberFunction {
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) {
+    return Value.of(Math.toDegrees(Math.acos(parameterValue.wrapped().doubleValue())));
   }
 }

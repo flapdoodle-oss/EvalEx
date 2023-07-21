@@ -39,7 +39,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcos(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -52,14 +52,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcosH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
   @ValueSource(doubles = {-1, -0.5, 0, 0.5, 0.9})
   void testAcosHThrowsException(double d) {
     assertThatThrownBy(() -> {
-			Expression expression = new Expression("ACOSH(x)");
+			Expression expression = Expression.of("ACOSH(x)");
 			expression.evaluate(VariableResolver.builder().with("x", d).build());
 		})
         .isInstanceOf(EvaluationException.class)
@@ -76,7 +76,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcosR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -88,7 +88,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAcot(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -114,14 +114,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testAcotRThrowsException() {
-    assertThatThrownBy(() -> new Expression("ACOTR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ACOTR(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testAcotThrowsException() {
-    assertThatThrownBy(() -> new Expression("ACOT(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ACOT(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -136,19 +136,19 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAsin(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
   void testAsinThrowsExceptionPositive() {
-    assertThatThrownBy(() -> new Expression("ASIN(1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASIN(1.5)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asin(x) for x > 1: x = 1.5");
   }
 
   @Test
   void testAsinThrowsExceptionNegative() {
-    assertThatThrownBy(() -> new Expression("ASIN(-1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASIN(-1.5)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asin(x) for x < -1: x = -1.5");
   }
@@ -163,7 +163,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAsinH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -176,19 +176,19 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAsinR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
   void testAsinRThrowsExceptionPositive() {
-    assertThatThrownBy(() -> new Expression("ASINR(1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASINR(1.5)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asinr(x) for x > 1: x = 1.5");
   }
 
   @Test
   void testAsinRThrowsExceptionNegative() {
-    assertThatThrownBy(() -> new Expression("ASINR(-1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASINR(-1.5)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asinr(x) for x < -1: x = -1.5");
   }
@@ -203,7 +203,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtan(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -222,7 +222,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtan2(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -241,7 +241,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtan2R(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -254,14 +254,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtanH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
   @ValueSource(doubles = {-1.1, -1.0, 1.0, 1.1})
   void testAtanHThrowsException(double d) {
     assertThatThrownBy(() -> {
-			Expression expression = new Expression("ATANH(x)");
+			Expression expression = Expression.of("ATANH(x)");
 			expression.evaluate(VariableResolver.builder().with("x", d).build());
 		})
         .isInstanceOf(EvaluationException.class)
@@ -278,7 +278,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testAtanR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -304,7 +304,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCSCH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -348,14 +348,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testCoTanRThrowsException() {
-    assertThatThrownBy(() -> new Expression("COTR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("COTR(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCoTanThrowsException() {
-    assertThatThrownBy(() -> new Expression("COT(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("COT(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -371,7 +371,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCos(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -384,7 +384,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCosH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -398,7 +398,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testCosR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -416,28 +416,28 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testCotHThrowsException() {
-    assertThatThrownBy(() -> new Expression("COTH(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("COTH(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCscHThrowsException() {
-    assertThatThrownBy(() -> new Expression("CSCH(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("CSCH(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCscRThrowsException() {
-    assertThatThrownBy(() -> new Expression("CSCR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("CSCR(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCscThrowsException() {
-    assertThatThrownBy(() -> new Expression("CSC(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("CSC(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -453,7 +453,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testDeg(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -469,7 +469,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testRad(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -495,12 +495,12 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testSecH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @Test
   void testSecHThrowsException() {
-    assertThatThrownBy(() -> new Expression("SECH(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SECH(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -520,14 +520,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testSecRThrowsException() {
-    assertThatThrownBy(() -> new Expression("SECR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SECR(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testSecThrowsException() {
-    assertThatThrownBy(() -> new Expression("SEC(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SEC(0)").evaluate(VariableResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -538,7 +538,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       value = {"SIN(0) : 0", "SIN(1) : 0.01745240643728351", "SIN(90) : 1", "SIN(-90) : -1"})
   void testSin(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -551,7 +551,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testSinH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -565,7 +565,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testSinR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -579,7 +579,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testTan(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -592,7 +592,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testTanH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 
   @ParameterizedTest
@@ -606,6 +606,6 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       })
   void testTanR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, numberValueOf(expectedResult));
   }
 }

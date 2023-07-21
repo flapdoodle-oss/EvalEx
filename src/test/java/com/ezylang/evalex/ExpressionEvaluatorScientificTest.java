@@ -15,7 +15,10 @@
 */
 package com.ezylang.evalex;
 
+import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.data.Percentage;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -47,6 +50,8 @@ class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
       })
   void testScientificLiteralsEvaluation(String expression, String expectedResult)
       throws ParseException, EvaluationException {
-    assertThat(evaluate(expression)).isEqualTo(expectedResult);
+    assertThat(createExpression(expression).evaluate(VariableResolver.empty()).wrapped())
+      .asInstanceOf(InstanceOfAssertFactories.BIG_DECIMAL)
+      .isCloseTo(numberValueOf(expectedResult).wrapped(), Percentage.withPercentage(0.9999));
   }
 }

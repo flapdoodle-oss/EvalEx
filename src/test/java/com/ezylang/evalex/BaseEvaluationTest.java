@@ -15,11 +15,15 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.data.Percentage;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,31 +31,61 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public abstract class BaseEvaluationTest {
 
   protected void assertExpressionHasExpectedResult(String expression, String expectedResult)
+    throws EvaluationException, ParseException {
+    assertThat(
+      evaluate(
+        expression,
+        TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators).wrapped().toString())
+      .isEqualTo(expectedResult);
+  }
+
+  protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
       throws EvaluationException, ParseException {
     assertThat(
             evaluate(
                     expression,
-                    TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators)
-                .getStringValue())
+                    TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators))
         .isEqualTo(expectedResult);
   }
 
+  protected void assertExpressionHasExpectedResult(String expression, Value.NumberValue expectedResult)
+          throws EvaluationException, ParseException {
+    assertThat(
+            evaluate(
+                    expression,
+                    TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators))
+            .isInstanceOf(Value.NumberValue.class)
+            .extracting(Value::wrapped, InstanceOfAssertFactories.BIG_DECIMAL)
+            .isCloseTo(expectedResult.wrapped(), Percentage.withPercentage(0.99999));
+  }
+
   protected void assertExpressionHasExpectedResult(
-      String expression, String expectedResult, ExpressionConfiguration expressionConfiguration)
+    String expression, String expectedResult, Configuration expressionConfiguration)
+    throws EvaluationException, ParseException {
+    assertThat(evaluate(expression, expressionConfiguration).wrapped().toString())
+      .isEqualTo(expectedResult);
+  }
+
+  protected void assertExpressionHasExpectedResult(
+      String expression, Value<?> expectedResult, Configuration expressionConfiguration)
       throws EvaluationException, ParseException {
-    assertThat(evaluate(expression, expressionConfiguration).getStringValue())
+    assertThat(evaluate(expression, expressionConfiguration))
         .isEqualTo(expectedResult);
   }
 
   protected void assertExpressionThrowsException(
-      String expression, String message, ExpressionConfiguration expressionConfiguration) {
+      String expression, String message, Configuration expressionConfiguration) {
     assertThatThrownBy(() -> evaluate(expression, expressionConfiguration)).hasMessage(message);
   }
 
-  private EvaluationValue evaluate(String expressionString, ExpressionConfiguration configuration)
+  private Value<?> evaluate(String expressionString, Configuration configuration)
       throws EvaluationException, ParseException {
-    Expression expression = new Expression(expressionString, configuration);
+    Expression expression = Expression.of(expressionString, configuration);
 
     return expression.evaluate(VariableResolver.empty());
+  }
+
+  protected static Value.NumberValue numberValueOf(String doubleAsString) {
+    return Value.of(new BigDecimal(doubleAsString));
   }
 }

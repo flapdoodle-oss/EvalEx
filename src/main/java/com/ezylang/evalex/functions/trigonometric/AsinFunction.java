@@ -17,10 +17,8 @@ package com.ezylang.evalex.functions.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
@@ -29,26 +27,23 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
 
 /** Returns the arc-sine (in degrees). */
-@FunctionParameter(name = "value")
-public class AsinFunction extends AbstractFunction {
+public class AsinFunction extends AbstractNumberFunction {
 
   private static final BigDecimal MINUS_ONE = valueOf(-1);
 
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
-      throws EvaluationException {
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) throws EvaluationException {
 
-    BigDecimal parameterValue = parameterValues[0].getNumberValue();
+    BigDecimal value = parameterValue.wrapped();
 
-    if (parameterValue.compareTo(ONE) > 0) {
+    if (value.compareTo(ONE) > 0) {
       throw new EvaluationException(
-          functionToken, "Illegal asin(x) for x > 1: x = " + parameterValue);
+          functionToken, "Illegal asin(x) for x > 1: x = " + value);
     }
-    if (parameterValue.compareTo(MINUS_ONE) < 0) {
+    if (value.compareTo(MINUS_ONE) < 0) {
       throw new EvaluationException(
-          functionToken, "Illegal asin(x) for x < -1: x = " + parameterValue);
+          functionToken, "Illegal asin(x) for x < -1: x = " + value);
     }
-    return expression.convertDoubleValue(Math.toDegrees(Math.asin(parameterValue.doubleValue())));
+    return Value.of(Math.toDegrees(Math.asin(value.doubleValue())));
   }
 }

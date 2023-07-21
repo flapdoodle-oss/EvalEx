@@ -15,7 +15,6 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,32 +23,32 @@ class TokenizerExpressionTest extends BaseParserTest {
 
   @Test
   void testSingleNumber() throws ParseException {
-    assertAllTokensParsedCorrectly("1", new Token(1, "1", TokenType.NUMBER_LITERAL));
+    assertAllTokensParsedCorrectly("1", Token.of(1, "1", TokenType.NUMBER_LITERAL));
   }
 
   @Test
   void testSingleVariable() throws ParseException {
-    assertAllTokensParsedCorrectly("a", new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT));
+    assertAllTokensParsedCorrectly("a", Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testSimple() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a+123",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, "+", TokenType.INFIX_OPERATOR),
-        new Token(3, "123", TokenType.NUMBER_LITERAL));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, "+", TokenType.INFIX_OPERATOR),
+      Token.of(3, "123", TokenType.NUMBER_LITERAL));
   }
 
   @Test
   void testTwo() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a+123+c",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, "+", TokenType.INFIX_OPERATOR),
-        new Token(3, "123", TokenType.NUMBER_LITERAL),
-        new Token(6, "+", TokenType.INFIX_OPERATOR),
-        new Token(7, "c", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, "+", TokenType.INFIX_OPERATOR),
+      Token.of(3, "123", TokenType.NUMBER_LITERAL),
+      Token.of(6, "+", TokenType.INFIX_OPERATOR),
+      Token.of(7, "c", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test

@@ -15,8 +15,6 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
-import com.ezylang.evalex.functions.FunctionParameter;
-
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -24,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
-@FunctionParameter(name = "value", isVarArg = true)
 public class ZonedDateTimeParseFunction extends AbstractDateTimeParseFunction {
   protected Instant parse(String value, String format, ZoneId zoneId) {
     return parseZonedDateTime(value, format, zoneId)

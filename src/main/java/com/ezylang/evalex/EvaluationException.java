@@ -22,10 +22,10 @@ public class EvaluationException extends BaseException {
 
   public EvaluationException(Token token, String message) {
     super(
-        token.getStartPosition(),
-        token.getStartPosition() + token.getValue().length(),
-        token.getValue(),
-        message);
+      token.getStartPosition(),
+      token.getStartPosition() + token.getValue().length(),
+      token.getValue(),
+      message);
   }
 
   public static EvaluationException ofUnsupportedDataTypeInOperation(Token token) {

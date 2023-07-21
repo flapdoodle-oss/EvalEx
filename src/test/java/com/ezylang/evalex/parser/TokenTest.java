@@ -15,16 +15,16 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.config.Configuration;
+import com.ezylang.evalex.operators.InfixOperator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenTest {
 
-  final ExpressionConfiguration expressionConfiguration =
-      ExpressionConfiguration.defaultConfiguration();
+  final Configuration expressionConfiguration =
+      Configuration.defaultConfiguration();
 
   @Test
   void testTokenCreation() {
@@ -33,7 +33,7 @@ class TokenTest {
       counter++;
       String tokenString =
           type == TokenType.NUMBER_LITERAL ? Integer.toString(counter) : "token" + counter;
-      Token token = new Token(counter, tokenString, type);
+      Token token = Token.of(counter, tokenString, type);
 
       assertThat(token.getType()).isEqualTo(type);
       assertThat(token.getStartPosition()).isEqualTo(counter);
@@ -46,11 +46,11 @@ class TokenTest {
   @Test
   void testFunctionToken() {
     Token token =
-        new Token(
-            3,
-            "MAX",
-            TokenType.FUNCTION,
-            expressionConfiguration.getFunctionDictionary().getFunction("MAX"));
+      Token.of(
+          3,
+          "MAX",
+          TokenType.FUNCTION,
+          expressionConfiguration.getFunctionResolver().getFunction("MAX"));
 
     assertThat(token.getStartPosition()).isEqualTo(3);
     assertThat(token.getValue()).isEqualTo("MAX");
@@ -61,12 +61,12 @@ class TokenTest {
 
   @Test
   void testOperatorToken() {
-    Token token =
-        new Token(
-            1,
-            "+",
-            TokenType.INFIX_OPERATOR,
-            expressionConfiguration.getOperatorDictionary().getInfixOperator("+"));
+		Token token =
+      Token.of(
+          1,
+          "+",
+          TokenType.INFIX_OPERATOR,
+				expressionConfiguration.getOperatorResolver().getOperator(InfixOperator.class, "+"));
 
     assertThat(token.getStartPosition()).isEqualTo(1);
     assertThat(token.getValue()).isEqualTo("+");

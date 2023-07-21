@@ -15,8 +15,7 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.config.Configuration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,52 +26,52 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
   void testImplicitBraces() throws ParseException {
     assertAllTokensParsedCorrectly(
         "(a+b)(a-b)",
-        new Token(1, "(", TokenType.BRACE_OPEN),
-        new Token(2, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(3, "+", TokenType.INFIX_OPERATOR),
-        new Token(4, "b", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(5, ")", TokenType.BRACE_CLOSE),
-        new Token(6, "*", TokenType.INFIX_OPERATOR),
-        new Token(6, "(", TokenType.BRACE_OPEN),
-        new Token(7, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(8, "-", TokenType.INFIX_OPERATOR),
-        new Token(9, "b", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(10, ")", TokenType.BRACE_CLOSE));
+      Token.of(1, "(", TokenType.BRACE_OPEN),
+      Token.of(2, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(3, "+", TokenType.INFIX_OPERATOR),
+      Token.of(4, "b", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(5, ")", TokenType.BRACE_CLOSE),
+      Token.of(6, "*", TokenType.INFIX_OPERATOR),
+      Token.of(6, "(", TokenType.BRACE_OPEN),
+      Token.of(7, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(8, "-", TokenType.INFIX_OPERATOR),
+      Token.of(9, "b", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(10, ")", TokenType.BRACE_CLOSE));
   }
 
   @Test
   void testImplicitNumberBraces() throws ParseException {
     assertAllTokensParsedCorrectly(
         "2(x)",
-        new Token(1, "2", TokenType.NUMBER_LITERAL),
-        new Token(2, "*", TokenType.INFIX_OPERATOR),
-        new Token(2, "(", TokenType.BRACE_OPEN),
-        new Token(3, "x", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(4, ")", TokenType.BRACE_CLOSE));
+      Token.of(1, "2", TokenType.NUMBER_LITERAL),
+      Token.of(2, "*", TokenType.INFIX_OPERATOR),
+      Token.of(2, "(", TokenType.BRACE_OPEN),
+      Token.of(3, "x", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(4, ")", TokenType.BRACE_CLOSE));
   }
 
   @Test
   void testImplicitNumberNoBraces() throws ParseException {
     assertAllTokensParsedCorrectly(
         "2x",
-        new Token(1, "2", TokenType.NUMBER_LITERAL),
-        new Token(2, "*", TokenType.INFIX_OPERATOR),
-        new Token(2, "x", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "2", TokenType.NUMBER_LITERAL),
+      Token.of(2, "*", TokenType.INFIX_OPERATOR),
+      Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testImplicitNumberVariable() throws ParseException {
     assertAllTokensParsedCorrectly(
         "2x",
-        new Token(1, "2", TokenType.NUMBER_LITERAL),
-        new Token(2, "*", TokenType.INFIX_OPERATOR),
-        new Token(2, "x", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "2", TokenType.NUMBER_LITERAL),
+      Token.of(2, "*", TokenType.INFIX_OPERATOR),
+      Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testImplicitMultiplicationNotAllowed() {
-    ExpressionConfiguration config =
-        ExpressionConfiguration.builder().implicitMultiplicationAllowed(false).build();
+    Configuration config =
+        Configuration.builder().isImplicitMultiplicationAllowed(false).build();
 
     assertThatThrownBy(() -> new Tokenizer("2(x+y)", config).parse())
         .isEqualTo(new ParseException(2, 2, "(", "Missing operator"));

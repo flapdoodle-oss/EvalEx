@@ -15,7 +15,7 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
@@ -29,70 +29,52 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testSingleStringVariable() throws ParseException, EvaluationException {
-    Expression expression1 = createExpression("a");
-    Expression expression = expression1;
     VariableResolver variableResolver = VariableResolver.builder()
       .with("a", "hello")
       .build();
-    EvaluationValue result = expression.evaluate(variableResolver);
-    assertThat(result.isStringValue()).isTrue();
-    assertThat(result.getStringValue()).isEqualTo("hello");
+    Value<?> result = createExpression("a").evaluate(variableResolver);
+    assertThat(result.wrapped()).isEqualTo("hello");
   }
 
   @Test
   void testSingleNumberVariable() throws ParseException, EvaluationException {
-    Expression expression1 = createExpression("a");
-    Expression expression = expression1;
     VariableResolver variableResolver = VariableResolver.builder()
       .with("a", BigDecimal.valueOf(9))
       .build();
-    EvaluationValue result = expression.evaluate(variableResolver);
-    assertThat(result.isNumberValue()).isTrue();
-    assertThat(result.getNumberValue()).isEqualTo(BigDecimal.valueOf(9));
+    Value<?> result = createExpression("a").evaluate(variableResolver);
+    assertThat(result.wrapped()).isEqualTo(BigDecimal.valueOf(9));
   }
 
   @Test
   void testNumbers() throws ParseException, EvaluationException {
-    Expression expression1 = createExpression("(a+b)*(a-b)");
-    Expression expression =
-      expression1;
     VariableResolver variableResolver = VariableResolver.builder()
       .with("a", BigDecimal.valueOf(9))
-      .and("b", BigDecimal.valueOf(5))
+      .with("b", BigDecimal.valueOf(5))
       .build();
-    EvaluationValue result = expression.evaluate(variableResolver);
-    assertThat(result.isNumberValue()).isTrue();
-    assertThat(result.getNumberValue()).isEqualTo(BigDecimal.valueOf(56));
+    Value<?> result = createExpression("(a+b)*(a-b)").evaluate(variableResolver);
+    assertThat(result.wrapped()).isEqualTo(BigDecimal.valueOf(56));
   }
 
   @Test
   void testStrings() throws ParseException, EvaluationException {
-    Expression expression1 = createExpression("prefix+infix+postfix");
-    Expression expression =
-      expression1;
     VariableResolver variableResolver = VariableResolver.builder()
       .with("prefix", "Hello")
-      .and("infix", " ")
-      .and("postfix", "world")
+      .with("infix", " ")
+      .with("postfix", "world")
       .build();
-    EvaluationValue result = expression.evaluate(variableResolver);
-    assertThat(result.isStringValue()).isTrue();
-    assertThat(result.getStringValue()).isEqualTo("Hello world");
+    Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
+    assertThat(result.wrapped()).isEqualTo("Hello world");
   }
 
   @Test
   void testStringNumberCombined() throws ParseException, EvaluationException {
-    Expression expression1 = createExpression("prefix+infix+postfix");
-    Expression expression =
-      expression1;
     VariableResolver variableResolver = VariableResolver.builder()
       .with("prefix", "Hello")
-      .and("infix", BigDecimal.valueOf(2))
-      .and("postfix", "world")
+      .with("infix", BigDecimal.valueOf(2))
+      .with("postfix", "world")
       .build();
-    EvaluationValue result = expression.evaluate(variableResolver);
-    assertThat(result.isStringValue()).isTrue();
-    assertThat(result.getStringValue()).isEqualTo("Hello2world");
+    Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
+    assertThat(result.wrapped()).isEqualTo("Hello2world");
   }
 
   @Test

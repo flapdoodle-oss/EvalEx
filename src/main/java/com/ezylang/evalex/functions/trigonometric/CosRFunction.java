@@ -15,21 +15,17 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the trigonometric cosine of an angle (in radians). */
-@FunctionParameter(name = "value")
-public class CosRFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-
-    return expression.convertDoubleValue(
-        Math.cos(parameterValues[0].getNumberValue().doubleValue()));
+public class CosRFunction extends AbstractNumberFunction {
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
+    return Value.of(
+        Math.cos(parameterValue.wrapped().doubleValue()));
   }
 }

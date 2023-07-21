@@ -15,22 +15,34 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.Configuration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
 
+import java.math.BigDecimal;
+
 public abstract class BaseExpressionEvaluatorTest {
 
-  final ExpressionConfiguration configuration =
+  final Configuration configuration =
       TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
 
-  String evaluate(String expressionString) throws ParseException, EvaluationException {
+  protected String evaluate(String expressionString) throws ParseException, EvaluationException {
     Expression expression = createExpression(expressionString);
-    return expression.evaluate(VariableResolver.empty()).getStringValue();
+    return expression.evaluate(VariableResolver.empty()).wrapped().toString();
+  }
+
+  protected String evaluate(String expressionString, VariableResolver variableResolver) throws ParseException, EvaluationException {
+    Expression expression = createExpression(expressionString);
+    return expression.evaluate(variableResolver).wrapped().toString();
   }
 
   Expression createExpression(String expressionString) {
-    return new Expression(expressionString, configuration);
+    return Expression.of(expressionString, configuration);
+  }
+
+  protected static Value.NumberValue numberValueOf(String doubleAsString) {
+    return Value.of(new BigDecimal(doubleAsString));
   }
 }

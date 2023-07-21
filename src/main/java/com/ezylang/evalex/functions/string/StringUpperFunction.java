@@ -15,19 +15,22 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Converts the given value to upper case. */
-@FunctionParameter(name = "value")
-public class StringUpperFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return new EvaluationValue(parameterValues[0].getStringValue().toUpperCase());
+public class StringUpperFunction extends AbstractFunction.Single<Value.StringValue> {
+
+	public StringUpperFunction() {
+		super(Value.StringValue.class);
+	}
+
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.StringValue parameterValue) throws EvaluationException {
+    return Value.of(parameterValue.wrapped().toUpperCase());
   }
 }

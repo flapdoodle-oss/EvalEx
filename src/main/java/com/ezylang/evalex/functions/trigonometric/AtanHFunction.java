@@ -17,25 +17,20 @@ package com.ezylang.evalex.functions.trigonometric;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the hyperbolic arc-sine. */
-@FunctionParameter(name = "value")
-public class AtanHFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues)
-      throws EvaluationException {
+public class AtanHFunction extends AbstractNumberFunction {
 
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) throws EvaluationException {
     /* Formula: atanh(x) = 0.5*ln((1 + x)/(1 - x)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = parameterValue.wrapped().doubleValue();
     if (Math.abs(value) >= 1) {
       throw new EvaluationException(functionToken, "Absolute value must be less than 1");
     }
-    return expression.convertDoubleValue(0.5 * Math.log((1 + value) / (1 - value)));
+    return Value.of(0.5 * Math.log((1 + value) / (1 - value)));
   }
 }

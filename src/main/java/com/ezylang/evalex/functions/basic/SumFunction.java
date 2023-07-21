@@ -16,24 +16,28 @@
 package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /** Returns the sum value of all parameters. */
-@FunctionParameter(name = "value", isVarArg = true)
-public class SumFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class SumFunction extends AbstractFunction.SingleVararg<Value.NumberValue> {
+
+  public SumFunction() {
+    super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class, "value"));
+  }
+
+  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+    List<Value.NumberValue> parameterValues) {
     BigDecimal sum = BigDecimal.ZERO;
-    for (EvaluationValue parameter : parameterValues) {
-      sum = sum.add(parameter.getNumberValue(), expression.getConfiguration().getMathContext());
+    for (Value.NumberValue parameter : parameterValues) {
+      sum = sum.add(parameter.wrapped(), expression.getConfiguration().getMathContext());
     }
-    return new EvaluationValue(sum);
+    return Value.of(sum);
   }
 }

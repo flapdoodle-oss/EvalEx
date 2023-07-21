@@ -16,22 +16,23 @@
 package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 
-@FunctionParameter(name = "value")
-public class DurationFromMillisFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-    VariableResolver variableResolver,
-    Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    BigDecimal millis = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Duration.ofMillis(millis.longValue()));
+public class DurationFromMillisFunction extends AbstractFunction.Single<Value.NumberValue> {
+
+  public DurationFromMillisFunction() {
+    super(Value.NumberValue.class);
+  }
+
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) {
+    BigDecimal millis = parameterValue.wrapped();
+    return Value.of(Duration.ofMillis(millis.longValue()));
   }
 }

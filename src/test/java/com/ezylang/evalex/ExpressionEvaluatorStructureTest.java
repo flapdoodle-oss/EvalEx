@@ -15,14 +15,12 @@
 */
 package com.ezylang.evalex;
 
-import com.ezylang.evalex.data.VariableResolver;
+import com.ezylang.evalex.data.*;
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,33 +36,28 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
             put("environment_id", new BigDecimal(12345));
           }
         };
-    Expression expression1 = new Expression("order.environment_id");
-    Expression expression = expression1;
 
     VariableResolver variableResolver = VariableResolver.builder()
-      .with("order", structure)
+      .with("order", Value::of, structure)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("12345");
+    assertThat(evaluate("order.environment_id", variableResolver)).isEqualTo("12345");
   }
 
   @Test
   void testStructureScientificNumberDistinctionMultiple()
       throws EvaluationException, ParseException {
-    Map<String, Object> structure1 = new HashMap<>();
-    Map<String, Object> structure2 = new HashMap<>();
-    Map<String, Object> structure3 = new HashMap<>();
-
-    structure3.put("e", new BigDecimal("765"));
-    structure2.put("var_x", structure3);
-    structure1.put("e_id_e", structure2);
-
-    Expression expression1 = new Expression("order.e_id_e.var_x.e");
-    Expression expression = expression1;
+    ImmutableValueMap structure1 = ValueMap.builder()
+      .putValues("e_id_e", Value.of(ValueMap.builder()
+        .putValues("var_x", Value.of(ValueMap.builder()
+          .putValues("e", Value.of(new BigDecimal("765")))
+          .build()))
+        .build()))
+      .build();
 
     VariableResolver variableResolver = VariableResolver.builder()
       .with("order", structure1)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("765");
+    assertThat(evaluate("order.e_id_e.var_x.e", variableResolver)).isEqualTo("765");
   }
 
   @Test
@@ -76,35 +69,24 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    Expression expression1 = createExpression("a.b");
-    Expression expression = expression1;
-
     VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", structure)
+      .with("a", Value::of, structure)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("99");
+    assertThat(evaluate("a.b",variableResolver)).isEqualTo("99");
   }
 
   @Test
   void testTripleStructure() throws ParseException, EvaluationException {
-    Map<String, Map<String, BigDecimal>> structure = new HashMap<>();
-
-    Map<String, BigDecimal> subStructure =
-        new HashMap<>() {
-          {
-            put("c", new BigDecimal(95));
-          }
-        };
-
-    structure.put("b", subStructure);
-
-    Expression expression1 = createExpression("a.b.c");
-    Expression expression = expression1;
+    ImmutableValueMap structure = ValueMap.builder()
+      .putValues("b", Value.of(ValueMap.builder()
+        .putValues("c", Value.of(new BigDecimal(95)))
+        .build()))
+      .build();
 
     VariableResolver variableResolver = VariableResolver.builder()
       .with("a", structure)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("95");
+    assertThat(evaluate("a.b.c", variableResolver)).isEqualTo("95");
   }
 
   @Test
@@ -126,7 +108,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     assertThatThrownBy(
             () -> {
               VariableResolver variableResolver = VariableResolver.builder()
-                .with("a", testStructure)
+                .with("a", Value::of, testStructure)
                 .build();
               Expression expression = createExpression("a.field1 + a.field2");
               expression.evaluate(variableResolver);
@@ -142,46 +124,40 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     Map<String, BigDecimal> testStructure = new HashMap<>();
     testStructure.put("field 1", new BigDecimal(88));
 
-    Expression expression1 = createExpression("a.\"field 1\"");
-    Expression expression = expression1;
 
     VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", testStructure)
+      .with("a", Value::of, testStructure)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("88");
+    assertThat(evaluate("a.\"field 1\"", variableResolver)).isEqualTo("88");
   }
 
   @Test
   void testTripleStructureWithSpaces() throws ParseException, EvaluationException {
-    Map<String, Object> structure = new HashMap<>();
-    Map<String, Object> subStructure = new HashMap<>();
-    subStructure.put("prop c", 99);
-    structure.put("prop b", List.of(subStructure));
-
-    Expression expression1 = createExpression("a.\"prop b\"[0].\"prop c\"");
-    Expression expression = expression1;
+    ImmutableValueMap structure = ValueMap.builder()
+      .putValues("prop b", Value.of(ValueArray.of(
+        Value.of(ValueMap.builder()
+          .putValues("prop c", Value.of(99))
+          .build())
+      )))
+      .build();
 
     VariableResolver variableResolver = VariableResolver.builder()
       .with("a", structure)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("99");
+    assertThat(evaluate("a.\"prop b\"[0].\"prop c\"", variableResolver)).isEqualTo("99.0");
   }
 
   @Test
   void testStructureWithSpaceInNameAndArrayAccess() throws EvaluationException, ParseException {
-    Map<String, List<Integer>> structure =
-        new HashMap<>() {
-          {
-            put("b prop", Arrays.asList(1, 2, 3));
-          }
-        };
-
-    Expression expression1 = createExpression("a.\"b prop\"[1]");
-    Expression expression = expression1;
+    ImmutableValueMap structure = ValueMap.builder()
+      .putValues("b prop", Value.of(ValueArray.of(
+        Value.of(1),Value.of(2),Value.of(3)
+      )))
+      .build();
 
     VariableResolver variableResolver = VariableResolver.builder()
       .with("a", structure)
       .build();
-    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("2");
+    assertThat(evaluate("a.\"b prop\"[1]", variableResolver)).isEqualTo("2.0");
   }
 }

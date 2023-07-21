@@ -15,31 +15,41 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-@FunctionParameter(name = "value", isVarArg = true)
 public class DateTimeFormatFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String formatted;
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
-    if (parameterValues.length < 2) {
-      formatted = parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().toString();
-    } else {
-      DateTimeFormatter formatter =
-          DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
-      formatted =
-          parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().format(formatter);
-    }
-    return new EvaluationValue(formatted);
-  }
+
+	public DateTimeFormatFunction() {
+		super(
+			FunctionParameterDefinition.of(Value.DateTimeValue.class, "value"),
+			FunctionParameterDefinition.optionalWith(Value.StringValue.class, "format")
+		);
+	}
+
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		throws EvaluationException {
+		ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+
+		LocalDateTime dateTimeValue = ((Value.DateTimeValue) (parameterValues.get(0))).wrapped().atZone(zoneId).toLocalDateTime();
+
+		String formatted;
+		if (parameterValues.size() < 2) {
+			formatted = dateTimeValue.toString();
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(((Value.StringValue) parameterValues.get(1)).wrapped());
+			formatted = dateTimeValue.format(formatter);
+		}
+		return Value.of(formatted);
+	}
 }

@@ -15,8 +15,7 @@
 */
 package com.ezylang.evalex.parser;
 
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.config.Configuration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,54 +26,54 @@ class TokenizerStructureTest extends BaseParserTest {
   void testStructureSimple() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a.b",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, ".", TokenType.STRUCTURE_SEPARATOR),
-        new Token(3, "b", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
+      Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testStructureLeftIsE() throws ParseException {
     assertAllTokensParsedCorrectly(
         "e.b",
-        new Token(1, "e", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, ".", TokenType.STRUCTURE_SEPARATOR),
-        new Token(3, "b", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "e", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
+      Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testStructureRightIsE() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a.e",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, ".", TokenType.STRUCTURE_SEPARATOR),
-        new Token(3, "e", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
+      Token.of(3, "e", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testStructureBothAreE() throws ParseException {
     assertAllTokensParsedCorrectly(
         "e.e",
-        new Token(1, "e", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, ".", TokenType.STRUCTURE_SEPARATOR),
-        new Token(3, "e", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "e", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
+      Token.of(3, "e", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testStructureLeftEndsE() throws ParseException {
     assertAllTokensParsedCorrectly(
         "variable.a",
-        new Token(1, "variable", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(9, ".", TokenType.STRUCTURE_SEPARATOR),
-        new Token(10, "a", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "variable", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(9, ".", TokenType.STRUCTURE_SEPARATOR),
+      Token.of(10, "a", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
   void testStructureRightStartsE() throws ParseException {
     assertAllTokensParsedCorrectly(
         "a.end",
-        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-        new Token(2, ".", TokenType.STRUCTURE_SEPARATOR),
-        new Token(3, "end", TokenType.VARIABLE_OR_CONSTANT));
+      Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+      Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
+      Token.of(3, "end", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
@@ -91,8 +90,8 @@ class TokenizerStructureTest extends BaseParserTest {
 
   @Test
   void testStructureNotAllowed() {
-    ExpressionConfiguration config =
-        ExpressionConfiguration.builder().structuresAllowed(false).build();
+    Configuration config =
+        Configuration.builder().isStructuresAllowed(false).build();
 
     assertThatThrownBy(() -> new Tokenizer("a.b", config).parse())
         .isEqualTo(new ParseException(2, 2, ".", "Undefined operator '.'"));

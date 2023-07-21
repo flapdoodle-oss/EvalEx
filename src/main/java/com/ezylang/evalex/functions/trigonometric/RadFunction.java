@@ -15,24 +15,24 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /**
  * Converts an angle measured in degrees to an approximately equivalent angle measured in radians.
  */
-@FunctionParameter(name = "degrees")
-public class RadFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class RadFunction extends AbstractFunction.Single<Value.NumberValue> {
+  public RadFunction() {
+    super(Value.NumberValue.class, "degrees");
+  }
 
-    double deg = Math.toRadians(parameterValues[0].getNumberValue().doubleValue());
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) throws EvaluationException {
 
-    return expression.convertDoubleValue(deg);
+    return Value.of(Math.toRadians(parameterValue.wrapped().doubleValue()));
   }
 }

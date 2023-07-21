@@ -16,30 +16,35 @@
 package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.functions.validations.NonNegativeNumberValidator;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
-@FunctionParameter(name = "values", isVarArg = true, nonNegative = true)
-public class DateTimeFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    int year = parameterValues[0].getNumberValue().intValue();
-    int month = parameterValues[1].getNumberValue().intValue();
-    int day = parameterValues[2].getNumberValue().intValue();
-    int hour = parameterValues.length >= 4 ? parameterValues[3].getNumberValue().intValue() : 0;
-    int minute = parameterValues.length >= 5 ? parameterValues[4].getNumberValue().intValue() : 0;
-    int second = parameterValues.length >= 6 ? parameterValues[5].getNumberValue().intValue() : 0;
-    int nanoOfs = parameterValues.length >= 7 ? parameterValues[6].getNumberValue().intValue() : 0;
+// das ist eigentlich 3+vararg
+public class DateTimeFunction extends AbstractFunction.SingleVararg<Value.NumberValue> {
+  public DateTimeFunction() {
+    super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class,"values")
+      .withValidators(new NonNegativeNumberValidator()));
+  }
+  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+    List<Value.NumberValue> parameterValues) {
+    int year = parameterValues.get(0).wrapped().intValue();
+    int month = parameterValues.get(1).wrapped().intValue();
+    int day = parameterValues.get(2).wrapped().intValue();
+    int hour = parameterValues.size() >= 4 ? parameterValues.get(3).wrapped().intValue() : 0;
+    int minute = parameterValues.size() >= 5 ? parameterValues.get(4).wrapped().intValue() : 0;
+    int second = parameterValues.size() >= 6 ? parameterValues.get(5).wrapped().intValue() : 0;
+    int nanoOfs = parameterValues.size() >= 7 ? parameterValues.get(6).wrapped().intValue() : 0;
 
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
-    return new EvaluationValue(
+    return Value.of(
         LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)
             .atZone(zoneId)
             .toInstant());

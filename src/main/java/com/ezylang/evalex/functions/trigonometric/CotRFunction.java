@@ -15,22 +15,20 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Returns the trigonometric co-tangent of an angle (in radians). */
-@FunctionParameter(name = "value", nonZero = true)
-public class CotRFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+/**
+ * Returns the trigonometric co-tangent of an angle (in radians).
+ */
+public class CotRFunction extends NonZeroFunction {
 
-    /* Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
-    return expression.convertDoubleValue(
-        1 / Math.tan(parameterValues[0].getNumberValue().doubleValue()));
-  }
+	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+		Value.NumberValue parameterValue) throws EvaluationException {
+		/* Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
+		return Value.of(1 / Math.tan(parameterValue.wrapped().doubleValue()));
+	}
 }

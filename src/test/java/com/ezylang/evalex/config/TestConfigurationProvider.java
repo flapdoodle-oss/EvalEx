@@ -1,82 +1,69 @@
-/*
-  Copyright 2012-2022 Udo Klimaschewski
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
 package com.ezylang.evalex.config;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.PostfixOperator;
-import com.ezylang.evalex.operators.PrefixOperator;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
+import com.ezylang.evalex.operators.Precedence;
+import com.ezylang.evalex.operators.AbstractPostfixOperator;
+import com.ezylang.evalex.operators.AbstractPrefixOperator;
 import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public class TestConfigurationProvider {
 
-  public static final ExpressionConfiguration StandardConfigurationWithAdditionalTestOperators =
-      ExpressionConfiguration.defaultConfiguration()
-          .withAdditionalOperators(
-              Map.entry("++", new PrefixPlusPlusOperator()),
-              Map.entry("++", new PostfixPlusPlusOperator()),
-              Map.entry("?", new PostfixQuestionOperator()))
-          .withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
+	public static final ImmutableConfiguration StandardConfigurationWithAdditionalTestOperators =
+		Configuration.defaultConfiguration()
+			.withAdditionalOperators(
+				Map.entry("++", new PrefixPlusPlusOperator()),
+				Map.entry("++", new PostfixPlusPlusOperator()),
+				Map.entry("?", new PostfixQuestionOperator()))
+			.withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
 
-  @FunctionParameter(name = "input", isVarArg = true)
-  public static class DummyFunction extends AbstractFunction {
-    @Override
-    public EvaluationValue evaluate(
-			VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      // dummy implementation
-      return new EvaluationValue("OK");
-    }
-  }
+	public static class DummyFunction extends AbstractFunction.SingleVararg<Value.StringValue> {
+		public DummyFunction() {
+			super(FunctionParameterDefinition.varArgWith(Value.StringValue.class, "input"));
+		}
 
-  @PrefixOperator(leftAssociative = false)
-  public static class PrefixPlusPlusOperator extends AbstractOperator {
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      // dummy implementation
-      EvaluationValue operand = operands[0];
-      return new EvaluationValue(operand.getNumberValue().add(BigDecimal.ONE));
-    }
-  }
+		@Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+			List<Value.StringValue> parameterValues) {
+			// dummy implementation
+			return Value.of("OK");
+		}
+	}
 
-  @PostfixOperator()
-  public static class PostfixPlusPlusOperator extends AbstractOperator {
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      // dummy implementation
-      EvaluationValue operand = operands[0];
-      return new EvaluationValue(operand.getNumberValue().add(BigDecimal.ONE));
-    }
-  }
+	public static class PrefixPlusPlusOperator extends AbstractPrefixOperator {
 
-  @PostfixOperator(leftAssociative = false)
-  public static class PostfixQuestionOperator extends AbstractOperator {
-    @Override
-    public EvaluationValue evaluate(
-        Expression expression, Token operatorToken, EvaluationValue... operands) {
-      // dummy implementation
-      return new EvaluationValue("?");
-    }
-  }
+		public PrefixPlusPlusOperator() {
+			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+		}
+
+		@Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+			// dummy implementation
+			return Value.of(numberValue(operatorToken, operand).wrapped().add(BigDecimal.ONE));
+		}
+	}
+
+	public static class PostfixPlusPlusOperator extends AbstractPostfixOperator {
+
+		@Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+			return Value.of(numberValue(operatorToken, operand).wrapped().add(BigDecimal.ONE));
+		}
+	}
+
+	public static class PostfixQuestionOperator extends AbstractPostfixOperator {
+
+		public PostfixQuestionOperator() {
+			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+		}
+
+		@Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+			return Value.of("?");
+		}
+	}
 }

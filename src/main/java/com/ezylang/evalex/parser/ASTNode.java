@@ -15,9 +15,8 @@
 */
 package com.ezylang.evalex.parser;
 
-import lombok.Value;
+import org.immutables.value.Value;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,18 +34,18 @@ import java.util.stream.Collectors;
  *
  * <p><a href="https://vanya.jp.net/vtree/">Online JSON to Tree Diagram Converter</a>
  */
-@Value
-public class ASTNode {
+@Value.Immutable
+public abstract class ASTNode {
 
-  /** The children od the tree. */
-  List<ASTNode> parameters;
+  public abstract List<ASTNode> getParameters();
 
-  /** The token associated with this tree node. */
-  Token token;
+  public abstract Token getToken();
 
-  public ASTNode(Token token, ASTNode... parameters) {
-    this.token = token;
-    this.parameters = Arrays.asList(parameters);
+  public static ASTNode of(Token token, ASTNode... parameters) {
+    return ImmutableASTNode.builder()
+      .token(token)
+      .addParameters(parameters)
+      .build();
   }
 
   /**
@@ -55,15 +54,15 @@ public class ASTNode {
    * @return A JSON string of the tree structure starting at this node.
    */
   public String toJSON() {
-    if (parameters.isEmpty()) {
+    if (getParameters().isEmpty()) {
       return String.format(
-          "{" + "\"type\":\"%s\",\"value\":\"%s\"}", token.getType(), token.getValue());
+        "{" + "\"type\":\"%s\",\"value\":\"%s\"}", getToken().getType(), getToken().getValue());
     } else {
       String childrenJson =
-          parameters.stream().map(ASTNode::toJSON).collect(Collectors.joining(","));
+        getParameters().stream().map(ASTNode::toJSON).collect(Collectors.joining(","));
       return String.format(
-          "{" + "\"type\":\"%s\",\"value\":\"%s\",\"children\":[%s]}",
-          token.getType(), token.getValue(), childrenJson);
+        "{" + "\"type\":\"%s\",\"value\":\"%s\",\"children\":[%s]}",
+        getToken().getType(), getToken().getValue(), childrenJson);
     }
   }
 }

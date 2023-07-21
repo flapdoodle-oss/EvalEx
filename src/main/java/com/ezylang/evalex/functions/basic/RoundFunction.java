@@ -15,32 +15,32 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.FunctionParameterDefinition;
 import com.ezylang.evalex.parser.Token;
 
 /**
  * Rounds the given value to the specified scale, using the {@link java.math.MathContext} of the
  * expression configuration.
  */
-@FunctionParameter(name = "value")
-@FunctionParameter(name = "scale")
-public class RoundFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class RoundFunction extends AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {
 
-    EvaluationValue value = parameterValues[0];
-    EvaluationValue precision = parameterValues[1];
+  public RoundFunction() {
+    super(FunctionParameterDefinition.of(Value.NumberValue.class, "value"),
+      FunctionParameterDefinition.of(Value.NumberValue.class, "scale"));
+  }
 
-    return new EvaluationValue(
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value,
+    Value.NumberValue precision) throws EvaluationException {
+    return Value.of(
         value
-            .getNumberValue()
+            .wrapped()
             .setScale(
-                precision.getNumberValue().intValue(),
+                precision.wrapped().intValue(),
                 expression.getConfiguration().getMathContext().getRoundingMode()));
   }
 }

@@ -15,22 +15,19 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /** Returns the hyperbolic arc-sine. */
-@FunctionParameter(name = "value")
-public class AsinHFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+public class AsinHFunction extends AbstractNumberFunction {
 
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.NumberValue parameterValue) throws EvaluationException {
     /* Formula: asinh(x) = ln(x + sqrt(x^2 + 1)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
-    return expression.convertDoubleValue(Math.log(value + (Math.sqrt(Math.pow(value, 2) + 1))));
+    double value = parameterValue.wrapped().doubleValue();
+    return Value.of(Math.log(value + (Math.sqrt(Math.pow(value, 2) + 1))));
   }
 }

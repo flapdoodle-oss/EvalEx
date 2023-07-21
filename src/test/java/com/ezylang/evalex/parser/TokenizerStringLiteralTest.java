@@ -16,8 +16,7 @@
 package com.ezylang.evalex.parser;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.VariableResolverBuilder;
-import com.ezylang.evalex.parser.Token.TokenType;
+import com.ezylang.evalex.data.VariableResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,48 +26,48 @@ class TokenizerStringLiteralTest extends BaseParserTest {
   @Test
   void testSimpleQuote() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "\"Hello, World\"", new Token(1, "Hello, World", TokenType.STRING_LITERAL));
+        "\"Hello, World\"", Token.of(1, "Hello, World", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testSimpleQuoteLeadingBlanks() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "  \t\n \"Hello, World\"", new Token(6, "Hello, World", TokenType.STRING_LITERAL));
+        "  \t\n \"Hello, World\"", Token.of(6, "Hello, World", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testSimpleQuoteTrailingBlanks() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "\"Hello, World\"  \t\n ", new Token(1, "Hello, World", TokenType.STRING_LITERAL));
+        "\"Hello, World\"  \t\n ", Token.of(1, "Hello, World", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testEscapeDoubleQuote() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "\"Hello, \\\"World\\\"\"", new Token(1, "Hello, \"World\"", TokenType.STRING_LITERAL));
+        "\"Hello, \\\"World\\\"\"", Token.of(1, "Hello, \"World\"", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testEscapeSingleQuote() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "\"Hello, \\'World\\'\"", new Token(1, "Hello, 'World'", TokenType.STRING_LITERAL));
+        "\"Hello, \\'World\\'\"", Token.of(1, "Hello, 'World'", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testEscapeBackslash() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "\"a \\\\ b\"", new Token(1, "a \\ b", TokenType.STRING_LITERAL));
+        "\"a \\\\ b\"", Token.of(1, "a \\ b", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testEscapeCharacters() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "\" \\t \\r \\n \\f \\b \"", new Token(1, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
+        "\" \\t \\r \\n \\f \\b \"", Token.of(1, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
   }
 
   @Test
   void testUnknownEscapeCharacter() {
-    assertThatThrownBy(() -> new Expression("\" \\y \"").evaluate(VariableResolverBuilder.newInstance().build()))
+    assertThatThrownBy(() -> Expression.of("\" \\y \"").evaluate(VariableResolver.builder().build()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Unknown escape character");
   }
@@ -77,11 +76,11 @@ class TokenizerStringLiteralTest extends BaseParserTest {
   void testSimpleQuoteOperation() throws ParseException {
     assertAllTokensParsedCorrectly(
         "\"Hello\" + \" \" + \"World\"",
-        new Token(1, "Hello", TokenType.STRING_LITERAL),
-        new Token(9, "+", TokenType.INFIX_OPERATOR),
-        new Token(11, " ", TokenType.STRING_LITERAL),
-        new Token(15, "+", TokenType.INFIX_OPERATOR),
-        new Token(17, "World", TokenType.STRING_LITERAL));
+      Token.of(1, "Hello", TokenType.STRING_LITERAL),
+      Token.of(9, "+", TokenType.INFIX_OPERATOR),
+      Token.of(11, " ", TokenType.STRING_LITERAL),
+      Token.of(15, "+", TokenType.INFIX_OPERATOR),
+      Token.of(17, "World", TokenType.STRING_LITERAL));
   }
 
   @Test

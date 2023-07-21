@@ -16,20 +16,19 @@
 package com.ezylang.evalex.operators.booleans;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.data.Value;
+import com.ezylang.evalex.operators.Precedence;
 import com.ezylang.evalex.parser.Token;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_COMPARISON;
-
 /** Less of two values. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
-public class InfixLessOperator extends AbstractOperator {
+public class InfixLessOperator extends AbstractInfixComparableOperator {
 
-  @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(operands[0].compareTo(operands[1]) < 0);
+  public InfixLessOperator() {
+    super(Precedence.OPERATOR_PRECEDENCE_COMPARISON);
+  }
+
+  @Override protected <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(Expression expression, Token operatorToken,
+    V leftOperand, V rightOperand) {
+    return Value.of(leftOperand.compareTo(rightOperand) < 0);
   }
 }

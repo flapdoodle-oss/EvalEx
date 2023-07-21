@@ -16,20 +16,22 @@
 package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 import java.time.Duration;
 
-@FunctionParameter(name = "value")
-public class DurationParseFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String text = parameterValues[0].getStringValue();
-    return new EvaluationValue(Duration.parse(text));
+public class DurationParseFunction extends AbstractFunction.Single<Value.StringValue> {
+
+  public DurationParseFunction() {
+    super(Value.StringValue.class);
+  }
+  
+  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+    Value.StringValue parameterValue) {
+    String text = parameterValue.wrapped();
+    return Value.of(Duration.parse(text));
   }
 }

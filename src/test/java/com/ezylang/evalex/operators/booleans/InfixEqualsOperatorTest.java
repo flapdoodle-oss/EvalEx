@@ -18,6 +18,7 @@ package com.ezylang.evalex.operators.booleans;
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.Value;
 import com.ezylang.evalex.data.VariableResolver;
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.api.Test;
@@ -58,58 +59,55 @@ class InfixEqualsOperatorTest extends BaseEvaluationTest {
 
   @Test
   void testInfixEqualsVariables() throws EvaluationException, ParseException {
-    Expression expression = new Expression("a=b");
+    Expression expression = Expression.of("a=b");
 
     new BigDecimal("1.4");
     new BigDecimal("1.4");
-    Expression expression5 = expression;
     assertThat(
-            expression5.evaluate(VariableResolver.builder()
+            expression.evaluate(VariableResolver.builder()
                 .with("a", new BigDecimal("1.4"))
-                .and("b", new BigDecimal("1.4"))
+                .with("b", new BigDecimal("1.4"))
                 .build())
-                .getBooleanValue())
-        .isTrue();
+                .wrapped())
+        .isEqualTo(Boolean.TRUE);
 
-    Expression expression4 = expression;
-    assertThat(expression4.evaluate(VariableResolver.builder().with("a", "Hello").and("b", "Hello").build()).getBooleanValue())
-        .isTrue();
+    assertThat(expression.evaluate(VariableResolver.builder().with("a", "Hello").with("b", "Hello").build()).wrapped())
+        .isEqualTo(Boolean.TRUE);
 
-    Expression expression3 = expression;
-    assertThat(expression3.evaluate(VariableResolver.builder().with("a", "Hello").and("b", "Goodbye").build()).getBooleanValue())
-        .isFalse();
+    assertThat(expression.evaluate(VariableResolver.builder().with("a", "Hello").with("b", "Goodbye").build()).wrapped())
+      .isEqualTo(Boolean.FALSE);
 
-    Expression expression2 = expression;
-    assertThat(expression2.evaluate(VariableResolver.builder().with("a", true).and("b", true).build()).getBooleanValue()).isTrue();
+    assertThat(expression.evaluate(VariableResolver.builder().with("a", true).with("b", true).build()).wrapped())
+      .isEqualTo(Boolean.TRUE);
 
-    Expression expression1 = expression;
-    assertThat(expression1.evaluate(VariableResolver.builder().with("a", false).and("b", true).build()).getBooleanValue()).isFalse();
+    assertThat(expression.evaluate(VariableResolver.builder().with("a", false).with("b", true).build()).wrapped())
+      .isEqualTo(Boolean.FALSE);
   }
 
   @Test
   void testInfixEqualsArrays() throws EvaluationException, ParseException {
-    Expression expression = new Expression("a=b");
+    Expression expression = Expression.of("a=b");
 
     assertThat(
             expression.evaluate(VariableResolver.builder()
-                .with("a", Arrays.asList("a", "b", "c"))
-                .and("b", Arrays.asList("a", "b", "c"))
+                .with("a", Value::of, Arrays.asList("a", "b", "c"))
+                .with("b", Value::of, Arrays.asList("a", "b", "c"))
                 .build())
-                .getBooleanValue())
-        .isTrue();
+                .wrapped())
+        .isEqualTo(Boolean.TRUE);
 
     assertThat(
             expression.evaluate(VariableResolver.builder()
-                .with("a", Arrays.asList("a", "b", "c"))
-                .and("b", Arrays.asList("c", "b", "a"))
+                .with("a", Value::of, Arrays.asList("a", "b", "c"))
+                .with("b", Value::of, Arrays.asList("c", "b", "a"))
                 .build())
-                .getBooleanValue())
-        .isFalse();
+                .wrapped())
+        .isEqualTo(false);
   }
 
   @Test
   void testInfixEqualsStructures() throws EvaluationException, ParseException {
-    Expression expression = new Expression("a=b");
+    Expression expression = Expression.of("a=b");
 
     Map<String, BigDecimal> structure1 =
         new HashMap<>() {
@@ -135,10 +133,10 @@ class InfixEqualsOperatorTest extends BaseEvaluationTest {
           }
         };
 
-    assertThat(expression.evaluate(VariableResolver.builder().with("a", structure1).and("b", structure2).build()).getBooleanValue())
-        .isTrue();
+    assertThat(expression.evaluate(VariableResolver.builder().with("a", Value::of, structure1).with("b", Value::of, structure2).build()).wrapped())
+        .isEqualTo(true);
 
-    assertThat(expression.evaluate(VariableResolver.builder().with("a", structure1).and("b", structure3).build()).getBooleanValue())
-        .isFalse();
+    assertThat(expression.evaluate(VariableResolver.builder().with("a", Value::of, structure1).with("b", Value::of, structure3).build()).wrapped())
+        .isEqualTo(false);
   }
 }
